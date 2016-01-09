@@ -4,5 +4,29 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
     version="2.2">
+    
+    <application>
+		<resource-bundle>
+			<base-name>com.AptiTekk.application</base-name>
+			<var>settings</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>com.AptiTekk.style</base-name>
+			<var>style</var>
+		</resource-bundle>
+	</application>
+    <managed-bean>
+    	<managed-bean-name>EntryController</managed-bean-name>
+    	<managed-bean-class>com.AptiTekk.Poll.web.EntryController</managed-bean-class>
+    	<managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <navigation-rule>
+    	<display-name>index.xhtml</display-name>
+    	<from-view-id>/index.xhtml</from-view-id>
+    	<navigation-case>
+    		<from-outcome>index</from-outcome>
+    		<to-view-id>/index.xhtml</to-view-id>
+    	</navigation-case>
+    </navigation-rule>
 
 </faces-config>

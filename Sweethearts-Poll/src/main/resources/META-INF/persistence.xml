@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	version="1.0">
+	<persistence-unit name="PollRepo" transaction-type="JTA">
+		<!-- <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider> -->
+		<jta-data-source>java:jboss/Resource/PollDS</jta-data-source>
+		<properties>
+			<!-- <property name="openjpa.ConnectionURL" value="jdbc:mysql://10.213.192.88:3306/RCMSdev" />
+			<property name="openjpa.ConnectionDriverName" value="com.mysql.jdbc.Driver" />
+			<property name="openjpa.ConnectionUserName" value="javadev" />
+			<property name="openjpa.ConnectionPassword" value="javadev2015" />
+			<property name="openjpa.jdbc.DBDictionary" value="mysql" />-->
+<!-- 			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)" /> -->
+<!-- 			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" /> -->
+			<property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+		</properties>
+	</persistence-unit>
+</persistence>
