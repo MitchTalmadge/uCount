@@ -1,49 +1,66 @@
 package com.AptiTekk.Poll.core.entityBeans;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Entry {
-	
-	@Id @GeneratedValue
+
+	@Id
+	@GeneratedValue
 	private int id;
-	
-	@Column(length=32)
-	private String studentId;
-	private int contestantId;
-	private int pollId;
 
-	public Entry(String studentId, int contestantId, int pollId) {
-		this.setStudentId(studentId);
-		this.setContestantId(contestantId);
-		this.setPollId(pollId);
+	@ManyToOne
+	@JoinColumn(name = "credentialsId")
+	private Credentials credentials;
+
+	@ManyToOne
+	@JoinColumn(name = "voteGroupId")
+	private VoteGroup voteGroup;
+
+	@ManyToOne
+	@JoinColumn(name = "pollId")
+	private Poll poll;
+
+	public Entry(Credentials credentials, VoteGroup voteGroup, Poll poll) {
+		setCredentials(credentials);
+		setVoteGroup(voteGroup);
+		setPoll(poll);
 	}
 
-	public String getStudentId() {
-		return studentId;
+	public int getId() {
+		return id;
 	}
 
-	public void setStudentId(String studentId) {
-		this.studentId = studentId;
+	public void setId(int id) {
+		this.id = id;
 	}
 
-	public int getContestantId() {
-		return contestantId;
+	public Credentials getCredentials() {
+		return credentials;
 	}
 
-	public void setContestantId(int contestantId) {
-		this.contestantId = contestantId;
+	public void setCredentials(Credentials credentials) {
+		this.credentials = credentials;
 	}
 
-	public int getPollId() {
-		return pollId;
+	public VoteGroup getVoteGroup() {
+		return voteGroup;
 	}
 
-	public void setPollId(int pollId) {
-		this.pollId = pollId;
+	public void setVoteGroup(VoteGroup voteGroup) {
+		this.voteGroup = voteGroup;
+	}
+
+	public Poll getPoll() {
+		return poll;
+	}
+
+	public void setPoll(Poll poll) {
+		this.poll = poll;
 	}
 
 }

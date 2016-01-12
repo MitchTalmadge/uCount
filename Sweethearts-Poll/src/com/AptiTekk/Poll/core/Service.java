@@ -14,7 +14,7 @@ public abstract class Service<T>{
 	protected EntityManager entityManager;
 	
 	protected Class<T> type;
-	
+
 	public Service() {
 		
 	}

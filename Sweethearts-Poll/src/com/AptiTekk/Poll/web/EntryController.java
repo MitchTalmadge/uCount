@@ -12,7 +12,7 @@ import com.AptiTekk.Poll.core.entityBeans.Entry;
 @ManagedBean
 @RequestScoped
 public class EntryController {
-	
+
 	private EntryService service;
 
 	@PostConstruct
@@ -23,9 +23,9 @@ public class EntryController {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public String addDummyEntry() {
-		service.insert(new Entry("student", 0, 0));
+		// service.insert(new Entry("student", 0, 0));
 		return "index";
 	}
 
