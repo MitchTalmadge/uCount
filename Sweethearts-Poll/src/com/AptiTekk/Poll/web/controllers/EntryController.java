@@ -1,4 +1,4 @@
-package com.AptiTekk.Poll.web;
+package com.AptiTekk.Poll.web.controllers;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;

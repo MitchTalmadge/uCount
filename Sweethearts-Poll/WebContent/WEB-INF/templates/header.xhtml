@@ -9,6 +9,29 @@
 	<nav class="#{style.colorPrimary}" role="navigation">
 	<div class="nav-wrapper container">
 		<a id="logo-container" class="brand-logo">#{settings.application_name}</a>
+		<ul class="right hide-on-med-and-down">
+			<li><h:form>
+					<ui:fragment rendered="#{LoginController.user != null}" value=" ">
+						<h:commandLink action="#{LoginController.logout}">Sign Out</h:commandLink>
+					</ui:fragment>
+					<ui:fragment rendered="#{LoginController.user == null}">
+						<h:commandLink action="login">Login</h:commandLink>
+					</ui:fragment>
+				</h:form></li>
+		</ul>
+		<!-- Mobile -->
+		<ul id="nav-mobile" class="side-nav">
+			<li><h:form>
+					<ui:fragment rendered="#{LoginController.user != null}" value=" ">
+						<h:commandLink action="#{LoginController.logout}">Sign Out</h:commandLink>
+					</ui:fragment>
+					<ui:fragment rendered="#{LoginController.user == null}">
+						<h:commandLink action="login">Login</h:commandLink>
+					</ui:fragment>
+				</h:form></li>
+		</ul>
+		<a href="#" data-activates="nav-mobile" class="button-collapse"><i
+			class="material-icons">menu</i></a>
 	</div>
 	</nav>
 </body>

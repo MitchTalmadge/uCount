@@ -3,6 +3,7 @@ package com.AptiTekk.Poll.core.entityBeans;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -20,18 +21,25 @@ public class VoteGroup {
 
 	@OneToMany(mappedBy = "voteGroup", cascade = CascadeType.ALL)
 	private Set<Contestant> contestants;
-	
-	@OneToOne(mappedBy = "voteGroup", cascade = CascadeType.ALL)
-	private Talent talent;
 
 	@ManyToOne
 	@JoinColumn(name = "pollId")
 	private Poll poll;
+	
+	@Column(length = 64)
+	private String talentName;
 
-	public VoteGroup(Talent talent, Poll poll)
+	public VoteGroup(Poll poll)
 	{
-		setTalent(talent);
+		this.talentName = null;
 		setPoll(poll);
+	}
+	
+	public VoteGroup(Poll poll, String talentName)
+	{
+		this.talentName = talentName;
+		setPoll(poll);
+		
 	}
 	
 	public int getId() {
@@ -50,20 +58,20 @@ public class VoteGroup {
 		this.contestants = contestants;
 	}
 
-	public Talent getTalent() {
-		return talent;
-	}
-
-	public void setTalent(Talent talent) {
-		this.talent = talent;
-	}
-
 	public Poll getPoll() {
 		return poll;
 	}
 
 	public void setPoll(Poll poll) {
 		this.poll = poll;
+	}
+
+	public String getTalentName() {
+		return talentName;
+	}
+
+	public void setTalentName(String talentName) {
+		this.talentName = talentName;
 	}
 
 }

@@ -15,7 +15,7 @@ public class Entry {
 
 	@ManyToOne
 	@JoinColumn(name = "credentialsId")
-	private Credentials credentials;
+	private Credential credential;
 
 	@ManyToOne
 	@JoinColumn(name = "voteGroupId")
@@ -25,8 +25,8 @@ public class Entry {
 	@JoinColumn(name = "pollId")
 	private Poll poll;
 
-	public Entry(Credentials credentials, VoteGroup voteGroup, Poll poll) {
-		setCredentials(credentials);
+	public Entry(Credential credential, VoteGroup voteGroup, Poll poll) {
+		setCredential(credential);
 		setVoteGroup(voteGroup);
 		setPoll(poll);
 	}
@@ -39,12 +39,12 @@ public class Entry {
 		this.id = id;
 	}
 
-	public Credentials getCredentials() {
-		return credentials;
+	public Credential getCredential() {
+		return credential;
 	}
 
-	public void setCredentials(Credentials credentials) {
-		this.credentials = credentials;
+	public void setCredential(Credential credential) {
+		this.credential = credential;
 	}
 
 	public VoteGroup getVoteGroup() {

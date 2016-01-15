@@ -17,15 +17,28 @@
 	</application>
     <managed-bean>
     	<managed-bean-name>EntryController</managed-bean-name>
-    	<managed-bean-class>com.AptiTekk.Poll.web.EntryController</managed-bean-class>
+    	<managed-bean-class>com.AptiTekk.Poll.web.controllers.EntryController</managed-bean-class>
     	<managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+    	<managed-bean-name>LoginController</managed-bean-name>
+    	<managed-bean-class>com.AptiTekk.Poll.web.controllers.LoginController</managed-bean-class>
+    	<managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
     <navigation-rule>
-    	<display-name>index.xhtml</display-name>
-    	<from-view-id>/index.xhtml</from-view-id>
+    	<display-name>WEB-INF/templates/header.xhtml</display-name>
+    	<from-view-id>/WEB-INF/templates/header.xhtml</from-view-id>
     	<navigation-case>
-    		<from-outcome>index</from-outcome>
-    		<to-view-id>/index.xhtml</to-view-id>
+    		<from-outcome>login</from-outcome>
+    		<to-view-id>/login.xhtml</to-view-id>
+    	</navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+    	<display-name>login.xhtml</display-name>
+    	<from-view-id>/login.xhtml</from-view-id>
+    	<navigation-case>
+    		<from-outcome>manage</from-outcome>
+    		<to-view-id>/admin/manage.xhtml</to-view-id>
     	</navigation-case>
     </navigation-rule>
 
