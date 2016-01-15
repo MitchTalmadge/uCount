@@ -8,7 +8,10 @@
 <body>
 	<nav class="#{style.colorPrimary}" role="navigation">
 	<div class="nav-wrapper container">
-		<a id="logo-container" class="brand-logo">#{settings.application_name}</a>
+		<h:form>
+			<h:commandLink id="logo-container" styleClass="brand-logo"
+				action="index">#{settings.application_name}</h:commandLink>
+		</h:form>
 		<ul class="right hide-on-med-and-down">
 			<li><h:form>
 					<ui:fragment rendered="#{LoginController.user != null}" value=" ">

@@ -27,7 +27,7 @@ public class PollProvider extends HttpServlet {
 	
 	@EJB(mappedName="PollService")
 	private Service<Poll> service;
-       
+    
     /**
      * @see HttpServlet#HttpServlet()
      */
