@@ -8,13 +8,12 @@
 
 <ui:composition template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
-		<script src='/js/lib/jquery.js'></script>
-		<script src='/js/knockout-3.4.0.js'></script>
 		<div class="section no-pad-bot" id="index-banner">
 			<div class="container">
 
 				<ul class="" data-bind="foreach: polls">
-					<li data-bind="text: $data, 
+					<li
+						data-bind="text: $data, 
                						css: { selected: $data == $root.selectedPoll() },
                						click: $root.selectPoll"></li>
 				</ul>
@@ -45,6 +44,10 @@
 
 			</div>
 		</div>
+
+	</ui:define>
+	<ui:define name="javascript">
+		<h:outputScript library="js" name="manage.js"/>
 	</ui:define>
 </ui:composition>
 </html>

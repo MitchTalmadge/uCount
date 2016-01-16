@@ -24,6 +24,10 @@ public class Entry {
 	@ManyToOne
 	@JoinColumn(name = "pollId")
 	private Poll poll;
+	
+	public Entry() {
+		
+	}
 
 	public Entry(Credential credential, VoteGroup voteGroup, Poll poll) {
 		setCredential(credential);

@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import com.sun.faces.ext.validator.CreditCardValidator;
+
 @Entity
 public class Credential {
 
@@ -16,6 +18,10 @@ public class Credential {
 
 	@Column(length = 16)
 	private String studentUsername;
+	
+	public Credential() {
+		
+	}
 
 	public Credential(int studentNumber, String studentUsername) {
 		setStudentNumber(studentNumber);

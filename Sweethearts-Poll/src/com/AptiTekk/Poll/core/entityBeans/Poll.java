@@ -27,10 +27,20 @@ public class Poll {
 
 	@Column(length = 512)
 	private String description;
+	
+	private Boolean enabled;
+	
+	public Poll() {
+		
+	}
 
 	public Poll(String name, String description) {
+		this(name, description, false);
+	}
+	public Poll(String name, String description, boolean enabled) {
 		setName(name);
 		setDescription(description);
+		setEnabled(enabled);
 	}
 
 	public int getId() {
@@ -71,6 +81,14 @@ public class Poll {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
 	}
 
 }

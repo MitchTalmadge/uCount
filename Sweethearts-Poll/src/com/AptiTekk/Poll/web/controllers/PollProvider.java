@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,7 +25,7 @@ import com.google.gson.Gson;
 public class PollProvider extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	@EJB(mappedName="PollService")
+	@Inject
 	private Service<Poll> service;
     
     /**

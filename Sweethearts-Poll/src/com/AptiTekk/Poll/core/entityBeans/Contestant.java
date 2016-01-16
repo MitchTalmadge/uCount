@@ -26,6 +26,10 @@ public class Contestant {
 
 	@Column(length = 64)
 	private String pictureFileName;
+	
+	public Contestant() {
+		
+	}
 
 	public Contestant(VoteGroup voteGroup, String firstName, String lastName, String pictureFileName) {
 		setVoteGroup(voteGroup);

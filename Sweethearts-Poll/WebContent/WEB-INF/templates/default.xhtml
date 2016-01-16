@@ -1,8 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-<head>
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
 <title><ui:insert name="title">Sweethearts Poll</ui:insert></title>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -16,7 +18,7 @@
 	media="screen,projection" />
 <link href="css/style.css" type="text/css" rel="stylesheet"
 	media="screen,projection" />
-</head>
+</h:head>
 
 <body>
 	<ui:debug hotkey="x"
@@ -30,7 +32,9 @@
 
 
 	<div id="content">
-		<ui:insert name="content" />
+
+		<ui:insert name="content">
+		</ui:insert>
 	</div>
 
 	<div id="footer">
@@ -42,7 +46,11 @@
 	<!--  Scripts-->
 	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<script src="js/materialize.js"></script>
-
+	<script src='js/knockout-3.4.0.js' type="text/javascript"></script>
+	<script src='js/materialize.js' type="text/javascript"></script>
+	
+	<ui:insert name="javascript"></ui:insert>
+	
 </body>
 
 </html>

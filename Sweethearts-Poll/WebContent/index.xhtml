@@ -13,10 +13,31 @@
 			<div class="container">
 				<br /> <br />
 				<h:form>
-					<ui:fragment rendered="#{">
+					<ui:fragment rendered="#{PollController.enabledPoll != null}">
+						<h1 class="header center #{style.colorComplementaryText}">#{PollController.enabledPoll.name}</h1>
+						<p>#{PollController.enabledPoll.description}</p>
+						<br />
+						<ui:repeat items="#{PollController.voteGroups}" delims=","
+							var="voteGroup">
+							<ui:repeat items="${voteGroup.contestants}" delims=","
+								var="contestant">
+								<h:outputText value="${contestant.firstName}" />
+							</ui:repeat>
+						</ui:repeat>
 					</ui:fragment>
+					<ui:fragment rendered="#{PollController.enabledPoll == null}">
+						<h2 class="header center #{style.colorComplementaryText}">
+							No polls are available.<br />Please check back soon.
+						</h2>
+					</ui:fragment>
+
+					<h:commandLink
+						styleClass="#{style.colorPrimary} btn waves-effect waves-light"
+						value="Add dummy polls"
+						actionListener="#{PollController.addDummyPolls}"></h:commandLink>
 				</h:form>
-				<h1 class="header center #{style.colorComplementaryText}">Poll Name: </h1>
+
+
 			</div>
 		</div>
 	</ui:define>
