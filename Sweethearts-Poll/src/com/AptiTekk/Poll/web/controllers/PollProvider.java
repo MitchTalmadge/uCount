@@ -13,10 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.AptiTekk.Poll.core.Service;
+import com.AptiTekk.Poll.core.ViewModelConverter;
 import com.AptiTekk.Poll.core.entityBeans.Poll;
-import com.AptiTekk.Poll.core.entityBeans.ViewModelConverter;
 import com.AptiTekk.Poll.web.ViewModels.PollViewModel;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * Servlet implementation class PollProvider
@@ -45,11 +46,16 @@ public class PollProvider extends HttpServlet {
 		List<Poll> list = service.getAll();
 		
 		l.addAll(ViewModelConverter.toPollViewModels(list));
+		
+		
+		
+		
+		System.out.println(new Gson().toJson(l, new TypeToken<List<PollViewModel>>(){}.getType()));
 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out = response.getWriter();
-		out.write(new Gson().toJson(l));
+		out.write(new Gson().toJson(l, new TypeToken<List<PollViewModel>>(){}.getType()));
 	}
 
 	/**

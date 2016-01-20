@@ -1,8 +1,10 @@
-package com.AptiTekk.Poll.core.entityBeans;
+package com.AptiTekk.Poll.core;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.AptiTekk.Poll.core.entityBeans.Contestant;
+import com.AptiTekk.Poll.core.entityBeans.Poll;
 import com.AptiTekk.Poll.web.ViewModels.ContestantViewModel;
 import com.AptiTekk.Poll.web.ViewModels.PollViewModel;
 
