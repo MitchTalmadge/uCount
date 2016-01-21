@@ -5,8 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import com.sun.faces.ext.validator.CreditCardValidator;
-
 @Entity
 public class Credential {
 

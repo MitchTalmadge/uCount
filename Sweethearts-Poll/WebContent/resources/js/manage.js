@@ -9,6 +9,8 @@ function ManageContestantViewModel() {
 	self.ready = ko.observable(false);
 	self.contestantCollectionReady = ko.observable(false);
 	self.contestantInfoReady = ko.observable(false);
+	
+	self.imageLocation = "/Sweethearts-Poll/contestantImg/";
 
 	// Behaviours
 	self.selectPoll = function(poll) {
@@ -16,7 +18,6 @@ function ManageContestantViewModel() {
 		self.contestantInfoReady(false);
 		console.log("selected Poll: " + JSON.stringify(poll));
 		self.selectedPoll(poll);
-		self.selectedContestantData(null);
 		$.post("ContestantProvider", {
 			request : 1,
 			obj : JSON.stringify(poll)
@@ -25,6 +26,8 @@ function ManageContestantViewModel() {
 			console.log("Contestants for Poll: " + JSON.stringify(data));
 			self.contestantCollectionReady(true);
 			console.log("Visible after contestants: " + self.ready());
+			//console.log("Loading contestant: " + JSON.stringify(self.selectedPollData[0]));
+			//self.selectContestant(data[0]);
 		}).fail(function(error) {
 			alert(JSON.stringify(error));
 		});
@@ -33,14 +36,13 @@ function ManageContestantViewModel() {
 	self.selectContestant = function(contestant) {
 		self.contestantInfoReady(false);
 		self.contestantCollectionReady(false);
-		self.selectedPoll(contestant.pollName);
-		self.selectedPollData(null); // Stop showing a folder
 		$.post("ContestantProvider", {
 			request : 0,
 			obj : JSON.stringify(contestant)
 		}).done(function(data) {
 			self.selectedContestantData(data);
 			self.contestantInfoReady(true);
+			console.log("Loaded contestant: " + JSON.stringify(data));
 		}).fail(function(error) {
 			alert(JSON.stringify(error));
 		});
@@ -48,6 +50,10 @@ function ManageContestantViewModel() {
 
 	self.fullName = function(contestant) {
 		return contestant.firstName + " " + contestant.lastName;
+	};
+	
+	self.fullPictureLocation = function(contestant) {
+		return self.imageLocation + contestant.pictureFileName;
 	};
 	
 	self.toggleReady = function() {
@@ -71,5 +77,11 @@ function ManageContestantViewModel() {
 		}
 	});
 }
+
+$(document).ready(function(){
+    $('.collapsible').collapsible({
+      accordion : true // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+    });
+  });
 
 ko.applyBindings(new ManageContestantViewModel());

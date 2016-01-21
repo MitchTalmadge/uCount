@@ -19,7 +19,6 @@ import com.AptiTekk.Poll.core.entityBeans.Contestant;
 import com.AptiTekk.Poll.web.ViewModels.ContestantViewModel;
 import com.AptiTekk.Poll.web.ViewModels.PollViewModel;
 import com.google.gson.Gson;
-import com.mysema.query.types.Constant;
 
 /**
  * Servlet implementation class ContestantProvider

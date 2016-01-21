@@ -7,7 +7,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import com.AptiTekk.Poll.core.EntryService;
-import com.AptiTekk.Poll.core.entityBeans.Entry;
 
 @ManagedBean
 @RequestScoped

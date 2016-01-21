@@ -2,7 +2,6 @@ package com.AptiTekk.Poll.web.controllers;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.AptiTekk.Poll.core.ContestantService;
 import com.AptiTekk.Poll.core.PollService;
-import com.AptiTekk.Poll.core.Service;
 import com.AptiTekk.Poll.core.VoteGroupService;
 import com.AptiTekk.Poll.core.entityBeans.Contestant;
 import com.AptiTekk.Poll.core.entityBeans.Poll;
