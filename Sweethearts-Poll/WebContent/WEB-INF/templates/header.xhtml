@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-<body>
-	<nav class="#{style.colorPrimary}" role="navigation">
+<nav class="#{style.colorPrimary}" role="navigation">
 	<div class="nav-wrapper container">
 		<h:form>
-			<h:commandLink id="logo-container" styleClass="brand-logo"
-				action="index">#{settings.application_name}</h:commandLink>
+			<a id="logo-container" class="brand-logo" href="index.xhtml">#{settings.application_name}</a>
 		</h:form>
 		<ul class="right hide-on-med-and-down">
+			<li><h:form>
+					<ui:fragment rendered="#{LoginController.user != null}" value=" ">
+						<h:commandLink action="manage">Admin Panel</h:commandLink>
+					</ui:fragment>
+				</h:form></li>
 			<li><h:form>
 					<ui:fragment rendered="#{LoginController.user != null}" value=" ">
 						<h:commandLink action="#{LoginController.logout}">Sign Out</h:commandLink>
@@ -36,6 +39,6 @@
 		<a href="#" data-activates="nav-mobile" class="button-collapse"><i
 			class="material-icons">menu</i></a>
 	</div>
-	</nav>
-</body>
+</nav>
+
 </html>

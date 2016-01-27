@@ -19,7 +19,7 @@ public class LoginController {
 
 	@PostConstruct
 	public void init() {
-		
+
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		username = externalContext.getRequestHeaderMap().get("REMOTE_USER");
 
@@ -27,7 +27,7 @@ public class LoginController {
 
 	private String username;
 	private String password;
-	
+
 	public Principal getUser() {
 		FacesContext context = FacesContext.getCurrentInstance();
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
@@ -35,23 +35,32 @@ public class LoginController {
 	}
 
 	public String login() {
+		System.out.println("Logging In");
 		FacesContext context = FacesContext.getCurrentInstance();
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 		try {
 			request.login(this.username, this.password);
+			if (getUser() != null)
+				request.getSession().setAttribute("user", getUser());
+			else {
+				request.logout();
+				context.addMessage(null, new FacesMessage("Login failed."));
+				return "error";
+			}
+
 		} catch (ServletException e) {
 			context.addMessage(null, new FacesMessage("Login failed."));
 			return "error";
 		}
 		/*
-		 * The Authentication filter will put the original page they wanted
-		 * into a header named ORIGINAL_PAGE if they previously tried to
-		 * access the page but weren't authenticated.
+		 * The Authentication filter will put the original page they wanted into
+		 * a header named ORIGINAL_PAGE if they previously tried to access the
+		 * page but weren't authenticated.
 		 * 
 		 * This is where we send them back to where they wanted
 		 * 
 		 */
-		if(request.getHeader("ORIGINAL_PAGE") != null) {
+		if (request.getHeader("ORIGINAL_PAGE") != null) {
 			HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
 			try {
 				response.sendRedirect(request.getHeader("ORIGINAL_PAGE"));
@@ -59,11 +68,13 @@ public class LoginController {
 				e.printStackTrace();
 			}
 		}
-		//context.addMessage(null, new FacesMessage("redirect page was null."));
+		// context.addMessage(null, new FacesMessage("redirect page was
+		// null."));
 		return "manage";
 	}
 
 	public String logout() {
+		System.out.println("Logging Out");
 		FacesContext context = FacesContext.getCurrentInstance();
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 		try {
