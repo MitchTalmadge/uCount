@@ -9,9 +9,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.registry.infomodel.User;
 
 @ManagedBean
 @SessionScoped
@@ -40,9 +42,11 @@ public class LoginController {
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 		try {
 			request.login(this.username, this.password);
-			if (getUser() != null)
-				request.getSession().setAttribute("user", getUser());
-			else {
+			password = null;
+			if (getUser() != null) {
+				context.getExternalContext().getSessionMap().put("user", this.username);
+				context.getExternalContext().getSessionMap().put("userRole", ((request.isUserInRole("admin")) ? "admin" : "user"));
+			} else {
 				request.logout();
 				context.addMessage(null, new FacesMessage("Login failed."));
 				return "error";
@@ -70,7 +74,7 @@ public class LoginController {
 		}
 		// context.addMessage(null, new FacesMessage("redirect page was
 		// null."));
-		return "manage";
+		return "manage?faces-redirect=true";
 	}
 
 	public String logout() {
@@ -82,7 +86,11 @@ public class LoginController {
 		} catch (ServletException e) {
 			context.addMessage(null, new FacesMessage("Logout failed."));
 		}
-		return "login";
+		finally {
+			FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+			username = null;
+		}
+		return "index?faces-redirect=true";
 	}
 
 	public String getSubmitUsername() {

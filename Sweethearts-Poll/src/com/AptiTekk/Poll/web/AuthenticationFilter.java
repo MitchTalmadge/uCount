@@ -1,6 +1,7 @@
 package com.AptiTekk.Poll.web;
 
 import java.io.IOException;
+import java.security.Principal;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -12,6 +13,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import io.undertow.server.session.Session;
 
 /**
  * Servlet Filter implementation class AuthenticationFilter
@@ -23,6 +27,7 @@ public class AuthenticationFilter implements Filter {
 
 	HttpServletRequest currentReq;
 	HttpServletResponse currentRes;
+	HttpSession currentSession;
 
 	public void init(FilterConfig fConfig) throws ServletException {
 		this.context = fConfig.getServletContext();
@@ -34,12 +39,14 @@ public class AuthenticationFilter implements Filter {
 
 		currentReq = (HttpServletRequest) request;
 		currentRes = (HttpServletResponse) response;
+		currentSession = currentReq.getSession(false);
 
 		String uri = currentReq.getRequestURI();
 		// this.context.log("Requested Resource::"+uri);
 
 		if (uri.contains("/admin")) {
-			if (currentReq.isUserInRole("admin")) {
+			if (currentSession != null && currentSession.getAttribute("user") != null &&
+					currentSession.getAttribute("userRole").equals("admin")) {
 				chain.doFilter(request, response);
 			}
 		} else {
