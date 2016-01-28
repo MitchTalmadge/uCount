@@ -18,7 +18,7 @@ function ManageContestantViewModel() {
 		self.contestantInfoReady(false);
 		console.log("selected Poll: " + JSON.stringify(poll));
 		self.selectedPoll(poll);
-		$.post("ContestantProvider", {
+		$.post("/Sweethearts-Poll/ContestantProvider", {
 			request : 1,
 			obj : JSON.stringify(poll)
 		}).done(function(data) {
@@ -36,7 +36,7 @@ function ManageContestantViewModel() {
 	self.selectContestant = function(contestant) {
 		self.contestantInfoReady(false);
 		self.contestantCollectionReady(false);
-		$.post("ContestantProvider", {
+		$.post("/Sweethearts-Poll/ContestantProvider", {
 			request : 0,
 			obj : JSON.stringify(contestant)
 		}).done(function(data) {
@@ -63,7 +63,7 @@ function ManageContestantViewModel() {
 
 	// Data Pull
 	$.ajax({
-		url : 'PollProvider',
+		url : '/Sweethearts-Poll/PollProvider',
 		dataType : "json",
 		method : 'POST',
 		success : function(data) {

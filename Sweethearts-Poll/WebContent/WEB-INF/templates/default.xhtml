@@ -5,22 +5,20 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
-<title><ui:insert name="title">Sweethearts Poll</ui:insert></title>
+	<title><ui:insert name="title">Sweethearts Poll</ui:insert></title>
 
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1.0" />
 
-<!-- CSS  -->
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-	rel="stylesheet" />
-<link href="css/materialize.css" type="text/css" rel="stylesheet"
-	media="screen,projection" />
-<link href="css/style.css" type="text/css" rel="stylesheet"
-	media="screen,projection" />
+	<!-- CSS  -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+		rel="stylesheet" />
+	<h:outputStylesheet library="css" name="materialize.css" />
+	<h:outputStylesheet library="css" name="style.css" />
 </h:head>
 
-<body>
+<h:body>
 	<ui:debug hotkey="x"
 		rendered="#{initParam['javax.faces.FACELETS_DEVELOPMENT']}" />
 
@@ -44,12 +42,11 @@
 
 	<!--  Scripts-->
 	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-	<script src="js/materialize.js"></script>
-	<script src='js/knockout-3.4.0.js' type="text/javascript"></script>
-	<script src='js/materialize.js' type="text/javascript"></script>
-	
+	<h:outputScript library="js" name="materialize.js" />
+	<h:outputScript library="js" name="knockout-3.4.0.js" />
+
 	<ui:insert name="javascript"></ui:insert>
-	
-</body>
+
+</h:body>
 
 </html>
