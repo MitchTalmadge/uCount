@@ -44,9 +44,11 @@ public class LoginController {
 			request.login(this.username, this.password);
 			password = null;
 			if (getUser() != null) {
+				System.out.println("Logged in - Adding Session Variables");
 				context.getExternalContext().getSessionMap().put("user", this.username);
 				context.getExternalContext().getSessionMap().put("userRole", ((request.isUserInRole("admin")) ? "admin" : "user"));
 			} else {
+				System.out.println("Logging in Failed");
 				request.logout();
 				context.addMessage(null, new FacesMessage("Login failed."));
 				return "error";
@@ -74,7 +76,7 @@ public class LoginController {
 		}
 		// context.addMessage(null, new FacesMessage("redirect page was
 		// null."));
-		return "manage?faces-redirect=true";
+		return "manage";
 	}
 
 	public String logout() {
@@ -90,7 +92,7 @@ public class LoginController {
 			FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 			username = null;
 		}
-		return "index?faces-redirect=true";
+		return "index";
 	}
 
 	public String getSubmitUsername() {

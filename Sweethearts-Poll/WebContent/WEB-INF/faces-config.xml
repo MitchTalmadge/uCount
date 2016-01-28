@@ -31,11 +31,10 @@
     	<managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
     <navigation-rule>
-    	<display-name>WEB-INF/templates/header.xhtml</display-name>
-    	<from-view-id>/WEB-INF/templates/header.xhtml</from-view-id>
+    	<from-view-id>*</from-view-id>
     	<navigation-case>
-    		<from-outcome>login</from-outcome>
-    		<to-view-id>/login.xhtml</to-view-id>
+    		<from-outcome>manage</from-outcome>
+    		<to-view-id>/admin/manage.xhtml</to-view-id>
     	</navigation-case>
     </navigation-rule>
     <navigation-rule>
@@ -47,20 +46,19 @@
     	</navigation-case>
     </navigation-rule>
     <navigation-rule>
-    	<display-name>WEB-INF/templates/header.xhtml</display-name>
-    	<from-view-id>/WEB-INF/templates/header.xhtml</from-view-id>
+    	<display-name>*</display-name>
+    	<from-view-id>*</from-view-id>
+    	<navigation-case>
+    		<from-outcome>login</from-outcome>
+    		<to-view-id>/login.xhtml</to-view-id>
+    	</navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+    	<display-name>*</display-name>
+    	<from-view-id>*</from-view-id>
     	<navigation-case>
     		<from-outcome>index</from-outcome>
     		<to-view-id>/index.xhtml</to-view-id>
     	</navigation-case>
     </navigation-rule>
-    <navigation-rule>
-    	<display-name>WEB-INF/templates/header.xhtml</display-name>
-    	<from-view-id>/WEB-INF/templates/header.xhtml</from-view-id>
-    	<navigation-case>
-    		<from-outcome>manage</from-outcome>
-    		<to-view-id>/admin/manage.xhtml</to-view-id>
-    	</navigation-case>
-    </navigation-rule>
-
 </faces-config>

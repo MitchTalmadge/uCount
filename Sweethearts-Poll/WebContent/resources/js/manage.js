@@ -4,7 +4,6 @@ function ManageContestantsViewModel() {
 	self.polls = ko.observableArray();
 	self.selectedPoll = ko.observable();
 	self.selectedPollData = ko.observableArray();
-	self.selectedContestantData = ko.observable();
 	
 	self.ready = ko.observable(false);
 	self.contestantCollectionReady = ko.observable(false);

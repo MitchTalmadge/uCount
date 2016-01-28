@@ -4,41 +4,41 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
-
-<nav class="#{style.colorPrimary}" role="navigation">
-	<div class="nav-wrapper container">
-		<h:form>
-			<a id="logo-container" class="brand-logo" href="index.xhtml">#{settings.application_name}</a>
-		</h:form>
-		<ul class="right hide-on-med-and-down">
-			<li><h:form>
-					<ui:fragment rendered="#{LoginController.user != null}" value=" ">
-						<h:commandLink action="manage">Admin Panel</h:commandLink>
-					</ui:fragment>
-				</h:form></li>
-			<li><h:form>
-					<ui:fragment rendered="#{LoginController.user != null}" value=" ">
-						<h:commandLink action="#{LoginController.logout}">Sign Out</h:commandLink>
-					</ui:fragment>
-					<ui:fragment rendered="#{LoginController.user == null}">
-						<h:commandLink action="login">Login</h:commandLink>
-					</ui:fragment>
-				</h:form></li>
-		</ul>
-		<!-- Mobile -->
-		<ul id="nav-mobile" class="side-nav">
-			<li><h:form>
-					<ui:fragment rendered="#{LoginController.user != null}" value=" ">
-						<h:commandLink action="#{LoginController.logout}">Sign Out</h:commandLink>
-					</ui:fragment>
-					<ui:fragment rendered="#{LoginController.user == null}">
-						<h:commandLink action="login">Login</h:commandLink>
-					</ui:fragment>
-				</h:form></li>
-		</ul>
-		<a href="#" data-activates="nav-mobile" class="button-collapse"><i
-			class="material-icons">menu</i></a>
-	</div>
-</nav>
-
+<ui:composition>
+	<nav class="#{style.colorPrimary}" role="navigation">
+		<div class="nav-wrapper container">
+			<h:link id="logo-container" styleClass="brand-logo" outcome="index"
+				value="#{settings.application_name}" />
+			<ul class="right hide-on-med-and-down">
+				<li><ui:fragment rendered="#{LoginController.user != null}"
+						value=" ">
+						<h:form>
+							<h:commandLink action="manage">Admin Panel</h:commandLink>
+						</h:form>
+					</ui:fragment></li>
+				<li><h:form>
+						<ui:fragment rendered="#{LoginController.user != null}" value=" ">
+							<h:commandLink action="#{LoginController.logout}">Sign Out</h:commandLink>
+						</ui:fragment>
+						<ui:fragment rendered="#{LoginController.user == null}">
+							<h:commandLink action="login">Login</h:commandLink>
+						</ui:fragment>
+					</h:form></li>
+			</ul>
+			<!-- Mobile -->
+			<ul id="nav-mobile" class="side-nav">
+				<li><h:form>
+						<ui:fragment rendered="#{LoginController.user != null}" value=" ">
+							<h:commandLink action="#{LoginController.logout}">Sign Out</h:commandLink>
+						</ui:fragment>
+						<ui:fragment rendered="#{LoginController.user == null}">
+							<h:commandLink action="login">Login</h:commandLink>
+						</ui:fragment>
+					</h:form></li>
+			</ul>
+			<a href="#" data-activates="nav-mobile" class="button-collapse"><i
+				class="material-icons">menu</i></a>
+		</div>
+	</nav>
+</ui:composition>
 </html>
