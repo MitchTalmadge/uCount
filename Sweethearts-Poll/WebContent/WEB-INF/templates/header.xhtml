@@ -12,9 +12,7 @@
 			<ul class="right hide-on-med-and-down">
 				<li><ui:fragment rendered="#{LoginController.user != null}"
 						value=" ">
-						<h:form>
-							<h:commandLink action="manage">Admin Panel</h:commandLink>
-						</h:form>
+						<h:link outcome="manage" value="Admin Panel" />
 					</ui:fragment></li>
 				<li><h:form>
 						<ui:fragment rendered="#{LoginController.user != null}" value=" ">

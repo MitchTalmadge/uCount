@@ -49,8 +49,8 @@ public class PollController {
 	}
 	
 	public void addDummyPolls() {
-		Poll o = new Poll("Enabled", "Test Poll", true);
-		Poll o2 = new Poll("Disabled", "Test Poll", false);
+		Poll o = new Poll("EnabledPoll", "Test Poll", true);
+		Poll o2 = new Poll("DisabledPoll", "Test Poll", false);
 		pollService.insert(o);
 		pollService.insert(o2);
 		
@@ -62,8 +62,8 @@ public class PollController {
 		Contestant contestant = new Contestant(o3, "Kevin", "Thorne", "notFound.png");
 		Contestant contestant1 = new Contestant(o3, "Megan", "Church", "notFound.png");
 		
-		Contestant contestant2 = new Contestant(o3, "Andrew", "Meservy", "notFound.png");
-		Contestant contestant3 = new Contestant(o3, "Emma", "Lowe", "notFound.png");
+		Contestant contestant2 = new Contestant(o4, "Andrew", "Meservy", "notFound.png");
+		Contestant contestant3 = new Contestant(o4, "Emma", "Lowe", "notFound.png");
 		
 		contestantService.insert(contestant);
 		contestantService.insert(contestant1);
