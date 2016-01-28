@@ -1,24 +1,24 @@
-function ManageContestantViewModel() {
+function ManageContestantsViewModel() {
 	var self = this;
 
-	self.polls = ko.observable();
+	self.polls = ko.observableArray();
 	self.selectedPoll = ko.observable();
-	self.selectedPollData = ko.observable();
+	self.selectedPollData = ko.observableArray();
 	self.selectedContestantData = ko.observable();
 	
 	self.ready = ko.observable(false);
 	self.contestantCollectionReady = ko.observable(false);
-	self.contestantInfoReady = ko.observable(false);
 	
 	self.imageLocation = "/Sweethearts-Poll/contestantImg/";
+	
+	self.selectedPartner = ko.observable();
 
 	// Behaviours
 	self.selectPoll = function(poll) {
 		self.contestantCollectionReady(false);
-		self.contestantInfoReady(false);
 		console.log("selected Poll: " + JSON.stringify(poll));
 		self.selectedPoll(poll);
-		$.post("ContestantProvider", {
+		$.post("/Sweethearts-Poll/ContestantProvider", {
 			request : 1,
 			obj : JSON.stringify(poll)
 		}).done(function(data) {
@@ -28,21 +28,6 @@ function ManageContestantViewModel() {
 			console.log("Visible after contestants: " + self.ready());
 			//console.log("Loading contestant: " + JSON.stringify(self.selectedPollData[0]));
 			//self.selectContestant(data[0]);
-		}).fail(function(error) {
-			alert(JSON.stringify(error));
-		});
-	};
-
-	self.selectContestant = function(contestant) {
-		self.contestantInfoReady(false);
-		self.contestantCollectionReady(false);
-		$.post("ContestantProvider", {
-			request : 0,
-			obj : JSON.stringify(contestant)
-		}).done(function(data) {
-			self.selectedContestantData(data);
-			self.contestantInfoReady(true);
-			console.log("Loaded contestant: " + JSON.stringify(data));
 		}).fail(function(error) {
 			alert(JSON.stringify(error));
 		});
@@ -63,7 +48,7 @@ function ManageContestantViewModel() {
 
 	// Data Pull
 	$.ajax({
-		url : 'PollProvider',
+		url : '/Sweethearts-Poll/PollProvider',
 		dataType : "json",
 		method : 'POST',
 		success : function(data) {
@@ -84,4 +69,4 @@ $(document).ready(function(){
     });
   });
 
-ko.applyBindings(new ManageContestantViewModel());
+ko.applyBindings(new ManageContestantsViewModel());

@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+xmlns:h="http://xmlns.jcp.org/jsf/html"
+xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+	<f:metadata>
+		<f:viewParam name="id" value="#{ContestantController.id}"
+					data-bind="value: $root.requestedId"/>
+	</f:metadata>
+
+	<ui:composition template="/WEB-INF/templates/default.xhtml">
+
+		<ui:define name="content">
+
+			<div class="section no-pad-bot" id="index-banner">
+				<div class="container">
+					<div class="" data-bind="visible: ready">
+						<div class="row">
+							<h:form data-bind="submit: $root.updateContestant">
+								<div class="col s3 m2">
+									<img class="responsive-img" style="float: right;" data-bind="attr:{src: $root.fullPictureLocation($data)}" />
+								</div>
+								<div class="col s9 m4">
+									<div class="row">
+										<h4 data-bind="text: 'ID: ' + id"></h4>
+									</div>
+									<div class="row input-field">
+										<h:outputLabel for="firstname">
+											First Name
+										</h:outputLabel>
+										<h:inputText id="firstname"
+										a:data-bind="value: firstName"></h:inputText>
+									</div>
+									<div class="row input-field">
+										<h:outputLabel for="lastname">
+											Last Name
+										</h:outputLabel>
+										<h:inputText id="lastname"
+										a:data-bind="value: lastName"></h:inputText>
+									</div>
+									<div class="row input-field">
+										<select id="partners" data-bind="options: $root.getPartnerOptions($data), value: $root.selectedPartner"></select>
+										<label for="partners"> Partner </label>
+									</div>
+									<div class="row"></div>
+								</div>
+							</h:form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</ui:define>
+
+		<ui:define name="javascript">
+			<h:outputScript library="js" name="contestant.js" />
+		</ui:define>
+
+	</ui:composition>
+</html>

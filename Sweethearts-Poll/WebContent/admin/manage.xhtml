@@ -17,13 +17,13 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 							data-bind="foreach: polls">
 								<li class="#{style.colorPrimary} btn waves-effect waves-light"
 								data-bind="text: $data.name,
-								css: { disabled: $root.contestantInfoReady ? false : $data == $root.selectedPoll() },
+								css: { disabled: ($data == $root.selectedPoll()) },
 								click: $root.selectPoll"></li>
 							</ul>
 							<br />
 							<br />
 						</div>
-						<!-- Mails grid -->
+
 						<table data-bind="visible: contestantCollectionReady">
 							<thead>
 								<tr>
@@ -37,103 +37,18 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 							</thead>
 							<tbody class="collection" data-bind="foreach: selectedPollData">
 								<tr class="collection-item">
-									<td data-bind="text: $data.id"></td>
+									<td value="#{ContestantController.id}" data-bind="text: $data.id"></td>
 									<td data-bind="text: $data.voteGroupId"></td>
 									<td data-bind="text: $root.fullName($data)"></td>
 									<td></td>
-									<td><a
-									class="#{style.colorPrimaryBase} btn waves-effect waves-light"><i
-									class="material-icons"
-									data-bind="click: $root.selectContestant">mode_edit</i></a></td>
-									<td><a class="red btn waves-effect waves-light"><i
-									class="material-icons">delete</i></a></td>
+									<td style="float: right"><h:link class="red btn waves-effect waves-light"> <i class="material-icons">delete</i> </a></td>
+									<td style="float: right"><h:link outcome="modifyContestant" class="#{style.colorPrimaryBase} btn waves-effect waves-light"> <i class="material-icons">mode_edit</i> </a></td>
 								</tr>
 							</tbody>
 						</table>
-						<!-- <ul class="collapsible" data-collapsible="accordian" data-bind="visible: contestantCollectionReady">
-						<li class="row" data-bind="foreach: selectedPollData">
-						<div class="collapsible-header" data-bind="click: $root.selectContestant">
-						<div class="col s1 m1">
-						<i class="material-icons">perm_identity</i>
-						</div>
-						<div class="col s1 m1">
-						<span data-bind="text: $root.id"></span>
-						</div>
-						<div class="col s1 m1">
-						<span data-bind="text: $root.voteGroupId"></span>
-						</div>
-						<div class="col s8 m2">
-						<span data-bind="text: $root.fullName($data)"></span>
-						</div>
-						<div class="col s1 m1">
-						<a class="red btn waves-effect waves-light"><i
-						class="material-icons">delete</i></a>
-						</div>
-						</div>
-						<div class="collapsible-body">
-						<div data-bind="visible: $root.contestantInfoReady">
-						<div data-bind="with: $root.selectedContestantData">
-						<div class="col s3 m2">
-						<img class="responsive-img" style="float: right;" data-bind="attr:{src: $root.fullPictureLocation($data)}" />
-						</div>
-						<div class="col s9 m4">
-						<div class="row input-field">
-						<h:outputLabel for="firstname">
-						First Name
-						</h:outputLabel>
-						<h:inputText id="firstname"
-						value="" data-bind="text: firstName"></h:inputText>
-						</div>
-						<div class="row input-field">
-						<h:outputLabel for="lastname">
-						Last Name
-						</h:outputLabel>
-						<h:inputText id="lastname"
-						value="" data-bind="text: lastName"></h:inputText>
-						</div>
-						</div>
-						</div>
-						</div>
-						</div>
-						</li>
-						</ul> -->
-
-						<!-- Old -->
-						<div class="" data-bind="visible: contestantInfoReady, with: selectedContestantData">
-							<div class="row">
-								<div class="col s3 m2">
-									<img class="responsive-img" style="float: right;" data-bind="attr:{src: $root.fullPictureLocation($data)}" />
-								</div>
-								<div class="col s9 m4">
-									<div class="row">
-										<h4 data-bind="text: 'ID: ' + id"></h4>
-									</div>
-									<div class="row input-field">
-										<h:outputLabel for="firstname">
-											First Name
-										</h:outputLabel>
-										<h:inputText id="firstname"
-										a:data-bind="value: firstName"></h:inputText>
-									</div>
-									<div class="row input-field">
-										<h:outputLabel for="lastname">
-											Last Name
-										</h:outputLabel>
-										<h:inputText id="lastname"
-										a:data-bind="value: lastName"></h:inputText>
-									</div>
-									<div class="row input-field">
-										<select data-bind="foreach: $root.selectedPollData">
-											<option data-bind="text: $root.fullName($data)"></option>
-										</select>
-										<label>Partner</label>
-									</div>
-								</div>
-							</div>
-						</div>
 
 						<!-- Loading -->
-						<div class="progress" data-bind="visible: !contestantInfoReady || !contestantCollectionReady">
+						<div class="progress" data-bind="visible: !contestantCollectionReady">
 							<div class="indeterminate"></div>
 						</div>
 					</div>
