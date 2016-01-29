@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -14,6 +15,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.registry.infomodel.User;
+
+import org.junit.validator.PublicClassValidator;
 
 @ManagedBean
 @SessionScoped
@@ -29,6 +32,8 @@ public class LoginController {
 
 	private String username;
 	private String password;
+	
+	private UIComponent submitButton;
 
 	public Principal getUser() {
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -37,25 +42,32 @@ public class LoginController {
 	}
 
 	public String login() {
-		System.out.println("Logging In");
 		FacesContext context = FacesContext.getCurrentInstance();
+		System.out.println("Logging In");
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 		try {
 			request.login(this.username, this.password);
 			password = null;
 			if (getUser() != null) {
-				System.out.println("Logged in - Adding Session Variables");
-				context.getExternalContext().getSessionMap().put("user", this.username);
-				context.getExternalContext().getSessionMap().put("userRole", ((request.isUserInRole("admin")) ? "admin" : "user"));
+				if (!request.isUserInRole("admin")) {
+					context.addMessage(submitButton.getClientId(),
+							new FacesMessage("Login Failed: User is not an admin."));
+					request.logout();
+					return "error";
+				} else {
+					System.out.println("Login Successful - Adding Session Variables");
+					context.getExternalContext().getSessionMap().put("user", this.username);
+					context.getExternalContext().getSessionMap().put("userRole",
+							((request.isUserInRole("admin")) ? "admin" : "user"));
+				}
 			} else {
-				System.out.println("Logging in Failed");
 				request.logout();
-				context.addMessage(null, new FacesMessage("Login failed."));
+				context.addMessage(submitButton.getClientId(), new FacesMessage("Login Failed: User is null."));
 				return "error";
 			}
 
 		} catch (ServletException e) {
-			context.addMessage(null, new FacesMessage("Login failed."));
+			context.addMessage(submitButton.getClientId(), new FacesMessage("Login Failed: Incorrect Credentials."));
 			return "error";
 		}
 		/*
@@ -87,8 +99,7 @@ public class LoginController {
 			request.logout();
 		} catch (ServletException e) {
 			context.addMessage(null, new FacesMessage("Logout failed."));
-		}
-		finally {
+		} finally {
 			FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 			username = null;
 		}
@@ -109,6 +120,16 @@ public class LoginController {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public void setSubmitButton(UIComponent submitButton)
+	{
+		this.submitButton = submitButton;
+	}
+	
+	public UIComponent getSubmitButton()
+	{
+		return this.submitButton;
 	}
 
 }

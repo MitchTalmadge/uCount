@@ -20,6 +20,7 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 						</div>
 						<div class="col s12 m4">
 							<h:form id="loginForm" onkeypress="if (event.keyCode == 13) { document.getElementById('loginForm:submit').click(); return false; }">
+								<h:message for="submit" style="color: red"/>
 								<div class="row">
 									<div class="input-field col s12">
 										<h:outputLabel for="username">
@@ -41,7 +42,7 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 									<p></p>
 									<h:commandLink id="submit"
 									styleClass="#{style.colorPrimary} btn waves-effect waves-light"
-									value="Login" action="#{LoginController.login}">
+									value="Login" binding="#{LoginController.submitButton}" action="#{LoginController.login}">
 										<i class="material-icons right">send</i>
 									</h:commandLink>
 								</h:panelGrid>
