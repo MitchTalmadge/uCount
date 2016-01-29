@@ -25,6 +25,17 @@ function ManageContestantsViewModel() {
 			alert(JSON.stringify(error));
 		});
 	};
+	
+	self.declareIdParameter = function(contestant) {
+		$.post("/Sweethearts-Poll/ParameterProvider", {
+			id : contestant.id
+		}).done(function(data) {
+			self.selectedPollData(data);
+			console.log("Contestants for Poll: " + JSON.stringify(data));
+		}).fail(function(error) {
+			alert(JSON.stringify(error));
+		});
+	}
 
 	self.fullName = function(contestant) {
 		return contestant.firstName + " " + contestant.lastName;

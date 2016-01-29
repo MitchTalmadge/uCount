@@ -11,25 +11,36 @@
 				value="Bingham Sweethearts" />
 			<ul class="right hide-on-med-and-down">
 				<ui:fragment rendered="#{LoginController.user != null}">
-					<li style="padding: 0 10px">Hello, #{LoginController.user.name}!</li>
-					<li><h:link outcome="manage" value="Admin Panel" /></li>
-					<li><h:form>
+					<li style="padding: 0 10px">Hello,
+						#{LoginController.user.name}!</li>
+					<li>
+						<h:link outcome="manage" value="Admin Panel" />
+					</li>
+					<li>
+						<h:form>
 							<h:commandLink action="#{LoginController.logout}">Sign Out</h:commandLink>
-						</h:form></li>
+						</h:form>
+					</li>
 				</ui:fragment>
 				<ui:fragment rendered="#{LoginController.user == null}">
-					<li><h:link outcome="login" value="Login" /></li>
+					<li>
+						<h:link outcome="login" value="Login" />
+					</li>
 				</ui:fragment>
 			</ul>
 			<!-- Mobile -->
 			<ul id="nav-mobile" class="side-nav">
 				<ui:fragment rendered="#{LoginController.user != null}">
-					<li><h:form>
+					<li>
+						<h:form>
 							<h:commandLink action="#{LoginController.logout}">Sign Out</h:commandLink>
-						</h:form></li>
+						</h:form>
+					</li>
 				</ui:fragment>
 				<ui:fragment rendered="#{LoginController.user == null}">
-					<li><h:link outcome="login" value="Login" /></li>
+					<li>
+						<h:link outcome="login" value="Login" />
+					</li>
 				</ui:fragment>
 			</ul>
 			<a href="#" data-activates="nav-mobile" class="button-collapse"><i

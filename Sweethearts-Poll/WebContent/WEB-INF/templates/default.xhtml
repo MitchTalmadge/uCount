@@ -22,25 +22,15 @@
 	<ui:debug hotkey="x"
 		rendered="#{initParam['javax.faces.FACELETS_DEVELOPMENT']}" />
 
-	<div id="header">
-		<ui:insert name="header">
-			<ui:include src="/WEB-INF/templates/header.xhtml" />
-		</ui:insert>
-	</div>
+	<header> <ui:include src="/WEB-INF/templates/header.xhtml" />
+	</header>
 
 
-	<div id="content">
-		<ui:insert name="content">
-		</ui:insert>
-	</div>
+	<main> <ui:insert name="content" /></main>
 
-	<!-- 
-	<div id="footer">
-		<ui:insert name="footer">
-			<ui:include src="/WEB-INF/templates/footer.xhtml" />
-		</ui:insert>
-	</div>
-	-->
+
+	<footer class="page-footer #{style.colorComplementary}"> <ui:include src="/WEB-INF/templates/footer.xhtml" />
+	</footer>
 
 	<!--  Scripts-->
 	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>

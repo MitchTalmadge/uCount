@@ -50,19 +50,24 @@
 							</thead>
 							<tbody data-bind="foreach: selectedPollData">
 								<tr>
-									<td value="#{ContestantController.id}"
-										data-bind="text: $data.id" />
+									<td data-bind="text: $data.id" />
 									<td data-bind="text: $data.voteGroupId" />
 									<td data-bind="text: $root.fullName($data)" />
-									<td style="float: right"><h:link
-											class="red btn waves-effect waves-light">
+									<td style="float: right">
+										<h:link class="red btn waves-effect waves-light">
 											<i class="material-icons">delete</i>
-										</h:link></td>
-									<td style="float: right"><h:link
-											outcome="modifyContestant"
-											class="#{style.colorPrimaryBase} btn waves-effect waves-light">
-											<i class="material-icons">mode_edit</i>
-										</h:link></td>
+										</h:link>
+									</td>
+									<td style="float: right">
+										<h:form>
+											<h:inputHidden id="id" data-bind="value: $data.id" value="#{ContestantController.id}" />
+											<h:commandButton
+												class="#{style.colorPrimaryBase} btn waves-effect waves-light"
+												action="modifyContestant">
+												<i class="material-icons">mode_edit</i>
+											</h:commandButton>
+										</h:form>
+									</td>
 								</tr>
 							</tbody>
 						</table>
