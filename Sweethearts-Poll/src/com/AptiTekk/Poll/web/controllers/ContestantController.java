@@ -1,10 +1,10 @@
 package com.AptiTekk.Poll.web.controllers;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 
 @ManagedBean
-@RequestScoped
+@SessionScoped
 public class ContestantController {
 
 	private int id;

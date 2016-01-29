@@ -59,11 +59,11 @@
 										</h:link>
 									</td>
 									<td style="float: right">
-										<h:form>
-											<h:inputHidden id="id" data-bind="value: $data.id" value="#{ContestantController.id}" />
+										<h:form id="contestantEdit">
+											<h:inputHidden id="id" value="#{ContestantController.id}" />
 											<h:commandButton
 												class="#{style.colorPrimaryBase} btn waves-effect waves-light"
-												action="modifyContestant">
+												action="modifyContestant" data-bind="click: setContestantId($data.id)">
 												<i class="material-icons">mode_edit</i>
 											</h:commandButton>
 										</h:form>

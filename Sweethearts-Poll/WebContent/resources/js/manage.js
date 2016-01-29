@@ -36,6 +36,10 @@ function ManageContestantsViewModel() {
 			alert(JSON.stringify(error));
 		});
 	}
+	
+	self.setContestantId = function(id) {
+		document.getElementById("contestantEdit:id").value = id;
+	};
 
 	self.fullName = function(contestant) {
 		return contestant.firstName + " " + contestant.lastName;
