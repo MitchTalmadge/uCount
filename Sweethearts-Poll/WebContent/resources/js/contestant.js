@@ -4,9 +4,19 @@
 function ModifyContestantViewModel() {
 	var self = this;
 	
+	$.urlParam = function(name){
+	    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	    if (results==null){
+	       return null;
+	    }
+	    else{
+	       return results[1] || 0;
+	    }
+	}
+	
 	self.ready = ko.observable(false);
 	
-	self.requestedId = ko.observable();
+	self.requestedId = $.urlParam('id');
 	
 	self.contestant = ko.observable();
 	
@@ -71,7 +81,7 @@ function ModifyContestantViewModel() {
 	// Data Pull
 	$.post("/Sweethearts-Poll/ContestantProvider", {
 		request : 0,
-		id : self.requestedId()
+		id : self.requestedId
 	}).done(function(data) {
 		console.log("Submitted new contestant: " + JSON.stringify(data));
 	}).fail(function(error) {

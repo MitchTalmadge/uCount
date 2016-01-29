@@ -60,7 +60,7 @@ public class ContestantProvider extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String reply = "";
-
+		
 		switch (Integer.parseInt(request.getParameter("request"))) {
 		case 0: // REQUESTED ONE CONTESTANT
 			int givenContestant = Integer.parseInt(request.getParameter("id"));
