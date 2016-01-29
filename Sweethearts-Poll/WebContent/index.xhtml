@@ -7,7 +7,6 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <ui:composition template="/WEB-INF/templates/default.xhtml">
-	<ui:define name="title">Sweethearts Poll</ui:define>
 	<ui:define name="content">
 		<div class="section no-pad-bot" id="index-banner">
 			<div class="container">
@@ -15,7 +14,7 @@
 				<h:form>
 					<ui:fragment rendered="#{PollController.enabledPoll != null}">
 						<h1 class="header center #{style.colorComplementaryText}">#{PollController.enabledPoll.name}</h1>
-						<p>#{PollController.enabledPoll.description}</p>
+						<p class="flow-text center-align">#{PollController.enabledPoll.description}</p>
 						<br />
 						<ui:repeat items="#{PollController.voteGroups}" delims=","
 							var="voteGroup">
@@ -30,11 +29,6 @@
 							No polls are available.<br />Please check back soon.
 						</h2>
 					</ui:fragment>
-
-					<h:commandLink
-						styleClass="#{style.colorPrimary} btn waves-effect waves-light"
-						value="Add dummy polls"
-						actionListener="#{PollController.addDummyPolls}"></h:commandLink>
 				</h:form>
 
 

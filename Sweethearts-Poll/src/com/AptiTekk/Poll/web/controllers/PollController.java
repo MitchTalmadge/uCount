@@ -49,8 +49,8 @@ public class PollController {
 	}
 	
 	public void addDummyPolls() {
-		Poll o = new Poll("EnabledPoll", "Test Poll", true);
-		Poll o2 = new Poll("DisabledPoll", "Test Poll", false);
+		Poll o = new Poll("EnabledPoll", "This is a test description for the Enabled Poll", true);
+		Poll o2 = new Poll("DisabledPoll", "This is a test description for the Disabled Poll", false);
 		pollService.insert(o);
 		pollService.insert(o2);
 		
@@ -72,7 +72,7 @@ public class PollController {
 		
 		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
 		try {
-			response.sendRedirect("index.xhtml");
+			response.sendRedirect("manage.xhtml");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

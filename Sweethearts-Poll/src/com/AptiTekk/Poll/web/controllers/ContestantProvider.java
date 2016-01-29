@@ -28,36 +28,40 @@ import com.google.gson.Gson;
 @WebServlet("/ContestantProvider")
 public class ContestantProvider extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Inject
 	private PollService pollService;
 	@Inject
 	private ContestantService contestantService;
 	@Inject
 	private VoteGroupService voteGroupService;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ContestantProvider() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public ContestantProvider() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		return;
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		String reply = "";
-		
-		switch(Integer.parseInt(request.getParameter("request"))) {
+
+		switch (Integer.parseInt(request.getParameter("request"))) {
 		case 0: // REQUESTED ONE CONTESTANT
 			int givenContestant = Integer.parseInt(request.getParameter("id"));
 			Contestant contestant = contestantService.get(givenContestant);
@@ -66,10 +70,15 @@ public class ContestantProvider extends HttpServlet {
 			break;
 		case 1: // REQUESTED ALL CONTESTANTS UNDER POLL
 			PollViewModel givenPoll = new Gson().fromJson(request.getParameter("obj"), PollViewModel.class);
-			List<ContestantViewModel> l = new ArrayList<>();
-			List<Contestant> list = contestantService.getContestantsByPoll(pollService.get(givenPoll.getId()));
-			l.addAll(ViewModelConverter.toContestantViewModels(list));
-			reply = new Gson().toJson(l);
+			if (givenPoll != null) {
+				List<ContestantViewModel> l = new ArrayList<>();
+				List<Contestant> list = contestantService.getContestantsByPoll(pollService.get(givenPoll.getId()));
+				l.addAll(ViewModelConverter.toContestantViewModels(list));
+				reply = new Gson().toJson(l);
+			}
+			else {
+				reply = "";
+			}
 			break;
 		case 2: // REQUESTED ALL CONTESTANTS
 			List<ContestantViewModel> l_ = new ArrayList<>();
@@ -78,8 +87,10 @@ public class ContestantProvider extends HttpServlet {
 			reply = new Gson().toJson(l_);
 			break;
 		case 3: // UPDATE CONTESTANT
-			ContestantViewModel modifiedContestantVM = new Gson().fromJson(request.getParameter("obj"), ContestantViewModel.class);
-			Contestant modifiedContestant = ModelConverter.toEntity(modifiedContestantVM, contestantService, voteGroupService);
+			ContestantViewModel modifiedContestantVM = new Gson().fromJson(request.getParameter("obj"),
+					ContestantViewModel.class);
+			Contestant modifiedContestant = ModelConverter.toEntity(modifiedContestantVM, contestantService,
+					voteGroupService);
 			contestantService.update(modifiedContestant, modifiedContestant.getId());
 			break;
 		default:
