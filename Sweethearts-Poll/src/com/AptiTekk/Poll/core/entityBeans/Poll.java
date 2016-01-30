@@ -1,10 +1,11 @@
 package com.AptiTekk.Poll.core.entityBeans;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -16,11 +17,11 @@ public class Poll {
 	@GeneratedValue
 	private int id;
 
-	@OneToMany(mappedBy = "poll", cascade = CascadeType.ALL)
-	private Set<VoteGroup> voteGroups;
+	@OneToMany(fetch=FetchType.EAGER, mappedBy = "poll", cascade = CascadeType.ALL)
+	private List<VoteGroup> voteGroups;
 
 	@OneToMany(mappedBy = "poll", cascade = CascadeType.ALL)
-	private Set<Entry> entries;
+	private List<Entry> entries;
 
 	@Column(length = 128)
 	private String name;
@@ -51,19 +52,19 @@ public class Poll {
 		this.id = id;
 	}
 
-	public Set<VoteGroup> getVoteGroups() {
+	public List<VoteGroup> getVoteGroups() {
 		return voteGroups;
 	}
 
-	public void setVoteGroups(Set<VoteGroup> voteGroups) {
+	public void setVoteGroups(List<VoteGroup> voteGroups) {
 		this.voteGroups = voteGroups;
 	}
 
-	public Set<Entry> getEntries() {
+	public List<Entry> getEntries() {
 		return entries;
 	}
 
-	public void setEntries(Set<Entry> entries) {
+	public void setEntries(List<Entry> entries) {
 		this.entries = entries;
 	}
 

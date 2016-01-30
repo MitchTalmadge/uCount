@@ -28,12 +28,17 @@
     <managed-bean>
     	<managed-bean-name>PollController</managed-bean-name>
     	<managed-bean-class>com.AptiTekk.Poll.web.controllers.PollController</managed-bean-class>
-    	<managed-bean-scope>request</managed-bean-scope>
+    	<managed-bean-scope>application</managed-bean-scope>
     </managed-bean>
     <managed-bean>
     	<managed-bean-name>ContestantController</managed-bean-name>
     	<managed-bean-class>com.AptiTekk.Poll.web.controllers.ContestantController</managed-bean-class>
     	<managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+    	<managed-bean-name>ManagerController</managed-bean-name>
+    	<managed-bean-class>com.AptiTekk.Poll.web.controllers.ManagerController</managed-bean-class>
+    	<managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
     <navigation-rule>
     	<from-view-id>*</from-view-id>

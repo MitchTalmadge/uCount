@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
@@ -18,28 +18,27 @@ import com.AptiTekk.Poll.core.entityBeans.Poll;
 import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
 
 @ManagedBean
-@RequestScoped
+@ApplicationScoped
 public class PollController {
-	
+
 	@Inject
 	PollService pollService;
-	
+
 	@Inject
 	VoteGroupService voteGroupService;
-	
+
 	@Inject
 	ContestantService contestantService;
-	
+
 	private Poll enabledPoll;
-	private List<VoteGroup> voteGroups;
-	
+	private List<Poll> polls;
+
 	@PostConstruct
 	public void init() {
 		setEnabledPoll(pollService.getEnabledPoll());
-		if(enabledPoll != null)
-			setVoteGroups(voteGroupService.getVoteGroupsFromPoll(enabledPoll));
+		setPolls(pollService.getAll());
 	}
-	
+
 	public Poll getEnabledPoll() {
 		return enabledPoll;
 	}
@@ -47,30 +46,31 @@ public class PollController {
 	public void setEnabledPoll(Poll enabledPoll) {
 		this.enabledPoll = enabledPoll;
 	}
-	
+
 	public void addDummyPolls() {
 		Poll o = new Poll("EnabledPoll", "This is a test description for the Enabled Poll", true);
 		Poll o2 = new Poll("DisabledPoll", "This is a test description for the Disabled Poll", false);
 		pollService.insert(o);
 		pollService.insert(o2);
-		
+
 		VoteGroup o3 = new VoteGroup(o);
 		VoteGroup o4 = new VoteGroup(o);
 		voteGroupService.insert(o3);
 		voteGroupService.insert(o4);
-		
+
 		Contestant contestant = new Contestant(o3, "Kevin", "Thorne", "notFound.png");
 		Contestant contestant1 = new Contestant(o3, "Megan", "Church", "notFound.png");
-		
+
 		Contestant contestant2 = new Contestant(o4, "Andrew", "Meservy", "notFound.png");
 		Contestant contestant3 = new Contestant(o4, "Emma", "Lowe", "notFound.png");
-		
+
 		contestantService.insert(contestant);
 		contestantService.insert(contestant1);
 		contestantService.insert(contestant2);
 		contestantService.insert(contestant3);
-		
-		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+
+		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
+				.getResponse();
 		try {
 			response.sendRedirect("manage.xhtml");
 		} catch (IOException e) {
@@ -78,12 +78,12 @@ public class PollController {
 		}
 	}
 
-	public List<VoteGroup> getVoteGroups() {
-		return voteGroups;
+	public List<Poll> getPolls() {
+		return polls;
 	}
 
-	public void setVoteGroups(List<VoteGroup> voteGroups) {
-		this.voteGroups = voteGroups;
+	public void setPolls(List<Poll> polls) {
+		this.polls = polls;
 	}
 
 }

@@ -4,33 +4,113 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <ui:composition template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
 		<div class="section no-pad-bot" id="index-banner">
 			<div class="container">
-				<h:form>
-					<h:commandLink
-						styleClass="#{style.colorPrimary} btn waves-effect waves-light"
-						value="Add Dummy Polls"
-						actionListener="#{PollController.addDummyPolls}" />
-				</h:form>
-				<br />
-				<div data-bind="visible: ready">
-					<div class="nav-wrapper">
-						<ul style="display: inline;" class="left"
-							data-bind="foreach: polls">
-							<li class="#{style.colorPrimary} btn waves-effect waves-light"
-								data-bind="text: $data.name,
-								css: { disabled: ($data == $root.selectedPoll()) },
-								click: $root.selectPoll"></li>
+
+				<div class="row">
+					<div class="col s6">
+						<h:selectOneMenu value="#{PollController.enabledPoll.id}">
+							<f:selectItems value="#{PollController.polls}" var="poll"
+								itemLabel="#{poll.name}" itemValue="${poll.id}" />
+							<label>Enabled Poll</label>
+						</h:selectOneMenu>
+					</div>
+				</div>
+
+
+				<nav class="light-blue darken-4">
+				<div class="nav-wrapper">
+					<h:form>
+						<ul id="nav-mobile" class="left hide-on-med-and-down">
+							<ui:repeat value="#{PollController.polls}" var="poll">
+								<li
+									class="#{poll.id == ManagerController.selectedPoll.id ? 'active' : ''}">
+									<h:commandLink value="#{poll.name}"
+										action="#{ManagerController.setSelectedPoll(poll)}" />
+								</li>
+							</ui:repeat>
 						</ul>
-						<br /> <br />
+						<h:form>
+							<h:commandLink styleClass="right" style="padding:0 10px"
+								value="Add Dummy Polls"
+								actionListener="#{PollController.addDummyPolls}" />
+						</h:form>
+					</h:form>
+				</div>
+				</nav>
+
+				<br />
+
+				<h:panelGroup rendered="#{ManagerController.selectedPoll != null}"
+					layout="block" id="manageContent">
+					<div class="row">
+						<div class="col s6">
+							<div class="card">
+								<div class="card-content">
+									<span class="card-title">Poll Description:</span>
+									<p>#{ManagerController.selectedPoll.description}</p>
+								</div>
+							</div>
+						</div>
 					</div>
 
-					<br />
+					<div class="row">
+						<div class="col s12">
+							<span style="font-size: 24px; font-weight: 300">Vote
+								Groups: </span>
+							<table class="striped responsive-table">
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Talent</th>
+										<th>Contestants</th>
+									</tr>
+								</thead>
+								<tbody>
+									<ui:repeat value="#{ManagerController.selectedPoll.voteGroups}"
+										var="voteGroup">
+										<tr>
+											<td>#{voteGroup.id}</td>
+											<td>#{voteGroup.talentName == null ? 'No Talent' :
+												voteGroup.talentName}</td>
+											<td>
+												<ui:repeat value="#{voteGroup.contestants}" var="contestant"
+													varStatus="status">
+													#{contestant.firstName} #{contestant.lastName}#{status.last ? '' : ','}
+												</ui:repeat>
+											</td>
+											<td style="float: right">
+												<h:link class="red btn waves-effect waves-light">
+													<i class="material-icons">delete</i>
+												</h:link>
+											</td>
+											<td style="float: right">
+												<h:form id="contestantEditForm">
+													<h:inputHidden id="id" value="#{ContestantController.id}" />
+													<h:commandLink
+														class="#{style.colorPrimaryBase} btn waves-effect waves-light"
+														data-bind="click: $root.setEditContestant"
+														action="modifyContestant">
+														<i class="material-icons">mode_edit</i>
+													</h:commandLink>
+												</h:form>
+											</td>
+										</tr>
+									</ui:repeat>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</h:panelGroup>
+
+
+				<!-- 
+				<div data-bind="visible: ready">
+					<br /> <br /> <br />
 					<div data-bind="visible: selectedPoll()">
 						<div data-bind="with: selectedPoll">
 							<h6 style="font-size: 25px">Poll Description:</h6>
@@ -53,40 +133,35 @@
 									<td data-bind="text: $data.id" />
 									<td data-bind="text: $data.voteGroupId" />
 									<td data-bind="text: $root.fullName($data)" />
-									<td style="float: right">
-										<h:link class="red btn waves-effect waves-light">
+									<td style="float: right"><h:link
+											class="red btn waves-effect waves-light">
 											<i class="material-icons">delete</i>
-										</h:link>
-									</td>
-									<td style="float: right">
-										<h:form id="contestantEdit">
+										</h:link></td>
+									<td style="float: right"><h:form id="contestantEditForm">
 											<h:inputHidden id="id" value="#{ContestantController.id}" />
-											<h:commandButton
+											<h:commandLink
 												class="#{style.colorPrimaryBase} btn waves-effect waves-light"
-												action="modifyContestant" data-bind="click: setContestantId($data.id)">
+												data-bind="click: $root.setEditContestant"
+												action="modifyContestant">
 												<i class="material-icons">mode_edit</i>
-											</h:commandButton>
-										</h:form>
-									</td>
+											</h:commandLink>
+										</h:form></td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
-
-					<!-- Loading -->
-					<div class="progress" data-bind="visible: !selectedPollData">
-						<div class="indeterminate"></div>
-					</div>
 				</div>
-			</div>
-			<div class="progress" data-bind="visible: !ready">
-				<div class="indeterminate"></div>
+				 -->
 			</div>
 		</div>
 
 	</ui:define>
 	<ui:define name="javascript">
-		<h:outputScript library="js" name="manage.js" />
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('select').material_select();
+			});
+		</script>
 	</ui:define>
 </ui:composition>
 </html>
