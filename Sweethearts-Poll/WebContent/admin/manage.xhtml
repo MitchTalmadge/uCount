@@ -35,7 +35,7 @@
 										class="#{poll.id == ManagerController.selectedPoll.id ? 'active' : ''}">
 										<h:commandLink value="#{poll.name}"
 											action="#{ManagerController.setSelectedPoll(poll)}">
-											<f:ajax render=":pollContent :navBar" />
+											<f:ajax render=":pollContent :navBar :descriptionForm" />
 										</h:commandLink>
 									</li>
 								</ui:repeat>
@@ -66,22 +66,23 @@
 												value="#{ManagerController.selectedPoll.description}" />
 											<br />
 											<h:commandLink
-												class="#{style.colorPrimaryBase} btn waves-effect waves-light"
-												action="#{ManagerController.setEditingDescription(true)}">
+												class="#{style.colorPrimaryBase} btn waves-effect waves-light">
 												<i class="material-icons">mode_edit</i>
-												<f:ajax render="descriptionForm" />
+												<f:ajax render=":descriptionForm"
+													listener="#{ManagerController.onEditDescriptionButtonFired}" />
 											</h:commandLink>
 										</ui:fragment>
 
 										<ui:fragment
 											rendered="#{ManagerController.editingDescription}">
-											<h:inputTextarea
+											<h:inputTextarea id="descriptionTextarea"
 												value="#{ManagerController.selectedPoll.description}" />
 											<h:commandLink
-												class="#{style.colorPrimaryBase} btn waves-effect waves-light"
-												action="#{ManagerController.setEditingDescription(false)}">
+												class="#{style.colorPrimaryBase} btn waves-effect waves-light">
 												<i class="material-icons">done</i>
-												<f:ajax render="descriptionForm" />
+												<f:ajax execute="descriptionTextarea"
+													render=":descriptionForm"
+													listener="#{ManagerController.onEditDescriptionDoneButtonFired}" />
 											</h:commandLink>
 										</ui:fragment>
 									</h:form>

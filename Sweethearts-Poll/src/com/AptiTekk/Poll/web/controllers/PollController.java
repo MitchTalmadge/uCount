@@ -35,7 +35,7 @@ public class PollController {
 
 	@PostConstruct
 	public void init() {
-		setEnabledPoll(pollService.getEnabledPoll());
+		this.enabledPoll = pollService.getEnabledPoll();
 		setPolls(pollService.getAll());
 	}
 
@@ -49,8 +49,8 @@ public class PollController {
 			pollService.merge(enabledPoll);
 		}
 		poll.setEnabled(true);
-		poll = pollService.merge(poll);
 		this.enabledPoll = poll;
+		pollService.merge(poll);
 	}
 
 	public void enabledPollChanged() {
