@@ -12,7 +12,6 @@ public class PollService extends Service<Poll> {
 	
 	public PollService() {
 		this.type = Poll.class;	
-		
 	}
 	
 	public Poll getPollByName(String name) {
@@ -20,7 +19,6 @@ public class PollService extends Service<Poll> {
 	}
 	
 	public Poll getEnabledPoll() {
-		System.out.println("EnabledPoll() - from poll service");
 		return new JPAQuery(entityManager).from(pollTable).where(pollTable.enabled.eq(true)).uniqueResult(pollTable);
 	}
 

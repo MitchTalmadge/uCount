@@ -13,46 +13,78 @@
 
 				<div class="row">
 					<div class="col s6">
-						<h:selectOneMenu value="#{PollController.enabledPoll.id}">
-							<f:selectItems value="#{PollController.polls}" var="poll"
-								itemLabel="#{poll.name}" itemValue="${poll.id}" />
-							<label>Enabled Poll</label>
-						</h:selectOneMenu>
+						<h:form>
+							<h:selectOneMenu value="#{PollController.enabledPoll}"
+								converter="#{PollConverter}">
+								<f:selectItems value="#{PollController.polls}" var="poll"
+									itemLabel="#{poll.name}" itemValue="#{poll}" />
+								<label>Enabled Poll</label>
+								<f:ajax listener="#{PollController.enabledPollChanged}" />
+							</h:selectOneMenu>
+						</h:form>
 					</div>
 				</div>
 
-
-				<nav class="light-blue darken-4">
-				<div class="nav-wrapper">
-					<h:form>
-						<ul id="nav-mobile" class="left hide-on-med-and-down">
-							<ui:repeat value="#{PollController.polls}" var="poll">
-								<li
-									class="#{poll.id == ManagerController.selectedPoll.id ? 'active' : ''}">
-									<h:commandLink value="#{poll.name}"
-										action="#{ManagerController.setSelectedPoll(poll)}" />
-								</li>
-							</ui:repeat>
-						</ul>
+				<h:panelGroup id="navBar">
+					<nav class="light-blue darken-4">
+					<div class="nav-wrapper">
 						<h:form>
-							<h:commandLink styleClass="right" style="padding:0 10px"
-								value="Add Dummy Polls"
-								actionListener="#{PollController.addDummyPolls}" />
+							<ul id="nav-mobile" class="left hide-on-med-and-down">
+								<ui:repeat value="#{PollController.polls}" var="poll">
+									<li
+										class="#{poll.id == ManagerController.selectedPoll.id ? 'active' : ''}">
+										<h:commandLink value="#{poll.name}"
+											action="#{ManagerController.setSelectedPoll(poll)}">
+											<f:ajax render=":pollContent :navBar" />
+										</h:commandLink>
+									</li>
+								</ui:repeat>
+							</ul>
+							<h:form>
+								<h:commandLink styleClass="right" style="padding:0 10px"
+									value="Add Dummy Polls"
+									actionListener="#{PollController.addDummyPolls}" />
+							</h:form>
 						</h:form>
-					</h:form>
-				</div>
-				</nav>
+					</div>
+					</nav>
+				</h:panelGroup>
 
 				<br />
 
 				<h:panelGroup rendered="#{ManagerController.selectedPoll != null}"
-					layout="block" id="manageContent">
+					layout="block" id="pollContent">
 					<div class="row">
 						<div class="col s6">
 							<div class="card">
 								<div class="card-content">
 									<span class="card-title">Poll Description:</span>
-									<p>#{ManagerController.selectedPoll.description}</p>
+									<h:form id="descriptionForm">
+										<ui:fragment
+											rendered="#{!ManagerController.editingDescription}">
+											<h:outputText
+												value="#{ManagerController.selectedPoll.description}" />
+											<br />
+											<h:commandLink
+												class="#{style.colorPrimaryBase} btn waves-effect waves-light"
+												action="#{ManagerController.setEditingDescription(true)}">
+												<i class="material-icons">mode_edit</i>
+												<f:ajax render="descriptionForm" />
+											</h:commandLink>
+										</ui:fragment>
+
+										<ui:fragment
+											rendered="#{ManagerController.editingDescription}">
+											<h:inputTextarea
+												value="#{ManagerController.selectedPoll.description}" />
+											<h:commandLink
+												class="#{style.colorPrimaryBase} btn waves-effect waves-light"
+												action="#{ManagerController.setEditingDescription(false)}">
+												<i class="material-icons">done</i>
+												<f:ajax render="descriptionForm" />
+											</h:commandLink>
+										</ui:fragment>
+									</h:form>
 								</div>
 							</div>
 						</div>
@@ -90,10 +122,8 @@
 											</td>
 											<td style="float: right">
 												<h:form id="contestantEditForm">
-													<h:inputHidden id="id" value="#{ContestantController.id}" />
 													<h:commandLink
 														class="#{style.colorPrimaryBase} btn waves-effect waves-light"
-														data-bind="click: $root.setEditContestant"
 														action="modifyContestant">
 														<i class="material-icons">mode_edit</i>
 													</h:commandLink>
@@ -106,52 +136,6 @@
 						</div>
 					</div>
 				</h:panelGroup>
-
-
-				<!-- 
-				<div data-bind="visible: ready">
-					<br /> <br /> <br />
-					<div data-bind="visible: selectedPoll()">
-						<div data-bind="with: selectedPoll">
-							<h6 style="font-size: 25px">Poll Description:</h6>
-							<p data-bind="text: description" />
-						</div>
-
-						<br />
-						<h6 style="font-size: 25px">Contestants:</h6>
-						<table class="striped responsive-table"
-							data-bind="visible: selectedPollData">
-							<thead>
-								<tr>
-									<th>ID</th>
-									<th>CoupleID</th>
-									<th>Name</th>
-								</tr>
-							</thead>
-							<tbody data-bind="foreach: selectedPollData">
-								<tr>
-									<td data-bind="text: $data.id" />
-									<td data-bind="text: $data.voteGroupId" />
-									<td data-bind="text: $root.fullName($data)" />
-									<td style="float: right"><h:link
-											class="red btn waves-effect waves-light">
-											<i class="material-icons">delete</i>
-										</h:link></td>
-									<td style="float: right"><h:form id="contestantEditForm">
-											<h:inputHidden id="id" value="#{ContestantController.id}" />
-											<h:commandLink
-												class="#{style.colorPrimaryBase} btn waves-effect waves-light"
-												data-bind="click: $root.setEditContestant"
-												action="modifyContestant">
-												<i class="material-icons">mode_edit</i>
-											</h:commandLink>
-										</h:form></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-				 -->
 			</div>
 		</div>
 

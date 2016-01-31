@@ -43,8 +43,18 @@ public class PollController {
 		return enabledPoll;
 	}
 
-	public void setEnabledPoll(Poll enabledPoll) {
-		this.enabledPoll = enabledPoll;
+	public void setEnabledPoll(Poll poll) {
+		if (enabledPoll != null) {
+			enabledPoll.setEnabled(false);
+			pollService.merge(enabledPoll);
+		}
+		poll.setEnabled(true);
+		poll = pollService.merge(poll);
+		this.enabledPoll = poll;
+	}
+
+	public void enabledPollChanged() {
+		System.out.println("Enabled Poll has been set to: " + enabledPoll.getName());
 	}
 
 	public void addDummyPolls() {

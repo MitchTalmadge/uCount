@@ -45,14 +45,12 @@ public class AuthenticationFilter implements Filter {
 		// this.context.log("Requested Resource::"+uri);
 
 		if (uri.contains("/admin")) {
-			System.out.println("Attempting to access admin page: "+uri);
 			if (currentSession != null && currentSession.getAttribute("user") != null
 					&& currentSession.getAttribute("userRole").equals("admin")) {
 				chain.doFilter(request, response);
 				return;
 			}
 		} else {
-			System.out.println("Attempting to access non-admin page: "+uri);
 			chain.doFilter(request, response);
 			return;
 		}

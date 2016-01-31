@@ -7,16 +7,11 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.registry.infomodel.User;
-
-import org.junit.validator.PublicClassValidator;
 
 @ManagedBean
 @SessionScoped
@@ -24,16 +19,12 @@ public class LoginController {
 
 	@PostConstruct
 	public void init() {
-
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 		username = externalContext.getRequestHeaderMap().get("REMOTE_USER");
-
 	}
 
 	private String username;
 	private String password;
-	
-	private UIComponent submitButton;
 
 	public Principal getUser() {
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -50,8 +41,7 @@ public class LoginController {
 			password = null;
 			if (getUser() != null) {
 				if (!request.isUserInRole("admin")) {
-					context.addMessage(submitButton.getClientId(),
-							new FacesMessage("Login Failed: User is not an admin."));
+					context.addMessage(null, new FacesMessage("Login Failed: User is not an admin."));
 					request.logout();
 					return "error";
 				} else {
@@ -62,12 +52,12 @@ public class LoginController {
 				}
 			} else {
 				request.logout();
-				context.addMessage(submitButton.getClientId(), new FacesMessage("Login Failed: User is null."));
+				context.addMessage(null, new FacesMessage("Login Failed: User is null."));
 				return "error";
 			}
 
 		} catch (ServletException e) {
-			context.addMessage(submitButton.getClientId(), new FacesMessage("Login Failed: Incorrect Credentials."));
+			context.addMessage(null, new FacesMessage("Login Failed: Incorrect Credentials."));
 			return "error";
 		}
 		/*
@@ -120,16 +110,6 @@ public class LoginController {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	
-	public void setSubmitButton(UIComponent submitButton)
-	{
-		this.submitButton = submitButton;
-	}
-	
-	public UIComponent getSubmitButton()
-	{
-		return this.submitButton;
 	}
 
 }

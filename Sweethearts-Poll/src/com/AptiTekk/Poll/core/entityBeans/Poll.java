@@ -92,4 +92,14 @@ public class Poll {
 		this.enabled = enabled;
 	}
 
+	@Override
+	public boolean equals(Object other)
+	{
+		return (other != null && other instanceof Poll && ((Poll)other).getId() == id);
+	}
+	
+	@Override
+	public int hashCode() {
+		return getClass().hashCode() + id;
+	}
 }

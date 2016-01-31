@@ -42,8 +42,13 @@ public abstract class Service<T>{
 	public void delete(int id) {
 		T old = entityManager.find(type, id);
 		if(old != null) {
-			entityManager.remove(old);;
+			entityManager.remove(old);
 		}
+	}
+	
+	public T merge(T entity)
+	{
+		return entityManager.merge(entity);
 	}
 
 }
