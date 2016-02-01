@@ -2,14 +2,14 @@ package com.AptiTekk.Poll.web.controllers;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 
 import com.AptiTekk.Poll.core.PollService;
 import com.AptiTekk.Poll.core.entityBeans.Poll;
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class ManagerController {
 
 	@Inject
@@ -28,8 +28,9 @@ public class ManagerController {
 	@PostConstruct
 	public void init() {
 		System.out.println("Init ManagerController");
-		if (!pollService.getAll().isEmpty())
-			selectedPoll = pollService.getAll().get(0);
+		if (!pollService.getPolls().isEmpty()) {
+			this.selectedPoll = pollService.getPolls().get(0);
+		}
 	}
 
 	public Poll getSelectedPoll() {
@@ -37,7 +38,8 @@ public class ManagerController {
 	}
 
 	public void setSelectedPoll(Poll selectedPoll) {
-		this.selectedPoll = selectedPoll;
+		System.out.println("Setting Selected Poll to "+selectedPoll.getName());
+		this.selectedPoll = pollService.getPollById(selectedPoll.getId());
 		this.editingDescription = false;
 	}
 

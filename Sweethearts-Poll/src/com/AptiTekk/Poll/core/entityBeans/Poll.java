@@ -81,7 +81,6 @@ public class Poll {
 	}
 
 	public void setDescription(String description) {
-		System.out.println("Changing Poll Description: "+description);
 		this.description = description;
 	}
 

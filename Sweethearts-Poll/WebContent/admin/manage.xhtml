@@ -13,9 +13,11 @@
 
 				<div class="row">
 					<div class="col s6">
-						<h:form>
+						<h:form id="enabledPollSelector">
 							<h:selectOneMenu value="#{PollController.enabledPoll}"
 								converter="#{PollConverter}">
+								<f:selectItem itemValue="#{null}"
+									itemLabel="-- No Polls Enabled --" noSelectionOption="true" />
 								<f:selectItems value="#{PollController.polls}" var="poll"
 									itemLabel="#{poll.name}" itemValue="#{poll}" />
 								<label>Enabled Poll</label>
@@ -40,11 +42,9 @@
 									</li>
 								</ui:repeat>
 							</ul>
-							<h:form>
-								<h:commandLink styleClass="right" style="padding:0 10px"
-									value="Add Dummy Polls"
-									actionListener="#{PollController.addDummyPolls}" />
-							</h:form>
+							<h:commandLink styleClass="right" style="padding:0 20px"
+								value="Add Dummy Polls"
+								action="#{PollController.addDummyPolls()}" />
 						</h:form>
 					</div>
 					</nav>
@@ -98,7 +98,6 @@
 							<table class="striped responsive-table">
 								<thead>
 									<tr>
-										<th>ID</th>
 										<th>Talent</th>
 										<th>Contestants</th>
 									</tr>
@@ -107,7 +106,6 @@
 									<ui:repeat value="#{ManagerController.selectedPoll.voteGroups}"
 										var="voteGroup">
 										<tr>
-											<td>#{voteGroup.id}</td>
 											<td>#{voteGroup.talentName == null ? 'No Talent' :
 												voteGroup.talentName}</td>
 											<td>
