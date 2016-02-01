@@ -80,4 +80,8 @@ public class PollService extends Service<Poll> {
 		}
 	}
 
+	public void flush() {
+		this.entityManager.flush();
+	}
+
 }
