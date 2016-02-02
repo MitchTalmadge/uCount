@@ -46,11 +46,23 @@
     	<managed-bean-class>com.AptiTekk.Poll.web.converters.PollConverter</managed-bean-class>
     	<managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+    	<managed-bean-name>ModifyContestantController</managed-bean-name>
+    	<managed-bean-class>com.AptiTekk.Poll.web.controllers.ModifyContestantController</managed-bean-class>
+    	<managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
     <navigation-rule>
     	<from-view-id>*</from-view-id>
     	<navigation-case>
     		<from-outcome>manage</from-outcome>
     		<to-view-id>/admin/manage.xhtml</to-view-id>
+    	</navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+    	<from-view-id>/admin/manage.xhtml</from-view-id>
+    	<navigation-case>
+    		<from-outcome>modifyVoteGroup</from-outcome>
+    		<to-view-id>/admin/modifyVoteGroup.xhtml</to-view-id>
     	</navigation-case>
     </navigation-rule>
     <navigation-rule>

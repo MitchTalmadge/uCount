@@ -4,11 +4,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 xmlns:h="http://xmlns.jcp.org/jsf/html"
-xmlns:f="http://xmlns.jcp.org/jsf/core"
-xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 	<f:metadata>
-		<f:viewParam name="voteGroup" value="#{ModifyContestantController.voteGroup}" />
+		<f:viewParam name="voteGroupId" value="#{ModifyContestantController.voteGroupId}" />
 	</f:metadata>
 
 	<ui:composition template="/WEB-INF/templates/default.xhtml">
@@ -16,7 +15,7 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 		<ui:define name="content">
 			<div class="section no-pad-bot" id="index-banner">
 				<div class="container row">
-					<ui:repeat value="#{ModifyContestantController.entries}"
+					<ui:repeat id="contestants" value="#{ModifyContestantController.entries}"
 					var="newContestant">
 						<div class="col s6 m3">
 							<h:panelGroup layout="block" id="contestantData">
@@ -26,9 +25,9 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 										<div class="file-field input-field">
 											<h:form enctype="multipart/form-data">
 												<div class="#{style.colorPrimary} btn">
-													<h:inputFile id="picture" validator="#{ModifyContestantController.validateImage}" value="newContestant.pictureFileName">
-														<h:commandButton value="Upload" action="#{ModifyContestantController.upload}">
-															<f:ajax render="displayImage">
+													<h:inputFile id="picture" validator="#{ModifyContestantController.validateImage}" value="newContestant.pictureUpload">
+														<h:commandButton value="Upload" action="#{ModifyContestantController.upload(newContestant)}">
+															<f:ajax render=":displayImage">
 														</h:commandButton>
 													</h:inputFile>
 												</div>
@@ -38,18 +37,18 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 									<div class="col s6">
 										<div class="row">
 											<div class="input-field col s6">
-												<h:inputText id="first_name" class="validate">
-													<h:outputLabel for="first_name">
-														First Name
-													</h:outputLabel>
+												<h:inputText id="first_name" class="validate" />
+												<h:outputLabel for="first_name">
+													First Name
+												</h:outputLabel>
 											</div>
 										</div>
 										<div class="row">
 											<div class="input-field col s6">
-												<h:inputText id="last_name" class="validate">
-													<h:outputLabel for="last_name">
-														Last Name
-													</h:outputLabel>
+												<h:inputText id="last_name" class="validate" />
+												<h:outputLabel for="last_name">
+													Last Name
+												</h:outputLabel>
 											</div>
 										</div>
 										<div class="row"></div>
@@ -58,6 +57,11 @@ xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 							</h:panelGroup>
 						</div>
 					</ui:repeat>
+					<div class="col s6 m3">
+						<h:commandButton value="+" action="#{ModifyContestantController.addContestant}">
+							<f:ajax render=":contestants">
+						</h:commandButton>
+					</div>
 				</div>
 			</div>
 

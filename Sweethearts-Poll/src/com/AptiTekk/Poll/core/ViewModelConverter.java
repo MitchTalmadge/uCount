@@ -23,7 +23,7 @@ public class ViewModelConverter {
 	}
 
 	public static ContestantViewModel toViewModel(Contestant e) {
-		return new ContestantViewModel(e.getId(), e.getVoteGroup().getId(), e.getVoteGroup().getPoll().getName(),
+		return new ContestantViewModel(e.getId(), e.getVoteGroup(), e.getVoteGroup().getPoll(),
 				e.getFirstName(), e.getLastName(), e.getPictureFileName());
 	}
 

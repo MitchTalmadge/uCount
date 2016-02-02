@@ -1,40 +1,39 @@
 package com.AptiTekk.Poll.web.ViewModels;
 
+import javax.servlet.http.Part;
+
+import com.AptiTekk.Poll.core.entityBeans.Poll;
+import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
+
 public class ContestantViewModel {
 	
 	private int id;
-	private int voteGroupId;
-	private String pollName;
+	private VoteGroup voteGroup;
+	private Poll poll;
 	private String firstName;
 	private String lastName;
 	private String pictureFileName;
+	
+	private Part pictureUpload;
 
 	public ContestantViewModel() {
+		pictureFileName = "notFound.png";
 	}
 	
-	public ContestantViewModel(int id, int voteGroupId, String pollName, String firstName, String lastName, String pictureFileName) {
-		this.setId(id);
-		this.setVoteGroupId(voteGroupId);
-		this.setPollName(pollName);
+	public ContestantViewModel(int id, VoteGroup voteGroup, Poll poll, String firstName, String lastName, String pictureFileName) {
+		this.setVoteGroup(voteGroup);
+		this.setPollName(poll);
 		this.setFirstName(firstName);
 		this.setLastName(lastName);
 		this.setPictureFileName(pictureFileName);
 	}
 
-	public int getId() {
-		return id;
+	public VoteGroup getVoteGroup() {
+		return voteGroup;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public int getVoteGroupId() {
-		return voteGroupId;
-	}
-
-	public void setVoteGroupId(int voteGroupId) {
-		this.voteGroupId = voteGroupId;
+	public void setVoteGroup(VoteGroup voteGroup) {
+		this.voteGroup = voteGroup;
 	}
 
 	public String getFirstName() {
@@ -61,12 +60,28 @@ public class ContestantViewModel {
 		this.pictureFileName = pictureFileName;
 	}
 
-	public String getPollName() {
-		return pollName;
+	public Poll getPollName() {
+		return poll;
 	}
 
-	public void setPollName(String pollName) {
-		this.pollName = pollName;
+	public void setPollName(Poll poll) {
+		this.poll = poll;
+	}
+
+	public Part getPictureUpload() {
+		return pictureUpload;
+	}
+
+	public void setPictureUpload(Part pictureUpload) {
+		this.pictureUpload = pictureUpload;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 }
