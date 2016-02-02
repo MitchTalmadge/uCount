@@ -14,7 +14,7 @@
 				<h:form>
 					<ui:fragment rendered="#{PollController.enabledPoll != null}">
 						<h1 class="header center #{style.colorComplementaryText}">#{PollController.enabledPoll.name}</h1>
-						<p class="flow-text center-aligzn">#{PollController.enabledPoll.description}</p>
+						<p class="flow-text center-align">#{PollController.enabledPoll.description}</p>
 						<br />
 						<ui:repeat items="#{PollController.voteGroups}" delims=","
 							var="voteGroup">
