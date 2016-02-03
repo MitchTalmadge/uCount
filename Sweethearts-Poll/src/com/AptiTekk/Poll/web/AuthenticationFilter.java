@@ -49,13 +49,22 @@ public class AuthenticationFilter implements Filter {
 					&& currentSession.getAttribute("userRole").equals("admin")) {
 				chain.doFilter(request, response);
 				return;
+			} else {
+				this.context.log("Unauthorized access request to " + uri);
+				currentRes.sendRedirect("/Sweethearts-Poll/login.xhtml");
+			}
+		} else if (uri.contains("vote.xhtml")) {
+			if (currentSession != null && currentSession.getAttribute("studentId") != null) {
+				chain.doFilter(request, response);
+				return;
+			} else {
+				this.context.log("Unauthorized access request to " + uri);
+				currentRes.sendRedirect("/Sweethearts-Poll/authenticate.xhtml");
 			}
 		} else {
 			chain.doFilter(request, response);
 			return;
 		}
-		this.context.log("Unauthorized access request to " + uri);
-		currentRes.sendRedirect("/Sweethearts-Poll/login.xhtml");
 
 	}
 

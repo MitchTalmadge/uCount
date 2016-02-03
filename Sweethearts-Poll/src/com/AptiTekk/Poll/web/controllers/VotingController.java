@@ -1,7 +1,6 @@
 package com.AptiTekk.Poll.web.controllers;
 
 import javax.ejb.EJB;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
