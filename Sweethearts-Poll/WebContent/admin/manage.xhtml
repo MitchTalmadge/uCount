@@ -59,7 +59,7 @@
 							<div class="card">
 								<h:form id="descriptionForm">
 									<div class="card-content">
-										<span class="card-title">Poll Description:</span>
+										<span class="card-title">Poll Description: (#{ManagerController.selectedPoll == PollController.enabledPoll})</span>
 
 										<ui:fragment
 											rendered="#{!ManagerController.editingDescription}">

@@ -1,6 +1,7 @@
 package com.AptiTekk.Poll.web.controllers;
 
 import java.util.Iterator;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -9,7 +10,6 @@ import javax.inject.Inject;
 
 import com.AptiTekk.Poll.core.PollService;
 import com.AptiTekk.Poll.core.VoteGroupService;
-import com.AptiTekk.Poll.core.entityBeans.Entry;
 import com.AptiTekk.Poll.core.entityBeans.Poll;
 import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
 
@@ -36,8 +36,9 @@ public class ManagerController {
 	@PostConstruct
 	public void init() {
 		System.out.println("Init ManagerController");
-		if (!pollService.getPolls().isEmpty()) {
-			this.selectedPoll = pollService.getPolls().get(0);
+		List<Poll> polls = pollService.getAll();
+		if (!polls.isEmpty()) {
+			this.selectedPoll = polls.get(0);
 		}
 	}
 
@@ -47,7 +48,7 @@ public class ManagerController {
 
 	public void setSelectedPoll(Poll selectedPoll) {
 		System.out.println("Setting Selected Poll to " + selectedPoll.getName());
-		this.selectedPoll = pollService.getPollById(selectedPoll.getId());
+		this.selectedPoll = selectedPoll;
 		this.editingDescription = false;
 	}
 
@@ -65,8 +66,7 @@ public class ManagerController {
 
 	public void onEditDescriptionDoneButtonFired() {
 		setEditingDescription(false);
-		pollService.flush();
-		System.out.println("Saved Poll Description to Database.");
+		pollService.merge(selectedPoll);
 	}
 
 	public void addNewVoteGroup() {

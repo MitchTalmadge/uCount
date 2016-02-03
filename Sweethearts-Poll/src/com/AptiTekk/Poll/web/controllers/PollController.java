@@ -2,6 +2,7 @@ package com.AptiTekk.Poll.web.controllers;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
@@ -26,20 +27,36 @@ public class PollController {
 	@Inject
 	ContestantService contestantService;
 
+	private List<Poll> polls;
+
+	private Poll enabledPoll;
+
+	@PostConstruct
+	public void init() {
+		polls = pollService.getAll();
+		enabledPoll = pollService.getEnabledPoll();
+	}
+
+	public List<Poll> getPolls() {
+		System.out.println("Getting all Polls...");
+		return polls;
+	}
+
 	public Poll getEnabledPoll() {
-		return pollService.getEnabledPoll();
+		if (enabledPoll != null)
+			System.out.println("The enabled poll's description is: " + enabledPoll.getDescription());
+		return enabledPoll;
 	}
 
 	public void setEnabledPoll(Poll poll) {
-		if (poll != null)
-			pollService.setEnabledPoll(poll.getId());
-		else
-			pollService.disableAllPolls();
+		enabledPoll = poll;
+		pollService.enablePoll(poll);
 	}
 
 	public void enabledPollChanged() {
-		if (pollService.getEnabledPoll() != null)
-			System.out.println("Enabled Poll has been set to: " + pollService.getEnabledPoll().getName());
+		Poll currentEnabledPoll = enabledPoll;
+		if (currentEnabledPoll != null)
+			System.out.println("Enabled Poll has been set to: " + enabledPoll.getName());
 		else
 			System.out.println("Enabled Poll has been cleared. No polls are currently enabled.");
 	}
@@ -67,19 +84,9 @@ public class PollController {
 		contestantService.insert(contestant3);
 		contestantService.insert(contestant4);
 
-		pollService.refreshPollsList();
-
 		System.out.println("Dummy Polls Added.");
 
 		return "manage";
-	}
-
-	public List<Poll> getPolls() {
-		return pollService.getPolls();
-	}
-
-	public void setPolls(List<Poll> polls) {
-		// Do nothing. PollService manages the polls.
 	}
 
 }

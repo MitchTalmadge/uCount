@@ -16,7 +16,7 @@
 						<h1 class="header center #{style.colorComplementaryText}">#{PollController.enabledPoll.name}</h1>
 						<p class="flow-text center-align">#{PollController.enabledPoll.description}</p>
 						<br />
-						<ui:repeat items="#{PollController.voteGroups}" delims=","
+						<ui:repeat items="#{PollController.enabledPoll.voteGroups}" delims=","
 							var="voteGroup">
 							<ui:repeat items="${voteGroup.contestants}" delims=","
 								var="contestant">

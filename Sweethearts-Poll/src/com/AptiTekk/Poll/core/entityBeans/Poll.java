@@ -17,7 +17,7 @@ public class Poll {
 	@GeneratedValue
 	private int id;
 
-	@OneToMany(fetch=FetchType.EAGER, mappedBy = "poll", orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "poll", orphanRemoval = true)
 	private List<VoteGroup> voteGroups;
 
 	@OneToMany(mappedBy = "poll", cascade = CascadeType.ALL)
@@ -28,16 +28,17 @@ public class Poll {
 
 	@Column(length = 512)
 	private String description;
-	
+
 	private Boolean enabled;
-	
+
 	public Poll() {
-		
+
 	}
 
 	public Poll(String name, String description) {
 		this(name, description, false);
 	}
+
 	public Poll(String name, String description, boolean enabled) {
 		setName(name);
 		setDescription(description);
@@ -81,6 +82,7 @@ public class Poll {
 	}
 
 	public void setDescription(String description) {
+		System.out.println(getName() + " Descripition Changed To: " + description);
 		this.description = description;
 	}
 
@@ -93,11 +95,10 @@ public class Poll {
 	}
 
 	@Override
-	public boolean equals(Object other)
-	{
-		return (other != null && other instanceof Poll && ((Poll)other).getId() == id);
+	public boolean equals(Object other) {
+		return (other != null && other instanceof Poll && ((Poll) other).getId() == id);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return getClass().hashCode() + id;
