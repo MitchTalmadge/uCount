@@ -28,6 +28,8 @@ public class ManagerController {
 	@EJB
 	ContestantService contestantService;
 
+	private List<Poll> polls;
+
 	/**
 	 * The poll currently being looked at on the manage page.
 	 */
@@ -41,7 +43,7 @@ public class ManagerController {
 	@PostConstruct
 	public void init() {
 		System.out.println("Init ManagerController");
-		List<Poll> polls = pollService.getAll();
+		polls = pollService.getAll();
 		if (!polls.isEmpty()) {
 			this.selectedPoll = polls.get(0);
 		}
@@ -64,7 +66,7 @@ public class ManagerController {
 	}
 
 	public List<Poll> getPolls() {
-		return pollService.getAll();
+		return polls;
 	}
 
 	public Poll getSelectedPoll() {
