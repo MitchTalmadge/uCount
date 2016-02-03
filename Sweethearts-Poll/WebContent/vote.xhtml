@@ -12,9 +12,11 @@
 			<div class="container">
 				<br /> <br />
 				<h:form>
-					<ui:fragment rendered="#{VotingController.enabledPoll != null}">
+					<ui:fragment
+						rendered="#{VotingController.enabledPoll != null}">
 						<h1 class="header center #{style.colorComplementaryText}">#{VotingController.enabledPoll.name}</h1>
 						<p class="flow-text center-align">#{VotingController.enabledPoll.description}</p>
+						<p class="flow-text center-align">Please Enter Your StudentID</p>
 					</ui:fragment>
 					<ui:fragment rendered="#{VotingController.enabledPoll == null}">
 						<h2 class="header center #{style.colorComplementaryText}">
