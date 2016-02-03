@@ -122,6 +122,8 @@ public class ManagerController {
 	public void onEditDescriptionDoneButtonFired() {
 		setEditingDescription(false);
 		pollService.merge(selectedPoll);
+		if(selectedPoll.getId() == pollService.getEnabledPoll().getId())
+			pollService.refreshEnabledPoll();
 	}
 
 	public void addNewVoteGroup() {
