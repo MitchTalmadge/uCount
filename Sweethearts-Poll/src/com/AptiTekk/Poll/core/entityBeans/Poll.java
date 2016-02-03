@@ -82,7 +82,7 @@ public class Poll {
 	}
 
 	public void setDescription(String description) {
-		System.out.println(getName() + " Descripition Changed To: " + description);
+		System.out.println(getName() + " Description Changed To: " + description);
 		this.description = description;
 	}
 
@@ -101,6 +101,6 @@ public class Poll {
 
 	@Override
 	public int hashCode() {
-		return getClass().hashCode() + id;
+		return getClass().hashCode() + super.hashCode() + id;
 	}
 }

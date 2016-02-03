@@ -12,19 +12,11 @@
 			<div class="container">
 				<br /> <br />
 				<h:form>
-					<ui:fragment rendered="#{PollController.enabledPoll != null}">
-						<h1 class="header center #{style.colorComplementaryText}">#{PollController.enabledPoll.name}</h1>
-						<p class="flow-text center-align">#{PollController.enabledPoll.description}</p>
-						<br />
-						<ui:repeat items="#{PollController.enabledPoll.voteGroups}" delims=","
-							var="voteGroup">
-							<ui:repeat items="${voteGroup.contestants}" delims=","
-								var="contestant">
-								<h:outputText value="${contestant.firstName}" />
-							</ui:repeat>
-						</ui:repeat>
+					<ui:fragment rendered="#{VotingController.enabledPoll != null}">
+						<h1 class="header center #{style.colorComplementaryText}">#{VotingController.enabledPoll.name}</h1>
+						<p class="flow-text center-align">#{VotingController.enabledPoll.description}</p>
 					</ui:fragment>
-					<ui:fragment rendered="#{PollController.enabledPoll == null}">
+					<ui:fragment rendered="#{VotingController.enabledPoll == null}">
 						<h2 class="header center #{style.colorComplementaryText}">
 							No polls are available.<br />Please check back soon.
 						</h2>

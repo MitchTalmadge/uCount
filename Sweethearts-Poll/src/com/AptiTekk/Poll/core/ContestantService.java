@@ -2,14 +2,14 @@ package com.AptiTekk.Poll.core;
 
 import java.util.List;
 
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 
 import com.AptiTekk.Poll.core.entityBeans.Contestant;
 import com.AptiTekk.Poll.core.entityBeans.Poll;
 import com.AptiTekk.Poll.core.entityBeans.QContestant;
 import com.mysema.query.jpa.impl.JPAQuery;
 
-@Stateless
+@Singleton
 public class ContestantService extends Service<Contestant> {
 	QContestant contestantTable = QContestant.contestant;
 

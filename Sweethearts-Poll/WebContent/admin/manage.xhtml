@@ -14,14 +14,14 @@
 				<div class="row">
 					<div class="col s6">
 						<h:form id="enabledPollSelector">
-							<h:selectOneMenu value="#{PollController.enabledPoll}"
+							<h:selectOneMenu value="#{ManagerController.enabledPoll}"
 								converter="#{PollConverter}">
 								<f:selectItem itemValue="#{null}"
 									itemLabel="-- No Polls Enabled --" noSelectionOption="true" />
-								<f:selectItems value="#{PollController.polls}" var="poll"
+								<f:selectItems value="#{ManagerController.polls}" var="poll"
 									itemLabel="#{poll.name}" itemValue="#{poll}" />
 								<label>Enabled Poll</label>
-								<f:ajax listener="#{PollController.enabledPollChanged}" />
+								<f:ajax listener="#{ManagerController.onEnabledPollChanged}" />
 							</h:selectOneMenu>
 						</h:form>
 					</div>
@@ -32,7 +32,7 @@
 					<div class="nav-wrapper">
 						<h:form>
 							<ul id="nav-mobile" class="left hide-on-med-and-down">
-								<ui:repeat value="#{PollController.polls}" var="poll">
+								<ui:repeat value="#{ManagerController.polls}" var="poll">
 									<li
 										class="#{poll.id == ManagerController.selectedPoll.id ? 'active' : ''}">
 										<h:commandLink value="#{poll.name}"
@@ -44,7 +44,7 @@
 							</ul>
 							<h:commandLink styleClass="right" style="padding:0 20px"
 								value="Add Dummy Polls"
-								action="#{PollController.addDummyPolls()}" />
+								action="#{ManagerController.addDummyPolls()}" />
 						</h:form>
 					</div>
 					</nav>
@@ -59,7 +59,7 @@
 							<div class="card">
 								<h:form id="descriptionForm">
 									<div class="card-content">
-										<span class="card-title">Poll Description: (#{ManagerController.selectedPoll == PollController.enabledPoll})</span>
+										<span class="card-title">Poll Description:</span>
 
 										<ui:fragment
 											rendered="#{!ManagerController.editingDescription}">

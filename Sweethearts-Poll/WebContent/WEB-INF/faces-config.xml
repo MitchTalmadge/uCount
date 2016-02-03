@@ -26,11 +26,6 @@
     	<managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     <managed-bean>
-    	<managed-bean-name>PollController</managed-bean-name>
-    	<managed-bean-class>com.AptiTekk.Poll.web.controllers.PollController</managed-bean-class>
-    	<managed-bean-scope>application</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
     	<managed-bean-name>ContestantController</managed-bean-name>
     	<managed-bean-class>com.AptiTekk.Poll.web.controllers.ContestantController</managed-bean-class>
     	<managed-bean-scope>session</managed-bean-scope>
@@ -49,6 +44,16 @@
     <managed-bean>
     	<managed-bean-name>ModifyContestantController</managed-bean-name>
     	<managed-bean-class>com.AptiTekk.Poll.web.controllers.ModifyContestantController</managed-bean-class>
+    	<managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+    	<managed-bean-name>VotingController</managed-bean-name>
+    	<managed-bean-class>com.AptiTekk.Poll.web.controllers.VotingController</managed-bean-class>
+    	<managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+    	<managed-bean-name>AuthenticationController</managed-bean-name>
+    	<managed-bean-class>com.AptiTekk.Poll.web.controllers.AuthenticationController</managed-bean-class>
     	<managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
     <navigation-rule>
@@ -77,8 +82,16 @@
     	<display-name>*</display-name>
     	<from-view-id>*</from-view-id>
     	<navigation-case>
-    		<from-outcome>index</from-outcome>
-    		<to-view-id>/index.xhtml</to-view-id>
+    		<from-outcome>vote</from-outcome>
+    		<to-view-id>/vote.xhtml</to-view-id>
+    	</navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+    	<display-name>*</display-name>
+    	<from-view-id>*</from-view-id>
+    	<navigation-case>
+    		<from-outcome>authenticate</from-outcome>
+    		<to-view-id>/authenticate.xhtml</to-view-id>
     	</navigation-case>
     </navigation-rule>
 </faces-config>

@@ -2,14 +2,14 @@ package com.AptiTekk.Poll.core;
 
 import java.util.List;
 
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 
 import com.AptiTekk.Poll.core.entityBeans.Poll;
 import com.AptiTekk.Poll.core.entityBeans.QVoteGroup;
 import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
 import com.mysema.query.jpa.impl.JPAQuery;
 
-@Stateless
+@Singleton
 public class VoteGroupService extends Service<VoteGroup> {
 	private QVoteGroup voteGroupTable = QVoteGroup.voteGroup;
 

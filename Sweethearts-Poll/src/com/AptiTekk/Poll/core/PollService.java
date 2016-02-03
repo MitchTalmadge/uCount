@@ -4,33 +4,41 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
-import javax.ejb.Stateful;
+import javax.ejb.Startup;
 
 import com.AptiTekk.Poll.core.entityBeans.Poll;
-import com.AptiTekk.Poll.core.entityBeans.QPoll;
 
+@Startup
 @Singleton
 public class PollService extends Service<Poll> {
-	private QPoll pollTable = QPoll.poll;
-
+	private Poll enabledPoll;
+	
 	public PollService() {
 		this.type = Poll.class;
 	}
-
-	public Poll getEnabledPoll() {
+	
+	@PostConstruct
+	public void init()
+	{
+		System.out.println("Starting PollService");
 		List<Poll> polls = getAll();
 		for (Poll poll : polls) {
 			if (poll.isEnabled())
-				return poll;
+			{
+				this.enabledPoll = poll;
+				break;
+			}
 		}
-		return null;
+	}
+
+	public Poll getEnabledPoll() {
+		return this.enabledPoll;
 	}
 
 	public void enablePoll(Poll poll) {
-		Poll currentEnabledPoll = getEnabledPoll();
-		if (currentEnabledPoll != null) {
-			currentEnabledPoll.setEnabled(false);
-			merge(currentEnabledPoll);
+		if (this.enabledPoll != null) {
+			enabledPoll.setEnabled(false);
+			merge(enabledPoll);
 		}
 		if (poll != null) {
 			System.out.println("Setting Enabled Poll to " + poll.getName());
@@ -39,6 +47,7 @@ public class PollService extends Service<Poll> {
 		} else {
 			System.out.println("Clearing Enabled Poll.");
 		}
+		this.enabledPoll = poll;
 	}
 
 }

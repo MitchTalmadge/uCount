@@ -3,7 +3,6 @@ package com.AptiTekk.Poll.core;
 import java.util.List;
 
 import javax.ejb.Remote;
-import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -47,8 +46,7 @@ public abstract class Service<T> {
 			System.out.println("Deleting " + old.getClass().getSimpleName() + " entity from database with ID: " + id);
 			entityManager.remove(merge(old));
 		} else
-			System.out.println("Tried to delete entity from database with ID: "
-					+ id + ", but it was not found!");
+			System.out.println("Tried to delete entity from database with ID: " + id + ", but it was not found!");
 	}
 
 	public T merge(T entity) {
