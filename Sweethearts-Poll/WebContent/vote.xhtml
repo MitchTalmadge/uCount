@@ -9,16 +9,32 @@
 <ui:composition template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
 		<div class="section no-pad-top">
+
+			<!-- Shown when a poll is enabled; displays poll name and description -->
 			<ui:fragment rendered="#{VotingController.enabledPoll != null}">
 				<div class="section #{style.colorPrimaryBase}">
 					<h1 class="header center #{style.textColorPrimary}">#{VotingController.enabledPoll.name}</h1>
 					<p class="flow-text center-align #{style.textColorPrimary}">#{VotingController.enabledPoll.description}</p>
 				</div>
 			</ui:fragment>
+
+			<!-- Shown when no polls are enabled; asks the user to come back later. -->
+			<ui:fragment rendered="#{VotingController.enabledPoll == null}">
+				<div class="section #{style.colorPrimaryBase}">
+					<h1 class="header center #{style.textColorPrimary}">No polls
+						are available.</h1>
+					<h2 class="header center #{style.textColorPrimary}">Please
+						check back soon.</h2>
+				</div>
+			</ui:fragment>
+
 			<div class="container">
-				<h:panelGroup id="mainContent">
-					<ui:fragment
-						rendered="#{VotingController.enabledPoll != null and VotingController.studentId == -1}">
+				<!-- This group is only shown when a poll is enabled. -->
+				<h:panelGroup id="mainContent"
+					rendered="#{VotingController.enabledPoll != null}">
+
+					<!-- Shown when the user is not authenticated (studentId will be -1). Asks the user to enter their Student ID -->
+					<ui:fragment rendered="#{VotingController.studentId == -1}">
 						<p class="flow-text center-align">Please Enter Your StudentID</p>
 						<div class="row center">
 							<h:form styleClass="col s12">
@@ -26,7 +42,7 @@
 									<h:messages globalOnly="true" style="color: red" />
 									<div class="input-field col s6 push-s3">
 										<i class="material-icons prefix">account_circle</i>
-										<h:inputText id="studentIdField" styleClass="validate"
+										<h:inputText id="studentIdField"
 											value="#{VotingController.studentIdInput}" required="true" />
 										<h:outputLabel for="studentIdField">Student ID</h:outputLabel>
 									</div>
@@ -43,14 +59,12 @@
 							</h:form>
 						</div>
 					</ui:fragment>
-					<ui:fragment
-						rendered="#{VotingController.enabledPoll != null and VotingController.studentId > -1}">
+
+					<!-- Shown when the user is authenticated (studentId will be something like 8227069, i.e. greater than -1). -->
+					<ui:fragment rendered="#{VotingController.studentId > -1}">
+						<!-- TODO: Fragment for if they are told they can't vote again, or fragment with voteGroups -->
 					</ui:fragment>
-					<ui:fragment rendered="#{VotingController.enabledPoll == null}">
-						<h2 class="header center #{style.colorComplementaryText}">
-							No polls are available.<br />Please check back soon.
-						</h2>
-					</ui:fragment>
+
 				</h:panelGroup>
 			</div>
 		</div>
