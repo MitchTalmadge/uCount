@@ -37,7 +37,7 @@
 
 					<!-- Shown when the user is not authenticated (studentId will be -1). Asks the user to enter their Student ID -->
 					<ui:fragment rendered="#{VotingController.studentId == -1}">
-						<p class="flow-text center-align">Please Enter Your Student ID</p>
+						<h5 class="header center">Please Enter Your Student ID</h5>
 						<div class="row center">
 							<h:form styleClass="col s12">
 								<div class="row center">
@@ -64,7 +64,19 @@
 
 					<!-- Shown when the user is authenticated (studentId will be something like 8227069, i.e. greater than -1). -->
 					<ui:fragment rendered="#{VotingController.studentId > -1}">
-						<!-- TODO: Fragment for if they are told they can't vote again, or fragment with voteGroups -->
+
+						<!-- Shown when the student has already submitted an entry. -->
+						<ui:fragment rendered="#{VotingController.studentHasAlreadyVoted}">
+							<h3 class="header center">You have already voted!</h3>
+							<p class="flow-text center">It appears that you have already voted. If you would like
+								to change your vote, or believe that someone else has voted
+								using your ID, please talk to Mr. McDonald in room V107.</p>
+						</ui:fragment>
+						
+						<!-- Shown when the user has not already submitted an entry. Should allow them to vote. -->
+						<ui:fragment  rendered="#{!VotingController.studentHasAlreadyVoted}">
+							<!-- TODO: Show list of votegroups/candidates, allow to vote. -->
+						</ui:fragment>
 					</ui:fragment>
 
 				</h:panelGroup>

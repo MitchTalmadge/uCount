@@ -10,6 +10,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import com.AptiTekk.Poll.core.ContestantService;
+import com.AptiTekk.Poll.core.EntryService;
 import com.AptiTekk.Poll.core.PollService;
 import com.AptiTekk.Poll.core.VoteGroupService;
 import com.AptiTekk.Poll.core.entityBeans.Poll;
@@ -30,9 +31,14 @@ public class VotingController {
 	@EJB
 	ContestantService contestantService;
 
+	@EJB
+	EntryService entryService;
+
 	private int studentId;
 
 	private String studentIdInput;
+
+	private boolean studentHasAlreadyVoted = false;
 
 	@PostConstruct
 	public void init() {
@@ -42,7 +48,7 @@ public class VotingController {
 	public Poll getEnabledPoll() {
 		return pollService.getEnabledPoll();
 	}
-	
+
 	public List<VoteGroup> getVoteGroups() {
 		return voteGroupService.getVoteGroupsFromPoll(getEnabledPoll());
 	}
@@ -64,7 +70,15 @@ public class VotingController {
 								new FacesMessage("The Student ID you entered is invalid. Please try again."));
 					} else {
 						System.out.println("ID Was Valid!");
-						setStudentId(Integer.parseInt(studentIdInput)); //Sets the valid Student ID for use when voting.
+						setStudentId(Integer.parseInt(studentIdInput)); // Sets
+																		// the
+																		// valid
+																		// Student
+																		// ID
+																		// for
+																		// use
+																		// when
+																		// voting.
 					}
 				} catch (NumberFormatException e) {
 					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Please only enter numbers."));
@@ -75,7 +89,7 @@ public class VotingController {
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage("You must enter your Student ID to continue."));
 		}
-		studentIdInput = null; //Clear input
+		studentIdInput = null; // Clear input
 	}
 
 	public int getStudentId() {
@@ -84,6 +98,11 @@ public class VotingController {
 
 	public void setStudentId(int studentId) {
 		this.studentId = studentId;
+		if (studentId == -1)
+			this.setStudentHasAlreadyVoted(false);
+		else
+			this.setStudentHasAlreadyVoted(
+					entryService.hasStudentVoted(studentId, pollService.getEnabledPoll().getId()));
 	}
 
 	public String getStudentIdInput() {
@@ -93,6 +112,14 @@ public class VotingController {
 	public void setStudentIdInput(String studentIdInput) {
 		System.out.println("Setting Student ID Input to " + studentIdInput);
 		this.studentIdInput = studentIdInput;
+	}
+
+	public boolean getStudentHasAlreadyVoted() {
+		return studentHasAlreadyVoted;
+	}
+
+	public void setStudentHasAlreadyVoted(boolean studentHasAlreadyVoted) {
+		this.studentHasAlreadyVoted = studentHasAlreadyVoted;
 	}
 
 }

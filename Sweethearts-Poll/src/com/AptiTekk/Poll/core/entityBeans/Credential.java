@@ -14,16 +14,12 @@ public class Credential {
 
 	private int studentNumber;
 
-	@Column(length = 16)
-	private String studentUsername;
-	
 	public Credential() {
-		
+
 	}
 
 	public Credential(int studentNumber, String studentUsername) {
 		setStudentNumber(studentNumber);
-		setStudentUsername(studentUsername);
 	}
 
 	public int getId() {
@@ -40,14 +36,6 @@ public class Credential {
 
 	public void setStudentNumber(int studentNumber) {
 		this.studentNumber = studentNumber;
-	}
-
-	public String getStudentUsername() {
-		return studentUsername;
-	}
-
-	public void setStudentUsername(String studentUsername) {
-		this.studentUsername = studentUsername;
 	}
 
 }
