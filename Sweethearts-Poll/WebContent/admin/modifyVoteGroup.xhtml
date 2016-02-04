@@ -6,15 +6,11 @@ xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 xmlns:h="http://xmlns.jcp.org/jsf/html"
 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-	<f:metadata>
-		<f:viewParam name="voteGroupId" value="#{ModifyContestantController.voteGroupId}" />
-	</f:metadata>
-
 	<ui:composition template="/WEB-INF/templates/default.xhtml">
 
 		<ui:define name="content">
 			<div class="section no-pad-bot" id="index-banner">
-				<div class="container row">
+				<div class="row">
 					<ui:repeat id="contestants" value="#{ModifyContestantController.entries}"
 					var="newContestant">
 						<div class="col s6 m3">
@@ -27,7 +23,7 @@ xmlns:f="http://xmlns.jcp.org/jsf/core">
 												<div class="#{style.colorPrimary} btn">
 													<h:inputFile id="picture" validator="#{ModifyContestantController.validateImage}" value="newContestant.pictureUpload">
 														<h:commandButton value="Upload" action="#{ModifyContestantController.upload(newContestant)}">
-															<f:ajax render=":displayImage">
+															<f:ajax render=":displayImage" />
 														</h:commandButton>
 													</h:inputFile>
 												</div>
@@ -59,7 +55,7 @@ xmlns:f="http://xmlns.jcp.org/jsf/core">
 					</ui:repeat>
 					<div class="col s6 m3">
 						<h:commandButton value="+" action="#{ModifyContestantController.addContestant}">
-							<f:ajax render=":contestants">
+							<f:ajax render=":contestants" />
 						</h:commandButton>
 					</div>
 				</div>

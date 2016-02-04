@@ -8,11 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.ComponentSystemEvent;
 import javax.faces.validator.ValidatorException;
-import javax.inject.Inject;
 import javax.servlet.http.Part;
 
 import com.AptiTekk.Poll.core.ViewModelConverter;
@@ -20,27 +24,32 @@ import com.AptiTekk.Poll.core.VoteGroupService;
 import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
 import com.AptiTekk.Poll.web.ViewModels.ContestantViewModel;
 
+@ManagedBean
+@SessionScoped
 public class ModifyContestantController {
 
 	public static final String[] VALID_IMAGE_TYPES = { "image/png", "image/jpeg", "image/gif" };
 
-	@Inject
+	@EJB
 	VoteGroupService voteGroupService;
 	
-	private List<ContestantViewModel> entries = new ArrayList<>();
+	private List<ContestantViewModel> entries;
 	private VoteGroup voteGroup;
 	
 	private int voteGroupId;
-
+	
 	@PostConstruct
 	public void init() {
-		voteGroup = voteGroupService.get(voteGroupId);
+		System.out.println("Init ModifyContestantController");
 		entries = ViewModelConverter.toContestantViewModels(voteGroup.getContestants());
 		entries.add(new ContestantViewModel());
+		System.out.println("Entries len: " + entries.size());
+		System.out.println("Entries initialized: " + entries.hashCode());
 	}
 	
 	public void addContestant() {
 		entries.add(new ContestantViewModel());
+		System.out.println("Entries len: " + entries.size());
 	}
 
 	public void validateImage(FacesContext ctx, UIComponent comp, Object value) {
@@ -89,7 +98,6 @@ public class ModifyContestantController {
 	public void setVoteGroup(VoteGroup voteGroup) {
 		this.voteGroup = voteGroup;
 	}
-
 	public int getVoteGroupId() {
 		return voteGroupId;
 	}

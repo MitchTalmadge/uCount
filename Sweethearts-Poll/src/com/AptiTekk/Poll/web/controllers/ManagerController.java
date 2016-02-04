@@ -2,11 +2,14 @@ package com.AptiTekk.Poll.web.controllers;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 import com.AptiTekk.Poll.core.ContestantService;
 import com.AptiTekk.Poll.core.PollService;
@@ -27,6 +30,9 @@ public class ManagerController {
 
 	@EJB
 	ContestantService contestantService;
+	
+	@ManagedProperty(value="#{ModifyContestantController}")
+	private ModifyContestantController modifyContestantController;
 
 	private List<Poll> polls;
 
@@ -47,6 +53,15 @@ public class ManagerController {
 		if (!polls.isEmpty()) {
 			this.selectedPoll = polls.get(0);
 		}
+	}
+	
+	public String editVoteGroup(int id) {
+//		Map<String,String> params = 
+// FacesContext.getExternalContext().getRequestParameterMap();
+//		String id = params.get("voteGroupId");
+		this.modifyContestantController.setVoteGroup(voteGroupService.get(id));
+		return "modifyVoteGroup";
+	  
 	}
 
 	public Poll getEnabledPoll() {
@@ -146,6 +161,14 @@ public class ManagerController {
 				}
 			}
 		}
+	}
+
+	public ModifyContestantController getModifyContestantController() {
+		return modifyContestantController;
+	}
+
+	public void setModifyContestantController(ModifyContestantController modifyContestantController) {
+		this.modifyContestantController = modifyContestantController;
 	}
 
 }
