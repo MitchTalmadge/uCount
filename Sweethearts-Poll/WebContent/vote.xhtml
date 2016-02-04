@@ -8,22 +8,50 @@
 
 <ui:composition template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
-		<div class="section no-pad-bot" id="index-banner">
+		<div class="section no-pad-top">
+			<ui:fragment rendered="#{VotingController.enabledPoll != null}">
+				<div class="section #{style.colorPrimaryBase}">
+					<h1 class="header center #{style.textColorPrimary}">#{VotingController.enabledPoll.name}</h1>
+					<p class="flow-text center-align #{style.textColorPrimary}">#{VotingController.enabledPoll.description}</p>
+				</div>
+			</ui:fragment>
 			<div class="container">
-				<br /> <br />
-				<h:form>
+				<h:panelGroup id="mainContent">
 					<ui:fragment
-						rendered="#{VotingController.enabledPoll != null}">
-						<h1 class="header center #{style.colorComplementaryText}">#{VotingController.enabledPoll.name}</h1>
-						<p class="flow-text center-align">#{VotingController.enabledPoll.description}</p>
+						rendered="#{VotingController.enabledPoll != null and VotingController.studentId == -1}">
 						<p class="flow-text center-align">Please Enter Your StudentID</p>
+						<div class="row center">
+							<h:form styleClass="col s12">
+								<div class="row center">
+									<h:messages globalOnly="true" style="color: red" />
+									<div class="input-field col s6 push-s3">
+										<i class="material-icons prefix">account_circle</i>
+										<h:inputText id="studentIdField" styleClass="validate"
+											value="#{VotingController.studentIdInput}" required="true" />
+										<h:outputLabel for="studentIdField">Student ID</h:outputLabel>
+									</div>
+								</div>
+								<div class="row center">
+									<h:commandLink id="submit"
+										styleClass="#{style.colorPrimary} btn waves-effect waves-light"
+										value="Submit">
+										<i class="material-icons right">send</i>
+										<f:ajax execute="studentIdField" render=":mainContent"
+											listener="#{VotingController.authenticate}" />
+									</h:commandLink>
+								</div>
+							</h:form>
+						</div>
+					</ui:fragment>
+					<ui:fragment
+						rendered="#{VotingController.enabledPoll != null and VotingController.studentId > -1}">
 					</ui:fragment>
 					<ui:fragment rendered="#{VotingController.enabledPoll == null}">
 						<h2 class="header center #{style.colorComplementaryText}">
 							No polls are available.<br />Please check back soon.
 						</h2>
 					</ui:fragment>
-				</h:form>
+				</h:panelGroup>
 			</div>
 		</div>
 	</ui:define>

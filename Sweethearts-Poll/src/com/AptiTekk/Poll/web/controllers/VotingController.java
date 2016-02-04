@@ -29,38 +29,44 @@ public class VotingController {
 
 	private int studentId;
 
+	private String studentIdInput;
+
 	@PostConstruct
-	public void init()
-	{
+	public void init() {
 		this.setStudentId(-1);
 	}
-	
+
 	public Poll getEnabledPoll() {
 		return pollService.getEnabledPoll();
 	}
 
-	public void authenticate(String studentIdInput) {
+	public void authenticate() {
+		System.out.println("Authenticating...");
 		this.setStudentId(-1);
-		boolean valid = false;
 
-		if (USE_JSD_AUTH) {
-			// TODO: Get reply from JSD and see how they want us to auth
-		} else { // Use basic authentication methods
-			try {
-				if (!studentIdInput.startsWith("8") || studentIdInput.length() != 7)
-					valid = false;
-				else {
-					setStudentId(Integer.parseInt(studentIdInput));
-					valid = true;
+		if (studentIdInput != null && !studentIdInput.isEmpty()) {
+			if (USE_JSD_AUTH) {
+				System.out.println("Using JSD Authentication...");
+				// TODO: Get reply from JSD and see how they want us to auth
+			} else { // Use basic authentication methods
+				System.out.println("Using Basic Authentication...");
+				try {
+					if (!studentIdInput.startsWith("8") || studentIdInput.length() != 7) {
+						System.out.println("Invalid Format!");
+						FacesContext.getCurrentInstance().addMessage(null,
+								new FacesMessage("The Student ID you entered is invalid. Please try again."));
+					} else {
+						setStudentId(Integer.parseInt(studentIdInput));
+						System.out.println("ID Was Valid!");
+					}
+				} catch (NumberFormatException e) {
+					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Please only enter numbers."));
 				}
-			} catch (NumberFormatException e) {
-				valid = false;
 			}
-		}
-
-		if (!valid) {
+		} else {
+			System.out.println("Input was empty!");
 			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage("The Student ID you entered is invalid. Please try again."));
+					new FacesMessage("You must enter your Student ID to continue."));
 		}
 	}
 
@@ -70,6 +76,15 @@ public class VotingController {
 
 	public void setStudentId(int studentId) {
 		this.studentId = studentId;
+	}
+
+	public String getStudentIdInput() {
+		return studentIdInput;
+	}
+
+	public void setStudentIdInput(String studentIdInput) {
+		System.out.println("Setting Student ID Input to " + studentIdInput);
+		this.studentIdInput = studentIdInput;
 	}
 
 }
