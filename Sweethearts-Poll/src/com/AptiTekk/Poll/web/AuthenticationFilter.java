@@ -53,14 +53,16 @@ public class AuthenticationFilter implements Filter {
 				this.context.log("Unauthorized access request to " + uri);
 				currentRes.sendRedirect("/Sweethearts-Poll/login.xhtml");
 			}
-		/*} else if (uri.contains("vote.xhtml")) {
-			if (currentSession != null && currentSession.getAttribute("studentId") != null) {
-				chain.doFilter(request, response);
+		} else if (uri.contains("login.xhtml")) {
+			if (currentSession != null && currentSession.getAttribute("user") != null
+					&& currentSession.getAttribute("userRole").equals("admin")) {
+				this.context.log("User tried to access " + uri + " but was already logged in.");
+				currentRes.sendRedirect("/Sweethearts-Poll/admin/manage.xhtml");
 				return;
 			} else {
-				this.context.log("Unauthorized access request to " + uri);
-				currentRes.sendRedirect("/Sweethearts-Poll/authenticate.xhtml");
-			}*/
+				chain.doFilter(request, response);
+				return;
+			}
 		} else {
 			chain.doFilter(request, response);
 			return;

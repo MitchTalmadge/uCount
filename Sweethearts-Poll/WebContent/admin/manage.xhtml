@@ -8,9 +8,14 @@
 
 <ui:composition template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
-		<div class="section no-pad-bot" id="index-banner">
-			<div class="container">
+		<div class="section no-pad-top">
+			<div class="section #{style.colorPrimaryBase}">
+				<h1 class="header center #{style.textColorPrimary}">Poll
+					Management</h1>
+			</div>
+			<br />
 
+			<div class="container">
 				<div class="row">
 					<div class="col s6">
 						<h:form id="enabledPollSelector">
@@ -57,6 +62,43 @@
 					<div class="row">
 						<div class="col s6">
 							<div class="card">
+								<h:form id="nameForm">
+									<div class="card-content">
+										<span class="card-title">Poll Name:</span>
+
+										<ui:fragment rendered="#{!ManagerController.editingName}">
+											<br />
+											<h:outputText value="#{ManagerController.editablePollName}" />
+										</ui:fragment>
+										<ui:fragment rendered="#{ManagerController.editingName}">
+											<h:inputText id="nameTextField"
+												value="#{ManagerController.editablePollName}" />
+										</ui:fragment>
+									</div>
+									<div class="card-action">
+										<ui:fragment rendered="#{!ManagerController.editingName}">
+											<h:commandLink class="#{style.colorPrimaryText}">
+												<i class="material-icons">mode_edit</i>
+												<f:ajax render=":nameForm"
+													listener="#{ManagerController.onEditNameButtonFired}" />
+											</h:commandLink>
+										</ui:fragment>
+										<ui:fragment rendered="#{ManagerController.editingName}">
+											<h:commandLink class="#{style.colorPrimaryText}">
+												<i class="material-icons">done</i>
+												<f:ajax execute="nameTextField"
+													render=":nameForm :navBar :enabledPollSelector"
+													listener="#{ManagerController.onEditNameDoneButtonFired}"
+													onevent="refreshEnabledPollSelector" />
+											</h:commandLink>
+										</ui:fragment>
+										<h:message for="nameForm" style="color: red" />
+									</div>
+								</h:form>
+							</div>
+						</div>
+						<div class="col s6">
+							<div class="card">
 								<h:form id="descriptionForm">
 									<div class="card-content">
 										<span class="card-title">Poll Description:</span>
@@ -65,12 +107,12 @@
 											rendered="#{!ManagerController.editingDescription}">
 											<br />
 											<h:outputText
-												value="#{ManagerController.selectedPoll.description}" />
+												value="#{ManagerController.editablePollDescription}" />
 										</ui:fragment>
 										<ui:fragment
 											rendered="#{ManagerController.editingDescription}">
 											<h:inputTextarea id="descriptionTextarea"
-												value="#{ManagerController.selectedPoll.description}" />
+												value="#{ManagerController.editablePollDescription}" />
 										</ui:fragment>
 									</div>
 									<div class="card-action">
@@ -91,6 +133,7 @@
 													listener="#{ManagerController.onEditDescriptionDoneButtonFired}" />
 											</h:commandLink>
 										</ui:fragment>
+										<h:message for="descriptionForm" style="color: red" />
 									</div>
 								</h:form>
 							</div>
@@ -122,7 +165,9 @@
 											</td>
 											<td>
 												<h:form>
-													<h:link outcome="modifyVoteGroup?voteGroupId=#{voteGroup.id}" includeViewParams="true">
+													<h:link
+														outcome="modifyVoteGroup?voteGroupId=#{voteGroup.id}"
+														includeViewParams="true">
 														<i class="material-icons">mode_edit</i>
 													</h:link>
 												</h:form>
@@ -158,6 +203,12 @@
 			$(document).ready(function() {
 				$('select').material_select();
 			});
+
+			function refreshEnabledPollSelector(data) {
+				if (data.status === 'success') {
+					$('select').material_select();
+				}
+			}
 		</script>
 	</ui:define>
 </ui:composition>

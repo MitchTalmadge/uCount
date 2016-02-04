@@ -60,24 +60,6 @@ public class LoginController {
 			context.addMessage(null, new FacesMessage("Login Failed: Incorrect Credentials."));
 			return "error";
 		}
-		/*
-		 * The Authentication filter will put the original page they wanted into
-		 * a header named ORIGINAL_PAGE if they previously tried to access the
-		 * page but weren't authenticated.
-		 * 
-		 * This is where we send them back to where they wanted
-		 * 
-		 */
-		if (request.getHeader("ORIGINAL_PAGE") != null) {
-			HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
-			try {
-				response.sendRedirect(request.getHeader("ORIGINAL_PAGE"));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		// context.addMessage(null, new FacesMessage("redirect page was
-		// null."));
 		return "manage";
 	}
 

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -30,7 +31,7 @@ public class ManagerController {
 
 	@EJB
 	ContestantService contestantService;
-	
+
 	private List<Poll> polls;
 
 	/**
@@ -39,9 +40,21 @@ public class ManagerController {
 	private Poll selectedPoll;
 
 	/**
-	 * Whether or not we are currently editing the description.
+	 * Whether or not we are currently editing the poll name.
+	 */
+	private boolean editingName = false;
+
+	/**
+	 * Whether or not we are currently editing the poll description.
 	 */
 	private boolean editingDescription = false;
+
+	/**
+	 * These variables are used when editing the poll name/description so that
+	 * input can be verified.
+	 */
+	private String editablePollName = "";
+	private String editablePollDescription = "";
 
 	@PostConstruct
 	public void init() {
@@ -50,8 +63,12 @@ public class ManagerController {
 		if (!polls.isEmpty()) {
 			this.selectedPoll = polls.get(0);
 		}
+		if (selectedPoll != null) {
+			this.setEditablePollName(selectedPoll.getName());
+			this.setEditablePollDescription(selectedPoll.getDescription());
+		}
 	}
-	
+
 	public Poll getEnabledPoll() {
 		return pollService.getEnabledPoll();
 	}
@@ -79,6 +96,10 @@ public class ManagerController {
 	public void setSelectedPoll(Poll selectedPoll) {
 		System.out.println("Setting Selected Poll to " + selectedPoll.getName());
 		this.selectedPoll = selectedPoll;
+		if (selectedPoll != null) {
+			this.setEditablePollName(selectedPoll.getName());
+			this.setEditablePollDescription(selectedPoll.getDescription());
+		}
 		this.editingDescription = false;
 	}
 
@@ -110,6 +131,50 @@ public class ManagerController {
 		return "manage";
 	}
 
+	public String getEditablePollName() {
+		return editablePollName;
+	}
+
+	public void setEditablePollName(String editablePollName) {
+		this.editablePollName = editablePollName;
+	}
+
+	public boolean getEditingName() {
+		return editingName;
+	}
+
+	public void setEditingName(boolean editingName) {
+		this.editingName = editingName;
+	}
+
+	public void onEditNameButtonFired() {
+		this.setEditablePollName(selectedPoll.getName());
+		setEditingName(true);
+	}
+
+	public void onEditNameDoneButtonFired() {
+		if (this.getEditablePollName().isEmpty()) {
+			FacesContext.getCurrentInstance().addMessage("nameForm",
+					new FacesMessage("The Poll Name cannot be empty!"));
+			return;
+		}
+		setEditingName(false);
+		selectedPoll.setName(editablePollName);
+		pollService.merge(selectedPoll);
+		if (pollService.getEnabledPoll() != null) {
+			if (selectedPoll.getId() == pollService.getEnabledPoll().getId())
+				pollService.refreshEnabledPoll();
+		}
+	}
+
+	public String getEditablePollDescription() {
+		return editablePollDescription;
+	}
+
+	public void setEditablePollDescription(String editablePollDescription) {
+		this.editablePollDescription = editablePollDescription;
+	}
+
 	public boolean getEditingDescription() {
 		return editingDescription;
 	}
@@ -119,14 +184,23 @@ public class ManagerController {
 	}
 
 	public void onEditDescriptionButtonFired() {
+		this.setEditablePollDescription(selectedPoll.getDescription());
 		setEditingDescription(true);
 	}
 
 	public void onEditDescriptionDoneButtonFired() {
+		if (this.getEditablePollDescription().isEmpty()) {
+			FacesContext.getCurrentInstance().addMessage("descriptionForm",
+					new FacesMessage("The Poll Description cannot be empty!"));
+			return;
+		}
 		setEditingDescription(false);
+		selectedPoll.setDescription(editablePollDescription);
 		pollService.merge(selectedPoll);
-		if(selectedPoll.getId() == pollService.getEnabledPoll().getId())
-			pollService.refreshEnabledPoll();
+		if (pollService.getEnabledPoll() != null) {
+			if (selectedPoll.getId() == pollService.getEnabledPoll().getId())
+				pollService.refreshEnabledPoll();
+		}
 	}
 
 	public void addNewVoteGroup() {

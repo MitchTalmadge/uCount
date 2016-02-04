@@ -8,15 +8,16 @@
 
 <ui:composition template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
-		<div class="section no-pad-bot" id="index-banner">
+		<div class="section no-pad-top">
+			<div class="section #{style.colorPrimaryBase}">
+				<h1 class="header center #{style.textColorPrimary}">Administrator
+					Login</h1>
+			</div>
+			<br />
+
 			<div class="container">
-				<br /> <br />
-				<h1 class="header center #{style.colorComplementaryText}">Login</h1>
 				<div class="row center">
-					<div class="col s12 m4">
-						<br />
-					</div>
-					<div class="col s12 m4">
+					<div class="col s12 m4 push-m4">
 						<h:form id="loginForm"
 							onkeypress="if (event.keyCode == 13) { document.getElementById('loginForm:submit').click(); return false; }">
 							<h:messages globalOnly="true" style="color: red" />
