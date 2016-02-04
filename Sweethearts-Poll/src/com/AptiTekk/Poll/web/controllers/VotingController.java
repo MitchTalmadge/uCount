@@ -56,8 +56,8 @@ public class VotingController {
 						FacesContext.getCurrentInstance().addMessage(null,
 								new FacesMessage("The Student ID you entered is invalid. Please try again."));
 					} else {
-						setStudentId(Integer.parseInt(studentIdInput));
 						System.out.println("ID Was Valid!");
+						setStudentId(Integer.parseInt(studentIdInput)); //Sets the valid Student ID for use when voting.
 					}
 				} catch (NumberFormatException e) {
 					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Please only enter numbers."));
@@ -68,6 +68,7 @@ public class VotingController {
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage("You must enter your Student ID to continue."));
 		}
+		studentIdInput = null; //Clear input
 	}
 
 	public int getStudentId() {
