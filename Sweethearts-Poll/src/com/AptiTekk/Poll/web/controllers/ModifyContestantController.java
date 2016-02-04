@@ -34,14 +34,11 @@ public class ModifyContestantController {
 	VoteGroupService voteGroupService;
 	
 	private List<ContestantViewModel> entries;
-	private VoteGroup voteGroup;
-	
-	private int voteGroupId;
 	
 	@PostConstruct
 	public void init() {
 		System.out.println("Init ModifyContestantController");
-		entries = ViewModelConverter.toContestantViewModels(voteGroup.getContestants());
+		//entries = ViewModelConverter.toContestantViewModels(voteGroup.getContestants());
 		entries.add(new ContestantViewModel());
 		System.out.println("Entries len: " + entries.size());
 		System.out.println("Entries initialized: " + entries.hashCode());
@@ -89,21 +86,6 @@ public class ModifyContestantController {
 
 	public void setEntries(List<ContestantViewModel> entries) {
 		this.entries = entries;
-	}
-
-	public VoteGroup getVoteGroup() {
-		return voteGroup;
-	}
-
-	public void setVoteGroup(VoteGroup voteGroup) {
-		this.voteGroup = voteGroup;
-	}
-	public int getVoteGroupId() {
-		return voteGroupId;
-	}
-
-	public void setVoteGroupId(int voteGroupId) {
-		this.voteGroupId = voteGroupId;
 	}
 
 }

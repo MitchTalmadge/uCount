@@ -31,9 +31,6 @@ public class ManagerController {
 	@EJB
 	ContestantService contestantService;
 	
-	@ManagedProperty(value="#{ModifyContestantController}")
-	private ModifyContestantController modifyContestantController;
-
 	private List<Poll> polls;
 
 	/**
@@ -55,15 +52,6 @@ public class ManagerController {
 		}
 	}
 	
-	public String editVoteGroup(int id) {
-//		Map<String,String> params = 
-// FacesContext.getExternalContext().getRequestParameterMap();
-//		String id = params.get("voteGroupId");
-		this.modifyContestantController.setVoteGroup(voteGroupService.get(id));
-		return "modifyVoteGroup";
-	  
-	}
-
 	public Poll getEnabledPoll() {
 		return pollService.getEnabledPoll();
 	}
@@ -161,14 +149,6 @@ public class ManagerController {
 				}
 			}
 		}
-	}
-
-	public ModifyContestantController getModifyContestantController() {
-		return modifyContestantController;
-	}
-
-	public void setModifyContestantController(ModifyContestantController modifyContestantController) {
-		this.modifyContestantController = modifyContestantController;
 	}
 
 }

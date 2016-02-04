@@ -122,9 +122,9 @@
 											</td>
 											<td>
 												<h:form>
-													<h:commandLink action="#{ManagerController.editVoteGroup(voteGroup.id)}">
+													<h:link outcome="modifyVoteGroup?voteGroupId=#{voteGroup.id}" includeViewParams="true">
 														<i class="material-icons">mode_edit</i>
-													</h:commandLink>
+													</h:link>
 												</h:form>
 											</td>
 											<td>

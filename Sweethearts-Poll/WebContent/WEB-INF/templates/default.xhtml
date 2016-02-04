@@ -4,6 +4,9 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:insert name="metadata" />
+
 <h:head>
 	<title><ui:insert name="title">Bingham Sweethearts</ui:insert></title>
 
@@ -38,7 +41,7 @@
 	<h:outputScript library="js" name="knockout-3.4.0.js" />
 	<h:outputScript library="js" name="fix_double_click.js" />
 
-	<ui:insert name="javascript"></ui:insert>
+	<ui:insert name="javascript" />
 
 </h:body>
 
