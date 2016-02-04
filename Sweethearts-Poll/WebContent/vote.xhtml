@@ -13,8 +13,10 @@
 			<!-- Shown when a poll is enabled; displays poll name and description -->
 			<ui:fragment rendered="#{VotingController.enabledPoll != null}">
 				<div class="section #{style.colorPrimaryBase}">
-					<h1 class="header center #{style.textColorPrimary}">#{VotingController.enabledPoll.name}</h1>
-					<p class="flow-text center-align #{style.textColorPrimary}">#{VotingController.enabledPoll.description}</p>
+					<div class="container">
+						<h1 class="header center #{style.textColorPrimary}">#{VotingController.enabledPoll.name}</h1>
+						<h5 class="header center #{style.textColorPrimary}">#{VotingController.enabledPoll.description}</h5>
+					</div>
 				</div>
 			</ui:fragment>
 
@@ -50,7 +52,7 @@
 								<div class="row center">
 									<h:commandLink id="submit"
 										styleClass="#{style.colorPrimary} btn waves-effect waves-light"
-										value="Submit">
+										value="Go Vote">
 										<i class="material-icons right">send</i>
 										<f:ajax execute="studentIdField" render=":mainContent"
 											listener="#{VotingController.authenticate}" />
