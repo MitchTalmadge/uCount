@@ -46,10 +46,14 @@
 										</h:commandLink>
 									</li>
 								</ui:repeat>
+								<li>
+									<h:commandLink action="#{ManagerController.addNewPoll()}">
+										<i class="material-icons">add</i>
+										<f:ajax render=":pollContent :navBar :enabledPollSelector"
+											onevent="refreshEnabledPollSelector" />
+									</h:commandLink>
+								</li>
 							</ul>
-							<h:commandLink styleClass="right" style="padding:0 20px"
-								value="Add Dummy Polls"
-								action="#{ManagerController.addDummyPolls()}" />
 						</h:form>
 					</div>
 					</nav>
@@ -59,6 +63,19 @@
 
 				<h:panelGroup rendered="#{ManagerController.selectedPoll != null}"
 					layout="block" id="pollContent">
+					<div class="row">
+						<div class="col s12">
+							<h:form>
+								<h:commandLink value="Delete Poll"
+									styleClass="waves-effect waves-light btn #{style.colorDelete}"
+									action="#{ManagerController.deleteSelectedPoll()}">
+									<i class="material-icons right">delete</i>
+									<f:ajax render=":pollContent :navBar :enabledPollSelector"
+										onevent="refreshEnabledPollSelector" />
+								</h:commandLink>
+							</h:form>
+						</div>
+					</div>
 					<div class="row">
 						<div class="col s6">
 							<div class="card">
@@ -71,8 +88,10 @@
 											<h:outputText value="#{ManagerController.editablePollName}" />
 										</ui:fragment>
 										<ui:fragment rendered="#{ManagerController.editingName}">
-											<h:inputText id="nameTextField"
-												value="#{ManagerController.editablePollName}" />
+											<div class="input-field">
+												<h:inputText id="nameTextField"
+													value="#{ManagerController.editablePollName}" />
+											</div>
 										</ui:fragment>
 									</div>
 									<div class="card-action">
@@ -111,8 +130,12 @@
 										</ui:fragment>
 										<ui:fragment
 											rendered="#{ManagerController.editingDescription}">
-											<h:inputTextarea id="descriptionTextarea"
-												value="#{ManagerController.editablePollDescription}" />
+											<div class="input-field">
+												<h:inputTextarea id="descriptionTextarea"
+													styleClass="materialize-textarea"
+													style="padding-top: 0; margin-bottom: 0;"
+													value="#{ManagerController.editablePollDescription}" />
+											</div>
 										</ui:fragment>
 									</div>
 									<div class="card-action">
@@ -174,7 +197,7 @@
 											</td>
 											<td>
 												<h:form>
-													<h:commandLink class="#{style.colorDelete}"
+													<h:commandLink class="#{style.colorDeleteText}"
 														action="#{ManagerController.deleteVoteGroup(voteGroup)}">
 														<i class="material-icons">delete</i>
 														<f:ajax render=":pollContent" />

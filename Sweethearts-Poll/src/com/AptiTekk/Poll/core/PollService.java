@@ -51,7 +51,10 @@ public class PollService extends Service<Poll> {
 	}
 
 	public void refreshEnabledPoll() {
-		this.enabledPoll = get(enabledPoll.getId());
+		if(this.enabledPoll != null)
+			this.enabledPoll = get(enabledPoll.getId());
+		else
+			this.enabledPoll = null;
 	}
 
 }

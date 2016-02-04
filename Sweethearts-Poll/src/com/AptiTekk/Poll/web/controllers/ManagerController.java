@@ -61,11 +61,7 @@ public class ManagerController {
 		System.out.println("Init ManagerController");
 		polls = pollService.getAll();
 		if (!polls.isEmpty()) {
-			this.selectedPoll = polls.get(0);
-		}
-		if (selectedPoll != null) {
-			this.setEditablePollName(selectedPoll.getName());
-			this.setEditablePollDescription(selectedPoll.getDescription());
+			setSelectedPoll(polls.get(0));
 		}
 	}
 
@@ -103,32 +99,24 @@ public class ManagerController {
 		this.editingDescription = false;
 	}
 
-	public String addDummyPolls() {
-		System.out.println("Adding Dummy Polls...");
-		Poll poll1 = new Poll("Poll 1", "This is a test description for Poll 1", false);
-		Poll poll2 = new Poll("Poll 2", "This is a test description for Poll 2", false);
-		pollService.insert(poll1);
-		pollService.insert(poll2);
+	public void addNewPoll() {
+		Poll poll = new Poll("New Poll", "This is a new poll. Edit its description here!", false);
+		pollService.insert(poll);
+		System.out.println("Added New Poll.");
+		if(polls.isEmpty()) //If the number of available polls right now is 0, call init so that a poll is selected.
+			init();
+		else //Otherwise, just refresh the polls list; don't leave the currently selected poll.
+			polls = pollService.getAll();
+	}
 
-		VoteGroup voteGroup1 = new VoteGroup(poll1);
-		VoteGroup voteGroup2 = new VoteGroup(poll1);
-		voteGroupService.insert(voteGroup1);
-		voteGroupService.insert(voteGroup2);
-
-		Contestant contestant1 = new Contestant(voteGroup1, "Kevin", "Thorne", "notFound.png");
-		Contestant contestant2 = new Contestant(voteGroup1, "Megan", "Church", "notFound.png");
-
-		Contestant contestant3 = new Contestant(voteGroup2, "Andrew", "Meservy", "notFound.png");
-		Contestant contestant4 = new Contestant(voteGroup2, "Emma", "Lowe", "notFound.png");
-
-		contestantService.insert(contestant1);
-		contestantService.insert(contestant2);
-		contestantService.insert(contestant3);
-		contestantService.insert(contestant4);
-
-		System.out.println("Dummy Polls Added.");
-
-		return "manage";
+	public void deleteSelectedPoll() {
+		if (selectedPoll != null) {
+			pollService.delete(selectedPoll.getId());
+			pollService.refreshEnabledPoll();
+			selectedPoll = null;
+			System.out.println("Deleted Selected Poll.");
+			init();
+		}
 	}
 
 	public String getEditablePollName() {
