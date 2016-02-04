@@ -8,74 +8,107 @@
 
 <ui:composition template="/WEB-INF/templates/default.xhtml">
 
-	<ui:define name="metadata">
-		<f:metadata>
-			<f:viewParam name="voteGroupId"
-				value="#{ModifyVoteGroupController.voteGroupIdParam}" />
-		</f:metadata>
-	</ui:define>
-
 	<ui:define name="content">
-		<div class="section no-pad-bot" id="index-banner">
-			<div class="row">
-				VoteGroup ID: #{ModifyVoteGroupController.voteGroup.id}
-				<!-- 
-				<ui:repeat id="contestants"
-					value="#{ModifyContestantController.entries}" var="newContestant">
-					<div class="col s6 m3">
-						<h:panelGroup layout="block" id="contestantData">
-							<h:form>
+		<div class="section no-pad-top">
+			<div class="section #{style.colorPrimaryBase}">
+				<h1 class="header center #{style.textColorPrimary}">Modify Vote
+					Group</h1>
+				<ui:fragment
+					rendered="#{ModifyVoteGroupController.voteGroup != null}">
+					<h5 class="header center #{style.textColorPrimary}">Current
+						Vote Group ID: #{ModifyVoteGroupController.voteGroup.id}</h5>
+				</ui:fragment>
+				<ui:fragment
+					rendered="#{ModifyVoteGroupController.voteGroup == null}">
+					<h5 class="header center #{style.textColorPrimary}">Current No
+						Vote Group Selected for Editing!</h5>
+				</ui:fragment>
+			</div>
+			<br />
+
+			<div class="container">
+				<h:panelGroup id="contestants">
+					<ui:fragment
+						rendered="#{ModifyVoteGroupController.voteGroup != null}">
+						<div class="row">
+							<ui:repeat
+								value="#{ModifyVoteGroupController.voteGroup.contestants}"
+								var="contestant">
 								<div class="col s6">
-									<h:graphicImage id="displayImage" library="contestant_images"
-										name="newContestant.pictureFileName" />
-									<div class="file-field input-field">
-										<h:form enctype="multipart/form-data">
-											<div class="#{style.colorPrimary} btn">
-												<h:inputFile id="picture"
-													validator="#{ModifyContestantController.validateImage}"
-													value="newContestant.pictureUpload">
-													<h:commandButton value="Upload"
-														action="#{ModifyContestantController.upload(newContestant)}">
-														<f:ajax render=":displayImage" />
-													</h:commandButton>
-												</h:inputFile>
+									<div class="card">
+										<h:form id="contestantEditForm">
+											<div class="card-image">
+												<h:graphicImage
+													value="/resources/contestant_images/notFound.png" />
+											</div>
+											<div class="card-content">
+
+												<!-- Rendered if the Contestant currently being edited is not this Contestant. -->
+												<ui:fragment
+													rendered="#{ModifyVoteGroupController.contestantIdBeingEdited != contestant.id}">
+													<span class="card-title">#{contestant.firstName}
+														#{contestant.lastName}</span>
+												</ui:fragment>
+
+												<!-- Rendered if the Contestant currently being edited IS this Contestant. -->
+												<ui:fragment
+													rendered="#{ModifyVoteGroupController.contestantIdBeingEdited == contestant.id}">
+													<div class="input-field col s6">
+														<h:inputText id="firstNameTextField"
+															value="#{ModifyVoteGroupController.editableFirstName}" />
+													</div>
+													<div class="input-field col s6">
+														<h:inputText id="lastNameTextField"
+															value="#{ModifyVoteGroupController.editableLastName}" />
+													</div>
+												</ui:fragment>
+
+											</div>
+											<div class="card-action">
+
+												<!-- Rendered if the Contestant currently being edited is not this Contestant. -->
+												<ui:fragment
+													rendered="#{ModifyVoteGroupController.contestantIdBeingEdited != contestant.id}">
+													<h:commandLink class="#{style.colorPrimaryText}"
+														action="#{ModifyVoteGroupController.onEditButtonFired(contestant.id)}">
+														<i class="material-icons">mode_edit</i>
+														<f:ajax render=":contestants" />
+													</h:commandLink>
+												</ui:fragment>
+
+												<!-- Rendered if the Contestant currently being edited IS this Contestant. -->
+												<ui:fragment
+													rendered="#{ModifyVoteGroupController.contestantIdBeingEdited == contestant.id}">
+													<h:commandLink class="#{style.colorPrimaryText}"
+														action="#{ModifyVoteGroupController.onEditDoneButtonFired}">
+														<i class="material-icons">done</i>
+														<f:ajax execute="firstNameTextField lastNameTextField"
+															render=":contestants" />
+													</h:commandLink>
+													<h:message for="contestantEditForm" style="color: red" />
+												</ui:fragment>
+
 											</div>
 										</h:form>
 									</div>
 								</div>
-								<div class="col s6">
-									<div class="row">
-										<div class="input-field col s6">
-											<h:inputText id="first_name" class="validate" />
-											<h:outputLabel for="first_name">
-													First Name
-												</h:outputLabel>
-										</div>
-									</div>
-									<div class="row">
-										<div class="input-field col s6">
-											<h:inputText id="last_name" class="validate" />
-											<h:outputLabel for="last_name">
-													Last Name
-												</h:outputLabel>
-										</div>
-									</div>
-									<div class="row"></div>
-								</div>
-							</h:form>
-						</h:panelGroup>
-					</div>
-				</ui:repeat>
-				<div class="col s6 m3">
-					<h:commandButton value="+"
-						action="#{ModifyContestantController.addContestant}">
-						<f:ajax render=":contestants" />
-					</h:commandButton>
-				</div>
-				 -->
+							</ui:repeat>
+							<div class="col s6">
+								<h:form>
+									<h:commandLink value="Add New Contestant"
+										styleClass="waves-effect waves-light btn #{style.colorPrimary}"
+										action="#{ModifyVoteGroupController.addNewContestant()}">
+										<i class="material-icons right">add</i>
+										<f:ajax render=":contestants" />
+									</h:commandLink>
+								</h:form>
+							</div>
+						</div>
+					</ui:fragment>
+				</h:panelGroup>
 			</div>
 		</div>
-		
+
 	</ui:define>
 
 </ui:composition>
