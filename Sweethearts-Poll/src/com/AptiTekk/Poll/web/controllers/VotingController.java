@@ -1,5 +1,7 @@
 package com.AptiTekk.Poll.web.controllers;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -11,6 +13,7 @@ import com.AptiTekk.Poll.core.ContestantService;
 import com.AptiTekk.Poll.core.PollService;
 import com.AptiTekk.Poll.core.VoteGroupService;
 import com.AptiTekk.Poll.core.entityBeans.Poll;
+import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
 
 @ManagedBean
 @ViewScoped
@@ -38,6 +41,10 @@ public class VotingController {
 
 	public Poll getEnabledPoll() {
 		return pollService.getEnabledPoll();
+	}
+	
+	public List<VoteGroup> getVoteGroups() {
+		return voteGroupService.getVoteGroupsFromPoll(getEnabledPoll());
 	}
 
 	public void authenticate() {
