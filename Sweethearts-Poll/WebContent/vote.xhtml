@@ -39,7 +39,7 @@
 					<ui:fragment rendered="#{VotingController.credential == null}">
 						<h5 class="header center">Please Enter Your Student ID</h5>
 						<div class="row center">
-							<h:form styleClass="col s12">
+							<h:form styleClass="col s12" id="voteForm" onkeypress="if (event.keyCode == 13) { document.getElementById('voteForm:submit').click(); return false; }">
 								<div class="row center">
 									<h:messages globalOnly="true" style="color: red" />
 									<div class="input-field col s6 push-s3">
