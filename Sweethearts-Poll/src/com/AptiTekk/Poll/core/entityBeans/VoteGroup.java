@@ -19,13 +19,16 @@ public class VoteGroup {
 	@GeneratedValue
 	private int id;
 
-	@OneToMany(fetch=FetchType.EAGER, mappedBy = "voteGroup", cascade = CascadeType.ALL)
-	private List<Contestant> contestants;
-
 	@ManyToOne
 	@JoinColumn(name = "pollId")
 	private Poll poll;
+	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy = "voteGroup", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Contestant> contestants;
 
+	@OneToMany(fetch=FetchType.LAZY, mappedBy = "voteGroup", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Entry> entries;
+	
 	@Column(length = 64)
 	private String talentName;
 
@@ -74,6 +77,14 @@ public class VoteGroup {
 
 	public void setTalentName(String talentName) {
 		this.talentName = talentName;
+	}
+
+	public List<Entry> getEntries() {
+		return entries;
+	}
+
+	public void setEntries(List<Entry> entries) {
+		this.entries = entries;
 	}
 
 }

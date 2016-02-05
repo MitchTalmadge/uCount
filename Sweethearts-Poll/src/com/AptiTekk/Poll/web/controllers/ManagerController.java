@@ -196,6 +196,7 @@ public class ManagerController {
 			VoteGroup voteGroup = new VoteGroup(selectedPoll);
 			voteGroupService.insert(voteGroup);
 			selectedPoll.getVoteGroups().add(voteGroup);
+			pollService.refreshEnabledPoll();
 		}
 	}
 

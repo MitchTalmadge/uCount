@@ -10,9 +10,12 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import com.AptiTekk.Poll.core.ContestantService;
+import com.AptiTekk.Poll.core.CredentialService;
 import com.AptiTekk.Poll.core.EntryService;
 import com.AptiTekk.Poll.core.PollService;
 import com.AptiTekk.Poll.core.VoteGroupService;
+import com.AptiTekk.Poll.core.entityBeans.Credential;
+import com.AptiTekk.Poll.core.entityBeans.Entry;
 import com.AptiTekk.Poll.core.entityBeans.Poll;
 import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
 
@@ -20,106 +23,154 @@ import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
 @ViewScoped
 public class VotingController {
 
-	private static final boolean USE_JSD_AUTH = false;
+  private static final boolean USE_JSD_AUTH = false;
 
-	@EJB
-	PollService pollService;
+  @EJB
+  PollService pollService;
 
-	@EJB
-	VoteGroupService voteGroupService;
+  @EJB
+  VoteGroupService voteGroupService;
 
-	@EJB
-	ContestantService contestantService;
+  @EJB
+  ContestantService contestantService;
 
-	@EJB
-	EntryService entryService;
+  @EJB
+  EntryService entryService;
 
-	private int studentId;
+  @EJB
+  CredentialService credentialService;
 
-	private String studentIdInput;
+  /**
+   * The student's credential. Null if the user has not yet validated their student ID.
+   */
+  private Credential credential;
 
-	private boolean studentHasAlreadyVoted = false;
+  /**
+   * The input string when the student types in their ID.
+   */
+  private String studentIdInput;
 
-	@PostConstruct
-	public void init() {
-		this.setStudentId(-1);
-	}
+  /**
+   * Will be set to true if an entry is found with the student's ID.
+   */
+  private boolean studentHasAlreadyVoted = false;
 
-	public Poll getEnabledPoll() {
-		return pollService.getEnabledPoll();
-	}
+  /**
+   * Will be set to true upon voting completion. Used to display thank-you page.
+   */
+  private boolean votingComplete = false;
 
-	public List<VoteGroup> getVoteGroups() {
-		return voteGroupService.getVoteGroupsFromPoll(getEnabledPoll());
-	}
+  @PostConstruct
+  public void init() {
+    this.setCredential(null);
+  }
 
-	public void authenticate() {
-		System.out.println("Authenticating...");
-		this.setStudentId(-1);
+  public Poll getEnabledPoll() {
+    return pollService.getEnabledPoll();
+  }
 
-		if (studentIdInput != null && !studentIdInput.isEmpty()) {
-			if (USE_JSD_AUTH) {
-				System.out.println("Using JSD Authentication...");
-				// TODO: Get reply from JSD and see how they want us to auth
-			} else { // Use basic authentication methods
-				System.out.println("Using Basic Authentication...");
-				try {
-					if (!studentIdInput.startsWith("8") || studentIdInput.length() != 7) {
-						System.out.println("Invalid Format!");
-						FacesContext.getCurrentInstance().addMessage(null,
-								new FacesMessage("The Student ID you entered is invalid. Please try again."));
-					} else {
-						System.out.println("ID Was Valid!");
-						setStudentId(Integer.parseInt(studentIdInput)); // Sets
-																		// the
-																		// valid
-																		// Student
-																		// ID
-																		// for
-																		// use
-																		// when
-																		// voting.
-					}
-				} catch (NumberFormatException e) {
-					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Please only enter numbers."));
-				}
-			}
-		} else {
-			System.out.println("Input was empty!");
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage("You must enter your Student ID to continue."));
-		}
-		studentIdInput = null; // Clear input
-	}
+  public List<VoteGroup> getVoteGroups() {
+    return voteGroupService.getVoteGroupsFromPoll(getEnabledPoll());
+  }
 
-	public int getStudentId() {
-		return studentId;
-	}
+  public void authenticate() {
+    System.out.println("Authenticating...");
+    this.setCredential(null);
 
-	public void setStudentId(int studentId) {
-		this.studentId = studentId;
-		if (studentId == -1)
-			this.setStudentHasAlreadyVoted(false);
-		else
-			this.setStudentHasAlreadyVoted(
-					entryService.hasStudentVoted(studentId, pollService.getEnabledPoll().getId()));
-	}
+    if (studentIdInput != null && !studentIdInput.isEmpty()) {
+      if (USE_JSD_AUTH) {
+        System.out.println("Using JSD Authentication...");
+        // TODO: Get reply from JSD and see how they want us to auth
+      } else { // Use basic authentication methods
+        System.out.println("Using Basic Authentication...");
+        try {
+          if (!studentIdInput.startsWith("8") || studentIdInput.length() != 7) {
+            System.out.println("Invalid Format!");
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage("The Student ID you entered is invalid. Please try again."));
+          } else {
+            System.out.println("ID Was Valid!");
+            int studentId = Integer.parseInt(studentIdInput);
+            Credential credential;
+            //Inserts a Credential row so that an Entry can be made.
+            if ((credential = credentialService.getByStudentNumber(studentId)) == null) {
+              System.out.println("Creating new Credential.");
+              credential = new Credential(studentId);
+              credentialService.insert(credential);
+            }
+            else
+            {
+              System.out.println("Found existing Credential.");
+            }
+            setCredential(credential); // Sets the valid Student ID for use when voting.
+          }
+        } catch (NumberFormatException e) {
+          FacesContext.getCurrentInstance().addMessage(null,
+              new FacesMessage("Please only enter numbers."));
+        }
+      }
+    } else {
+      System.out.println("Input was empty!");
+      FacesContext.getCurrentInstance().addMessage(null,
+          new FacesMessage("You must enter your Student ID to continue."));
+    }
+    studentIdInput = null; // Clear input
+  }
 
-	public String getStudentIdInput() {
-		return studentIdInput;
-	}
+  public Credential getCredential() {
+    return credential;
+  }
 
-	public void setStudentIdInput(String studentIdInput) {
-		System.out.println("Setting Student ID Input to " + studentIdInput);
-		this.studentIdInput = studentIdInput;
-	}
+  public void setCredential(Credential credential) {
+    this.credential = credential;
+    if (credential == null)
+      this.setStudentHasAlreadyVoted(false);
+    else
+      this.setStudentHasAlreadyVoted(
+          entryService.hasStudentVoted(credential.getId(), pollService.getEnabledPoll().getId()));
+  }
 
-	public boolean getStudentHasAlreadyVoted() {
-		return studentHasAlreadyVoted;
-	}
+  public String getStudentIdInput() {
+    return studentIdInput;
+  }
 
-	public void setStudentHasAlreadyVoted(boolean studentHasAlreadyVoted) {
-		this.studentHasAlreadyVoted = studentHasAlreadyVoted;
-	}
+  public void setStudentIdInput(String studentIdInput) {
+    System.out.println("Setting Student ID Input to " + studentIdInput);
+    this.studentIdInput = studentIdInput;
+  }
+
+  public boolean getStudentHasAlreadyVoted() {
+    return studentHasAlreadyVoted;
+  }
+
+  public void setStudentHasAlreadyVoted(boolean studentHasAlreadyVoted) {
+    this.studentHasAlreadyVoted = studentHasAlreadyVoted;
+  }
+
+  public boolean isVotingComplete() {
+    return votingComplete;
+  }
+
+  public void setVotingComplete(boolean votingComplete) {
+    this.votingComplete = votingComplete;
+  }
+
+  public void dummyVote() {
+    System.out.println("Adding Dummy Vote");
+    if (credential != null && pollService.getEnabledPoll() != null) {
+      List<VoteGroup> voteGroups = pollService.getEnabledPoll().getVoteGroups();
+      if (!voteGroups.isEmpty()) {
+        Entry entry = new Entry(getCredential(), voteGroups.get(0), pollService.getEnabledPoll());
+        entryService.insert(entry);
+        pollService.getEnabledPoll().getEntries().add(entry);
+        setVotingComplete(true);
+        System.out.println("Dummy Vote Added");
+      }
+      else
+      {
+        System.out.println("Dummy Vote could not be added. VoteGroups was empty.");
+      }
+    }
+  }
 
 }

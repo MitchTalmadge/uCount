@@ -1,5 +1,6 @@
 package com.AptiTekk.Poll.core.entityBeans;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -9,62 +10,62 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Entry {
 
-	@Id
-	@GeneratedValue
-	private int id;
+  @Id
+  @GeneratedValue
+  private int id;
 
-	@ManyToOne
-	@JoinColumn(name = "credentialsId")
-	private Credential credential;
+  @ManyToOne(cascade = CascadeType.MERGE)
+  @JoinColumn(name = "credentialsId")
+  private Credential credential;
 
-	@ManyToOne
-	@JoinColumn(name = "voteGroupId")
-	private VoteGroup voteGroup;
+  @ManyToOne
+  @JoinColumn(name = "voteGroupId")
+  private VoteGroup voteGroup;
 
-	@ManyToOne
-	@JoinColumn(name = "pollId")
-	private Poll poll;
-	
-	public Entry() {
-		
-	}
+  @ManyToOne
+  @JoinColumn(name = "pollId")
+  private Poll poll;
 
-	public Entry(Credential credential, VoteGroup voteGroup, Poll poll) {
-		setCredential(credential);
-		setVoteGroup(voteGroup);
-		setPoll(poll);
-	}
+  public Entry() {
 
-	public int getId() {
-		return id;
-	}
+  }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+  public Entry(Credential credential, VoteGroup voteGroup, Poll poll) {
+    setCredential(credential);
+    setVoteGroup(voteGroup);
+    setPoll(poll);
+  }
 
-	public Credential getCredential() {
-		return credential;
-	}
+  public int getId() {
+    return id;
+  }
 
-	public void setCredential(Credential credential) {
-		this.credential = credential;
-	}
+  public void setId(int id) {
+    this.id = id;
+  }
 
-	public VoteGroup getVoteGroup() {
-		return voteGroup;
-	}
+  public Credential getCredential() {
+    return credential;
+  }
 
-	public void setVoteGroup(VoteGroup voteGroup) {
-		this.voteGroup = voteGroup;
-	}
+  public void setCredential(Credential credential) {
+    this.credential = credential;
+  }
 
-	public Poll getPoll() {
-		return poll;
-	}
+  public VoteGroup getVoteGroup() {
+    return voteGroup;
+  }
 
-	public void setPoll(Poll poll) {
-		this.poll = poll;
-	}
+  public void setVoteGroup(VoteGroup voteGroup) {
+    this.voteGroup = voteGroup;
+  }
+
+  public Poll getPoll() {
+    return poll;
+  }
+
+  public void setPoll(Poll poll) {
+    this.poll = poll;
+  }
 
 }

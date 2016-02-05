@@ -35,8 +35,8 @@
 				<h:panelGroup id="mainContent"
 					rendered="#{VotingController.enabledPoll != null}">
 
-					<!-- Shown when the user is not authenticated (studentId will be -1). Asks the user to enter their Student ID -->
-					<ui:fragment rendered="#{VotingController.studentId == -1}">
+					<!-- Shown when the user is not authenticated (credential will be null). Asks the user to enter their Student ID -->
+					<ui:fragment rendered="#{VotingController.credential == null}">
 						<h5 class="header center">Please Enter Your Student ID</h5>
 						<div class="row center">
 							<h:form styleClass="col s12">
@@ -52,29 +52,54 @@
 								<div class="row center">
 									<h:commandLink id="submit"
 										styleClass="#{style.colorPrimary} btn waves-effect waves-light"
-										value="Go Vote">
+										value="Go Vote" action="#{VotingController.authenticate}">
 										<i class="material-icons right">send</i>
-										<f:ajax execute="studentIdField" render=":mainContent"
-											listener="#{VotingController.authenticate}" />
+										<f:ajax execute="studentIdField" render=":mainContent" />
 									</h:commandLink>
 								</div>
 							</h:form>
 						</div>
 					</ui:fragment>
 
-					<!-- Shown when the user is authenticated (studentId will be something like 8227069, i.e. greater than -1). -->
-					<ui:fragment rendered="#{VotingController.studentId > -1}">
+					<!-- Shown when the user is authenticated. -->
+					<ui:fragment rendered="#{VotingController.credential != null}">
 
 						<!-- Shown when the student has already submitted an entry. -->
 						<ui:fragment rendered="#{VotingController.studentHasAlreadyVoted}">
 							<h3 class="header center">You have already voted!</h3>
-							<p class="flow-text center">It appears that you have already voted. If you would like
-								to change your vote, or believe that someone else has voted
-								using your ID, please talk to Mr. McDonald in room V107.</p>
+							<p class="flow-text center">It appears that you have already
+								voted. If you would like to change your vote, or believe that
+								someone else has voted using your ID, please talk to Mr.
+								McDonald in room V107.</p>
 						</ui:fragment>
-						
+
 						<!-- Shown when the user has not already submitted an entry. Should allow them to vote. -->
-						<ui:fragment  rendered="#{!VotingController.studentHasAlreadyVoted}">
+						<ui:fragment
+							rendered="#{!VotingController.studentHasAlreadyVoted}">
+
+							<br />
+
+							<!-- This fragment will contain the votegroups and allow the user to vote -->
+							<ui:fragment rendered="#{!VotingController.votingComplete}">
+								<div class="row center">
+									<h:form>
+										<h:commandLink value="Add Dummy Vote"
+											styleClass="waves-effect waves-light btn #{style.colorPrimaryBase}"
+											action="#{VotingController.dummyVote}">
+											<i class="material-icons right">send</i>
+											<f:ajax render=":mainContent" />
+										</h:commandLink>
+									</h:form>
+								</div>
+							</ui:fragment>
+
+							<!-- This fragment will tell the user thank you for voting. -->
+							<ui:fragment rendered="#{VotingController.votingComplete}">
+								<h3 class="header center">Thank You!</h3>
+								<p class="flow-text center">Your vote has been recorded.
+									Thank you for voting!</p>
+							</ui:fragment>
+
 							<!-- TODO: Show list of votegroups/candidates, allow to vote. -->
 						</ui:fragment>
 					</ui:fragment>
