@@ -13,7 +13,9 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 
+import com.AptiTekk.Poll.core.entityBeans.Contestant;
 import com.AptiTekk.Poll.core.entityBeans.Poll;
+import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
 import com.AptiTekk.Poll.web.controllers.VotingController;
 
 @Startup
@@ -87,6 +89,22 @@ public class PollService extends Service<Poll> {
 			this.enabledPoll = get(enabledPoll.getId());
 		else
 			this.enabledPoll = null;
+	}
+	
+	@Override
+	public void delete(int id)
+	{
+	    Poll poll = get(id);
+	    if(poll != null)
+	    {
+		for(VoteGroup votegroup : poll.getVoteGroups())
+		{
+		    for(Contestant contestant : votegroup.getContestants())
+		    {
+			ContestantService.deleteContestantImage(contestant.getPictureFileName());
+		    }
+		}
+	    }
 	}
 
 	public String getCookie() {

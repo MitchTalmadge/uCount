@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.AptiTekk.Poll.core.Service;
+
 @Entity
 public class Contestant {
 
@@ -26,7 +28,7 @@ public class Contestant {
 	private String lastName;
 
 	@Column(length = 64)
-	private String pictureFileName;
+	private String pictureFileName = Service.NOTFOUND_IMAGE_FILENAME;
 	
 	public Contestant() {
 		
