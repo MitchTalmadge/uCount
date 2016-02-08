@@ -66,8 +66,14 @@
 						<div class="row">
 							<div class="col s12">
 								<h:form>
+									<h:link value="View Poll Entries"
+										styleClass="waves-effect waves-light btn #{style.colorPrimaryBase}"
+										outcome="pollEntries?pollId=#{ManagerController.selectedPoll.id}"
+										includeViewParams="true">
+										<i class="material-icons right">send</i>
+									</h:link>
 									<h:commandLink value="Delete Poll"
-										styleClass="waves-effect waves-light btn #{style.colorDelete}"
+										styleClass="waves-effect waves-light btn #{style.colorDelete} right"
 										action="#{ManagerController.deleteSelectedPoll()}">
 										<i class="material-icons right">delete</i>
 										<f:ajax render=":pollContent :navBar :enabledPollSelector"
@@ -170,7 +176,7 @@
 								<table class="striped responsive-table">
 									<thead>
 										<tr>
-											<th>Talent</th>
+											<th style="width: 200px">Talent</th>
 											<th>Contestants</th>
 										</tr>
 									</thead>
@@ -187,7 +193,7 @@
 													#{contestant.firstName} #{contestant.lastName}#{status.last ? '' : ','}
 												</ui:repeat>
 												</td>
-												<td>
+												<td style="width:50px">
 													<h:form>
 														<h:link
 															outcome="modifyVoteGroup?voteGroupId=#{voteGroup.id}"
@@ -196,7 +202,7 @@
 														</h:link>
 													</h:form>
 												</td>
-												<td>
+												<td style="width:50px">
 													<h:form>
 														<h:commandLink class="#{style.colorDeleteText}"
 															action="#{ManagerController.deleteVoteGroup(voteGroup)}">

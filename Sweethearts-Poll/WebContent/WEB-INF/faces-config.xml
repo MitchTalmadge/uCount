@@ -56,6 +56,11 @@
     	<managed-bean-class>com.AptiTekk.Poll.web.controllers.ModifyVoteGroupController</managed-bean-class>
     	<managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+    	<managed-bean-name>PollEntriesController</managed-bean-name>
+    	<managed-bean-class>com.AptiTekk.Poll.web.controllers.PollEntriesController</managed-bean-class>
+    	<managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
     <navigation-rule>
     	<from-view-id>*</from-view-id>
     	<navigation-case>
@@ -84,6 +89,14 @@
     	<navigation-case>
     		<from-outcome>vote</from-outcome>
     		<to-view-id>/vote.xhtml</to-view-id>
+    	</navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+    	<display-name>*</display-name>
+    	<from-view-id>*</from-view-id>
+    	<navigation-case>
+    		<from-outcome>pollEntries</from-outcome>
+    		<to-view-id>/admin/pollEntries.xhtml</to-view-id>
     	</navigation-case>
     </navigation-rule>
 </faces-config>

@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="/WEB-INF/templates/default.xhtml">
+
+	<ui:define name="content">
+		<div class="section no-pad-top">
+			<div class="section #{style.colorPrimaryBase}">
+
+				<h1 class="header center #{style.textColorPrimary}">Poll
+					Entries</h1>
+
+				<ui:fragment rendered="#{PollEntriesController.poll != null}">
+					<h5 class="header center #{style.textColorPrimary}">Viewing
+						Entries For: #{PollEntriesController.poll.name}</h5>
+				</ui:fragment>
+
+				<ui:fragment rendered="#{PollEntriesController.poll == null}">
+					<h5 class="header center #{style.textColorPrimary}">No Poll
+						has been Selected!</h5>
+				</ui:fragment>
+
+			</div>
+			<br />
+
+			<div class="container">
+				<ui:fragment rendered="#{PollEntriesController.poll != null}">
+					<div class="row">
+						<div class="col s12">
+							<h:form>
+								<h:commandLink value="Delete All Entries"
+									styleClass="waves-effect waves-light btn #{style.colorDelete} right"
+									action="#{PollEntriesController.deleteAllEntries}">
+									<i class="material-icons right">delete</i>
+									<f:ajax render=":entries" />
+								</h:commandLink>
+							</h:form>
+						</div>
+					</div>
+				</ui:fragment>
+				<h:panelGroup id="entries">
+					<ui:fragment rendered="#{PollEntriesController.poll != null}">
+
+						<div class="row">
+							<div class="col s12">
+								<table class="striped responsive-table">
+									<thead>
+										<tr>
+											<th style="width: 150px">Student Number</th>
+											<th>Vote Group ID</th>
+										</tr>
+									</thead>
+									<tbody>
+										<ui:repeat value="#{PollEntriesController.poll.entries}"
+											var="entry">
+											<tr>
+												<td>#{entry.credential.studentNumber}</td>
+												<td>#{entry.voteGroup.id}</td>
+												<td style="width: 50px">
+													<h:form>
+														<h:commandLink class="#{style.colorDeleteText}"
+															action="#{PollEntriesController.deleteEntry(entry)}">
+															<i class="material-icons">delete</i>
+															<f:ajax render=":entries" />
+														</h:commandLink>
+													</h:form>
+												</td>
+											</tr>
+										</ui:repeat>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+					</ui:fragment>
+				</h:panelGroup>
+			</div>
+		</div>
+	</ui:define>
+
+</ui:composition>
+</html>
