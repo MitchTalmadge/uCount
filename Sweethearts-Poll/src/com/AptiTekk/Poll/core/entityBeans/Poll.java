@@ -18,10 +18,10 @@ public class Poll {
   @GeneratedValue
   private int id;
 
-  @OneToMany(fetch = FetchType.EAGER, mappedBy = "poll", orphanRemoval = true)
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "poll", orphanRemoval = true)
   private List<VoteGroup> voteGroups;
 
-  @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "poll", cascade = CascadeType.REMOVE, orphanRemoval = true)
   private List<Entry> entries;
 
   @Column(length = 128)

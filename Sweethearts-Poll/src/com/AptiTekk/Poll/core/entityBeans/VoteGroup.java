@@ -22,29 +22,24 @@ public class VoteGroup {
 	@ManyToOne
 	@JoinColumn(name = "pollId")
 	private Poll poll;
-	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy = "voteGroup", cascade = CascadeType.ALL, orphanRemoval = true)
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "voteGroup", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Contestant> contestants;
 
-	@OneToMany(fetch=FetchType.LAZY, mappedBy = "voteGroup", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "voteGroup", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Entry> entries;
-	
-	@Column(length = 64)
-	private String talentName;
+
+	@Column(length = 128)
+	private String name;
 
 	public VoteGroup() {
 
 	}
 
-	public VoteGroup(Poll poll) {
-		this.talentName = null;
+	public VoteGroup(Poll poll, String name)
+	{
 		setPoll(poll);
-	}
-
-	public VoteGroup(Poll poll, String talentName) {
-		this.talentName = talentName;
-		setPoll(poll);
-
+		setName(name);
 	}
 
 	public int getId() {
@@ -71,20 +66,20 @@ public class VoteGroup {
 		this.poll = poll;
 	}
 
-	public String getTalentName() {
-		return talentName;
-	}
-
-	public void setTalentName(String talentName) {
-		this.talentName = talentName;
-	}
-
 	public List<Entry> getEntries() {
 		return entries;
 	}
 
 	public void setEntries(List<Entry> entries) {
 		this.entries = entries;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

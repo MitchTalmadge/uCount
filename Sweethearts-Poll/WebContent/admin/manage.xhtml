@@ -46,13 +46,12 @@
 										</h:commandLink>
 									</li>
 								</ui:repeat>
-								<li>
-									<h:commandLink action="#{ManagerController.addNewPoll()}">
+								<li><h:commandLink
+										action="#{ManagerController.addNewPoll()}">
 										<i class="material-icons">add</i>
 										<f:ajax render=":pollContent :navBar :enabledPollSelector"
 											onevent="refreshEnabledPollSelector" />
-									</h:commandLink>
-								</li>
+									</h:commandLink></li>
 							</ul>
 						</h:form>
 					</div>
@@ -176,7 +175,7 @@
 								<table class="striped responsive-table">
 									<thead>
 										<tr>
-											<th style="width: 200px">Talent</th>
+											<th style="width: 200px">Name</th>
 											<th>Contestants</th>
 										</tr>
 									</thead>
@@ -185,32 +184,25 @@
 											value="#{ManagerController.selectedPoll.voteGroups}"
 											var="voteGroup">
 											<tr>
-												<td>#{voteGroup.talentName == null ? 'No Talent' :
-													voteGroup.talentName}</td>
-												<td>
-													<ui:repeat value="#{voteGroup.contestants}"
+												<td>#{voteGroup.name}</td>
+												<td><ui:repeat value="#{voteGroup.contestants}"
 														var="contestant" varStatus="status">
 													#{contestant.firstName} #{contestant.lastName}#{status.last ? '' : ','}
-												</ui:repeat>
-												</td>
-												<td style="width:50px">
-													<h:form>
+												</ui:repeat></td>
+												<td style="width: 50px"><h:form>
 														<h:link
 															outcome="modifyVoteGroup?voteGroupId=#{voteGroup.id}"
 															includeViewParams="true">
 															<i class="material-icons">mode_edit</i>
 														</h:link>
-													</h:form>
-												</td>
-												<td style="width:50px">
-													<h:form>
+													</h:form></td>
+												<td style="width: 50px"><h:form>
 														<h:commandLink class="#{style.colorDeleteText}"
 															action="#{ManagerController.deleteVoteGroup(voteGroup)}">
 															<i class="material-icons">delete</i>
 															<f:ajax render=":pollContent" />
 														</h:commandLink>
-													</h:form>
-												</td>
+													</h:form></td>
 											</tr>
 										</ui:repeat>
 									</tbody>
