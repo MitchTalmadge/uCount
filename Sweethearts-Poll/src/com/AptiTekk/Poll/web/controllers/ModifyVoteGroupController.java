@@ -54,6 +54,8 @@ public class ModifyVoteGroupController {
 	 */
 	private String editableFirstName = "";
 	private String editableLastName = "";
+	
+	private boolean editingVoteGroup = false;
 
 	@PostConstruct
 	public void init() {
@@ -134,6 +136,10 @@ public class ModifyVoteGroupController {
 	public void setEditableLastName(String editableLastName) {
 		this.editableLastName = editableLastName;
 	}
+	
+	public void toggleVoteGroupEditing() {
+		this.setEditingVoteGroup(!editingVoteGroup);
+	}
 
 	public void onEditButtonFired(int contestantId) {
 		System.out.println("Editing Contestant with ID: " + contestantId);
@@ -196,6 +202,31 @@ public class ModifyVoteGroupController {
 
 		setPictureUpload(null);
 	}
+	
+	public void uploadVoteGroupImage() {
+		System.out.println("Uploading...");
+
+		// Generate a random file name.
+		String fileName = String.valueOf(voteGroup.getId());
+
+		try {
+			FileUploadUtilities.uploadPartToPathAndCrop(getPictureUpload(), "/resources/votegroup_images/", fileName,
+					300);
+
+			voteGroup.setPictureFileName(fileName);
+			voteGroupService.merge(voteGroup);
+
+			voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
+																	// voteGroup
+			System.out.println("VoteGroup Image Updated.");
+		} catch (IOException e) {
+			FacesContext.getCurrentInstance().addMessage("contestantEditForm",
+					new FacesMessage("The image could not be applied."));
+			e.printStackTrace();
+		}
+
+		setPictureUpload(null);
+	}
 
 	public Part getPictureUpload() {
 		return pictureUpload;
@@ -203,6 +234,14 @@ public class ModifyVoteGroupController {
 
 	public void setPictureUpload(Part pictureUpload) {
 		this.pictureUpload = pictureUpload;
+	}
+
+	public boolean isEditingVoteGroup() {
+		return editingVoteGroup;
+	}
+
+	public void setEditingVoteGroup(boolean editingVoteGroup) {
+		this.editingVoteGroup = editingVoteGroup;
 	}
 
 }

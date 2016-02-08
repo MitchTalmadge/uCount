@@ -31,15 +31,19 @@ public class VoteGroup {
 
 	@Column(length = 128)
 	private String name;
+	
+	@Column
+	private String pictureFileName;
 
 	public VoteGroup() {
-
+		
 	}
 
-	public VoteGroup(Poll poll, String name)
+	public VoteGroup(Poll poll, String name, String imageFileName)
 	{
 		setPoll(poll);
 		setName(name);
+		setPictureFileName(imageFileName);
 	}
 
 	public int getId() {
@@ -80,6 +84,14 @@ public class VoteGroup {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getPictureFileName() {
+		return pictureFileName;
+	}
+
+	public void setPictureFileName(String pictureFileName) {
+		this.pictureFileName = pictureFileName;
 	}
 
 }
