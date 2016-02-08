@@ -7,6 +7,7 @@ import javax.ejb.Singleton;
 import com.AptiTekk.Poll.core.entityBeans.Contestant;
 import com.AptiTekk.Poll.core.entityBeans.Poll;
 import com.AptiTekk.Poll.core.entityBeans.QContestant;
+import com.mysema.query.jpa.impl.JPADeleteClause;
 import com.mysema.query.jpa.impl.JPAQuery;
 
 @Singleton
@@ -20,6 +21,11 @@ public class ContestantService extends Service<Contestant> {
 	public List<Contestant> getContestantsByPoll(Poll poll) {
 		return new JPAQuery(entityManager).from(contestantTable)
 				.where(contestantTable.voteGroup.poll.name.eq(poll.getName())).list(contestantTable);
+	}
+
+	public void deleteAllContestants(int voteGroupId) {
+		new JPADeleteClause(entityManager, contestantTable).where(contestantTable.voteGroup.id.eq(voteGroupId))
+				.execute();
 	}
 
 }

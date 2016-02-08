@@ -8,6 +8,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -23,12 +26,12 @@ import com.AptiTekk.Poll.core.ContestantService;
 import com.AptiTekk.Poll.core.VoteGroupService;
 import com.AptiTekk.Poll.core.entityBeans.Contestant;
 import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
+import com.AptiTekk.Poll.core.utilities.FileUploadUtilities;
+import com.sun.mail.imap.protocol.ID;
 
 @ManagedBean
 @ViewScoped
 public class ModifyVoteGroupController {
-
-	public static final String[] VALID_IMAGE_TYPES = { "image/png", "image/jpeg", "image/gif" };
 
 	@EJB
 	VoteGroupService voteGroupService;
@@ -78,6 +81,22 @@ public class ModifyVoteGroupController {
 		voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
 																// voteGroup
 		System.out.println("Contestant Added");
+	}
+
+	public void deleteContestant(int contestantId) {
+		contestantService.delete(contestantId);
+
+		voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
+																// voteGroup
+		System.out.println("Contestant Deleted");
+	}
+
+	public void deleteAllContestants() {
+		contestantService.deleteAllContestants(voteGroup.getId());
+
+		voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
+																// voteGroup
+		System.out.println("All Contestants Deleted");
 	}
 
 	public int getContestantIdBeingEdited() {
@@ -147,56 +166,35 @@ public class ModifyVoteGroupController {
 		this.setContestantIdBeingEdited(-1);
 	}
 
-	public void validateImage(FacesContext ctx, UIComponent comp, Object value) {
-		System.out.println("Caught upload, validating)");
-		List<FacesMessage> msgs = new ArrayList<FacesMessage>();
-		Part file = (Part) value;
-		if (file.getSize() > 1024 * 1024) {
-			msgs.add(new FacesMessage("Too big must be at most 5MB"));
+	public void uploadContestantImage() {
+		Contestant contestant = contestantService.get(contestantIdBeingEdited);
+		if (contestant == null) {
+			System.out.println("Contestant not found.");
+			return;
 		}
-		boolean valid = false;
-		for (String validType : VALID_IMAGE_TYPES) {
-			if (validType.equals(file.getContentType())) {
-				valid = true;
-			}
-		}
-		if (!valid) {
-			msgs.add(new FacesMessage("file not valid image"));
-		}
-		if (!msgs.isEmpty()) {
-			throw new ValidatorException(msgs);
-		}
-	}
 
-	public void upload(Contestant newContestant) {
 		System.out.println("Uploading...");
-		String fileName = hash(getPictureUpload().getSubmittedFileName());
-		try (InputStream input = getPictureUpload().getInputStream()) {
-			Files.copy(input,
-					new File("/resources/contestant_images/", fileName)
-							.toPath());
-			newContestant.setPictureFileName(fileName);
-		} catch (IOException e) {
-			// Show faces message?
-		}
-		
-		setPictureUpload(null);
-	}
 
-	private String hash(String string) {
+		// Generate a random file name.
+		String fileName = UUID.randomUUID().toString();
+
 		try {
-			MessageDigest md = MessageDigest.getInstance("SHA-256");
-			md.update(string.getBytes());
-			byte byteData[] = md.digest();
-			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < byteData.length; i++) {
-				sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
-			}
-			return sb.toString();
-		} catch (NoSuchAlgorithmException e) {
+			FileUploadUtilities.uploadPartToPathAndCrop(getPictureUpload(), "/resources/contestant_images/", fileName,
+					300);
+
+			contestant.setPictureFileName(fileName);
+			contestantService.merge(contestant);
+
+			voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
+																	// voteGroup
+			System.out.println("Contestant Image Added.");
+		} catch (IOException e) {
+			FacesContext.getCurrentInstance().addMessage("contestantEditForm",
+					new FacesMessage("The image could not be applied."));
 			e.printStackTrace();
 		}
-		return null;
+
+		setPictureUpload(null);
 	}
 
 	public Part getPictureUpload() {

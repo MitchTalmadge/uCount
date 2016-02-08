@@ -99,4 +99,8 @@
     		<to-view-id>/admin/pollEntries.xhtml</to-view-id>
     	</navigation-case>
     </navigation-rule>
+    <validator>
+    	<validator-id>ImageFileValidator</validator-id>
+    	<validator-class>com.AptiTekk.Poll.core.utilities.ImageFileValidator</validator-class>
+    </validator>
 </faces-config>
