@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,12 +23,11 @@ import com.AptiTekk.Poll.core.ContestantService;
 import com.AptiTekk.Poll.core.VoteGroupService;
 import com.AptiTekk.Poll.core.entityBeans.Contestant;
 import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
-import com.AptiTekk.Poll.web.ViewModels.ContestantViewModel;
 
 @ManagedBean
 @ViewScoped
 public class ModifyVoteGroupController {
-	
+
 	public static final String[] VALID_IMAGE_TYPES = { "image/png", "image/jpeg", "image/gif" };
 
 	@EJB
@@ -36,7 +37,7 @@ public class ModifyVoteGroupController {
 	ContestantService contestantService;
 
 	private VoteGroup voteGroup;
-	
+
 	private Part pictureUpload;
 
 	/**
@@ -145,8 +146,9 @@ public class ModifyVoteGroupController {
 		}
 		this.setContestantIdBeingEdited(-1);
 	}
-	
+
 	public void validateImage(FacesContext ctx, UIComponent comp, Object value) {
+		System.out.println("Caught upload, validating)");
 		List<FacesMessage> msgs = new ArrayList<FacesMessage>();
 		Part file = (Part) value;
 		if (file.getSize() > 1024 * 1024) {
@@ -166,17 +168,35 @@ public class ModifyVoteGroupController {
 		}
 	}
 
-	public void upload(ContestantViewModel newContestant) {
+	public void upload(Contestant newContestant) {
+		System.out.println("Uploading...");
+		String fileName = hash(getPictureUpload().getSubmittedFileName());
 		try (InputStream input = getPictureUpload().getInputStream()) {
 			Files.copy(input,
-					new File("/resources/contestant_images/", getPictureUpload().getSubmittedFileName())
+					new File("/resources/contestant_images/", fileName)
 							.toPath());
-			newContestant.setPictureFileName(getPictureUpload().getSubmittedFileName());
+			newContestant.setPictureFileName(fileName);
 		} catch (IOException e) {
 			// Show faces message?
 		}
 		
 		setPictureUpload(null);
+	}
+
+	private String hash(String string) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("SHA-256");
+			md.update(string.getBytes());
+			byte byteData[] = md.digest();
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < byteData.length; i++) {
+				sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+			}
+			return sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public Part getPictureUpload() {
