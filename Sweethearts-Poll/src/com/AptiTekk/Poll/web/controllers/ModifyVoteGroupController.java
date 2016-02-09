@@ -55,6 +55,7 @@ public class ModifyVoteGroupController {
 	private String editableFirstName = "";
 	private String editableLastName = "";
 	
+	private String editableVoteGroupName = "";
 	private boolean editingVoteGroup = false;
 
 	@PostConstruct
@@ -137,8 +138,23 @@ public class ModifyVoteGroupController {
 		this.editableLastName = editableLastName;
 	}
 	
-	public void toggleVoteGroupEditing() {
-		this.setEditingVoteGroup(!editingVoteGroup);
+	public void startVoteGroupEditing() {
+		this.setEditingVoteGroup(true);
+	}
+	
+	public void applyVoteGroupChanges() {
+		if (this.getEditableVoteGroupName().isEmpty()) {
+			//System.out.println("First name was empty");
+			FacesContext.getCurrentInstance().addMessage("voteGroupEditForm",
+					new FacesMessage("The Vote Group Name cannot be empty!"));
+			return;
+		}
+		voteGroup.setName(editableVoteGroupName);
+		voteGroupService.merge(voteGroup);
+
+		voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
+																// voteGroup
+		this.setEditingVoteGroup(false);
 	}
 
 	public void onEditButtonFired(int contestantId) {
@@ -242,6 +258,15 @@ public class ModifyVoteGroupController {
 
 	public void setEditingVoteGroup(boolean editingVoteGroup) {
 		this.editingVoteGroup = editingVoteGroup;
+		this.editableVoteGroupName = voteGroup.getName();
+	}
+
+	public String getEditableVoteGroupName() {
+		return editableVoteGroupName;
+	}
+
+	public void setEditableVoteGroupName(String editableVoteGroupName) {
+		this.editableVoteGroupName = editableVoteGroupName;
 	}
 
 }
