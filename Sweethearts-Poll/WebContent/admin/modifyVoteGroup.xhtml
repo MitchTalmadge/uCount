@@ -10,20 +10,24 @@ xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 		<ui:define name="content">
 			<div class="section no-pad-top">
-				<div class="section #{style.colorPrimaryBase}">
+				<div class="section parallax-container;">
 					<h:panelGroup id="voteGroupInfo">
 						<h:form id="voteGroupEditForm" enctype="multipart/form-data">
 							<h1 class="header center #{style.textColorPrimary}">Modify Vote
 							Group</h1>
 							<ui:fragment
 							rendered="#{ModifyVoteGroupController.voteGroup != null}">
+								<div class="parallax">
+									<h:graphicImage
+									value="/resources/votegroup_images/#{ModifyVoteGroupController.voteGroup.pictureFileName}" />
+								</div>
 								<ui:fragment
 								rendered="#{not ModifyVoteGroupController.editingVoteGroup}">
 									<h5 class="header center #{style.textColorPrimary}">Current
 									Vote Group: #{ModifyVoteGroupController.voteGroup.name}</h5>
 									<h:commandLink
 									styleClass="waves-effect waves-light btn #{style.colorPrimary}"
-									action="#{ModifyVoteGroupController.toggleVoteGroupEditing}">
+									action="#{ModifyVoteGroupController.startVoteGroupEditing}">
 										<i class="material-icons right">mode_edit</i>
 										<f:ajax render=":voteGroupInfo" />
 									</h:commandLink>
@@ -37,7 +41,7 @@ xmlns:f="http://xmlns.jcp.org/jsf/core">
 												Vote Group Name
 											</h:outputLabel>
 											<h:inputText id="voteGroupName"
-											value="#{ModifyVoteGroupController.voteGroup.name}"></h:inputText>
+											value="#{ModifyVoteGroupController.editableVoteGroupName}"></h:inputText>
 										</div>
 										<div class="col s4 push-s2 right-align">
 											<label
@@ -58,7 +62,7 @@ xmlns:f="http://xmlns.jcp.org/jsf/core">
 									</div>
 									<h:commandLink
 									styleClass="waves-effect waves-light btn #{style.colorPrimary}"
-									action="#{ModifyVoteGroupController.toggleVoteGroupEditing}">
+									action="#{ModifyVoteGroupController.applyVoteGroupChanges}">
 										<i class="material-icons right">done</i>
 										<f:ajax execute="voteGroupName" render=":voteGroupInfo" />
 									</h:commandLink>
@@ -184,6 +188,16 @@ xmlns:f="http://xmlns.jcp.org/jsf/core">
 					</h:panelGroup>
 				</div>
 			</div>
+
+		</ui:define>
+
+		<ui:define name="javascript">
+
+			<script>
+				$(document).ready(function() {
+					$('.parallax').parallax();
+				});
+			</script>
 
 		</ui:define>
 
