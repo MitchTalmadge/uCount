@@ -10,16 +10,24 @@
 
 	<ui:define name="content">
 		<div class="section no-pad-top">
+
+			<!-- First header section, displaying the current page. -->
 			<div class="section #{style.colorPrimaryBase}">
 				<h1 class="header center #{style.textColorPrimary}">Modify Vote
 					Group</h1>
 			</div>
+
+			<!-- Second header section, with the vote group name, picture, and edit buttons -->
 			<div class="section light-blue darken-2">
 				<h:panelGroup id="voteGroupInfo">
 					<h:form id="voteGroupEditForm" enctype="multipart/form-data">
+
+						<!-- This fragment is shown if a vote group was supplied in the URL -->
 						<ui:fragment
 							rendered="#{ModifyVoteGroupController.voteGroup != null}">
 							<div class="row">
+
+								<!-- This column contains the card for the vote group image. -->
 								<div class="col s2">
 									<div class="card">
 										<div class="card-image" style="padding: 10px">
@@ -28,7 +36,11 @@
 										</div>
 									</div>
 								</div>
+
+								<!-- This column contains the vote group name and edit buttons -->
 								<div class="col s6">
+
+									<!-- This fragment is shown if we are not editing the vote group -->
 									<ui:fragment
 										rendered="#{not ModifyVoteGroupController.editingVoteGroup}">
 										<h5 class="header #{style.textColorPrimary} left-align">Vote
@@ -41,8 +53,12 @@
 											<f:ajax render=":voteGroupInfo" />
 										</h:commandLink>
 									</ui:fragment>
+
+									<!-- This fragment is shown if we are editing the vote group -->
 									<ui:fragment
 										rendered="#{ModifyVoteGroupController.editingVoteGroup}">
+
+										<!-- This first row contains the field for editing the name -->
 										<div class="row">
 											<div class="col s8 input-field white-text">
 												<h:outputLabel class="active" for="voteGroupName">
@@ -52,10 +68,15 @@
 													value="#{ModifyVoteGroupController.editableVoteGroupName}"></h:inputText>
 											</div>
 										</div>
+
+										<!-- This second row contains the buttons for uploading images and saving. -->
 										<div class="row">
+
+											<!-- Upload Image Button -->
 											<div class="col s4">
 												<div
-													class="waves-effect waves-light btn #{style.colorPrimary} file-field input-field" style="margin-top:0px">
+													class="waves-effect waves-light btn #{style.colorPrimary} file-field input-field"
+													style="margin-top: 0px">
 													Upload Image
 													<h:inputFile id="fileUploadField"
 														value="#{ModifyVoteGroupController.pictureUpload}"
@@ -67,6 +88,8 @@
 													<i class="material-icons">perm_media</i>
 												</div>
 											</div>
+
+											<!-- Save Changes Button -->
 											<div class="col s4">
 												<h:commandLink
 													styleClass="waves-effect waves-light btn #{style.colorPrimary}"
@@ -82,6 +105,8 @@
 								</div>
 							</div>
 						</ui:fragment>
+
+						<!-- This fragment is shown if no vote group was supplied in the URL -->
 						<ui:fragment
 							rendered="#{ModifyVoteGroupController.voteGroup == null}">
 							<h5 class="header center #{style.textColorPrimary}">No Vote
@@ -93,8 +118,12 @@
 			<br />
 
 			<div class="container">
+
+				<!-- This row contains the buttons at the top of the page, under the header. -->
 				<div class="row">
 					<h:form>
+
+						<!-- Add New Contestant Button -->
 						<div class="col s6">
 							<h:commandLink value="Add New Contestant"
 								styleClass="waves-effect waves-light btn #{style.colorPrimary}"
@@ -103,6 +132,8 @@
 								<f:ajax render=":contestants" />
 							</h:commandLink>
 						</div>
+
+						<!-- Delete All Contestants Button -->
 						<div class="col s6">
 							<h:commandLink value="Delete All Contestants"
 								styleClass="waves-effect waves-light btn #{style.colorDelete} right"
@@ -113,20 +144,36 @@
 						</div>
 					</h:form>
 				</div>
+
+				<!-- This panel group contains the cards for each contestant -->
 				<h:panelGroup id="contestants">
+
+					<!-- We only show the cards (and ui:repeat) if the voteGroup is not null. -->
 					<ui:fragment
 						rendered="#{ModifyVoteGroupController.voteGroup != null}">
+
+						<!-- We only use one row; the cards will overflow to the next row automatically. -->
 						<div class="row">
+
+							<!-- Iterate over the contestants of the voteGroup -->
 							<ui:repeat
 								value="#{ModifyVoteGroupController.voteGroup.contestants}"
 								var="contestant">
+
+								<!-- Since we use s3, which is 1/4 of 12, we can fit 4 cards on each row. -->
 								<div class="col s3">
+
+									<!-- We force the card to be 450px tall. -->
 									<div class="card" style="height: 450px">
 										<h:form id="contestantEditForm" enctype="multipart/form-data">
+
+											<!-- This displays the image of the contestant. -->
 											<div class="card-image">
 												<h:graphicImage
 													value="/resources/contestant_images/#{contestant.pictureFileName}" />
 											</div>
+
+											<!-- This section contains the name of the contestant & fields to edit it. -->
 											<div class="card-content">
 
 												<!-- Rendered if the Contestant currently being edited is not this Contestant. -->
@@ -150,6 +197,8 @@
 												</ui:fragment>
 
 											</div>
+
+											<!-- This section contains the edit and delete buttons -->
 											<div class="card-action">
 
 												<!-- Rendered if the Contestant currently being edited is not this Contestant. -->
@@ -201,8 +250,6 @@
 				</h:panelGroup>
 			</div>
 		</div>
-
 	</ui:define>
-
 </ui:composition>
 </html>
