@@ -73,19 +73,20 @@
 										<div class="row">
 
 											<!-- Upload Image Button -->
-											<div class="col s4">
-												<div
-													class="waves-effect waves-light btn #{style.colorPrimary} file-field input-field"
-													style="margin-top: 0px">
-													Upload Image
-													<h:inputFile id="fileUploadField"
-														value="#{ModifyVoteGroupController.pictureUpload}"
-														style="display:none;">
-														<f:validator validatorId="ImageFileValidator" />
-														<f:ajax execute="fileUploadField"
-															listener="#{ModifyVoteGroupController.uploadVoteGroupImage}" />
-													</h:inputFile>
-													<i class="material-icons">perm_media</i>
+											<div class="col s5">
+												<div class="file-field input-field">
+													<label
+														class="waves-effect waves-light btn #{style.colorPrimary} white-text"
+														style="display: inline-block; cursor: pointer;">
+														Upload Image <i class="material-icons">perm_media</i> <h:inputFile
+															id="fileUploadField"
+															value="#{ModifyVoteGroupController.pictureUpload}"
+															style="display:none;">
+															<f:validator validatorId="ImageFileValidator" />
+															<f:ajax execute="fileUploadField"
+																listener="#{ModifyVoteGroupController.uploadVoteGroupImage}" />
+														</h:inputFile>
+													</label>
 												</div>
 											</div>
 
@@ -198,7 +199,7 @@
 
 											</div>
 
-											<!-- This section contains the edit and delete buttons -->
+											<!-- This section contains the edit, image upload, and delete buttons -->
 											<div class="card-action">
 
 												<!-- Rendered if the Contestant currently being edited is not this Contestant. -->
@@ -219,12 +220,16 @@
 												<!-- Rendered if the Contestant currently being edited IS this Contestant. -->
 												<ui:fragment
 													rendered="#{ModifyVoteGroupController.contestantIdBeingEdited == contestant.id}">
+
+													<!-- Done button -->
 													<h:commandLink class="#{style.colorPrimaryText}"
 														action="#{ModifyVoteGroupController.onEditDoneButtonFired}">
 														<i class="material-icons">done</i>
 														<f:ajax execute="firstNameTextField lastNameTextField"
 															render=":contestants" />
 													</h:commandLink>
+
+													<!-- Upload image button -->
 													<label
 														class="#{style.colorPrimaryText} file-field input-field"
 														style="display: inline-block; cursor: pointer;"> <h:inputFile
@@ -236,7 +241,10 @@
 																listener="#{ModifyVoteGroupController.uploadContestantImage}" />
 														</h:inputFile> <i class="material-icons">perm_media</i>
 													</label>
+
+													<!-- Error messages -->
 													<h:message for="contestantEditForm" style="color: red" />
+
 													<!-- Display this if we ever get render working on file upload ajax <h:message for="fileUploadField" style="color: red" /> -->
 												</ui:fragment>
 
