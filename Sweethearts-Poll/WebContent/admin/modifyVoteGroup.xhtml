@@ -11,64 +11,76 @@
 	<ui:define name="content">
 		<div class="section no-pad-top">
 			<div class="section #{style.colorPrimaryBase}">
+				<h1 class="header center #{style.textColorPrimary}">Modify Vote
+					Group</h1>
+			</div>
+			<div class="section light-blue darken-2">
 				<h:panelGroup id="voteGroupInfo">
 					<h:form id="voteGroupEditForm" enctype="multipart/form-data">
-						<h1 class="header center #{style.textColorPrimary}">Modify
-							Vote Group</h1>
 						<ui:fragment
 							rendered="#{ModifyVoteGroupController.voteGroup != null}">
-							<h:graphicImage
-								value="/resources/votegroup_images/#{ModifyVoteGroupController.voteGroup.pictureFileName}" />
-							<ui:fragment
-								rendered="#{not ModifyVoteGroupController.editingVoteGroup}">
-								<h5 class="header center #{style.textColorPrimary}">Current
-									Vote Group
-									: #{ModifyVoteGroupController.voteGroup.name}</h5>
-								<h:commandLink
-									styleClass="waves-effect waves-light btn #{style.colorPrimary}"
-									action="#{ModifyVoteGroupController.startVoteGroupEditing}">
-									<i class="material-icons right">mode_edit</i>
-									<f:ajax render=":voteGroupInfo" />
-								</h:commandLink>
-							</ui:fragment>
-							<ui:fragment
-								rendered="#{ModifyVoteGroupController.editingVoteGroup}">
-
-								<div class="container center-align row"
-									style="margin-left: auto; margin-right: auto;">
-									<div class="col s4 input-field push-s2 white-text">
-										<h:outputLabel class="active" for="voteGroupName">
+							<div class="row">
+								<div class="col s2">
+									<div class="card">
+										<div class="card-image" style="padding: 10px">
+											<h:graphicImage
+												value="/resources/votegroup_images/#{ModifyVoteGroupController.voteGroup.pictureFileName}" />
+										</div>
+									</div>
+								</div>
+								<div class="col s6">
+									<ui:fragment
+										rendered="#{not ModifyVoteGroupController.editingVoteGroup}">
+										<h5 class="header #{style.textColorPrimary} left-align">Vote
+											Group Name: #{ModifyVoteGroupController.voteGroup.name}</h5>
+										<h:commandLink
+											styleClass="waves-effect waves-light btn #{style.colorPrimary}"
+											action="#{ModifyVoteGroupController.startVoteGroupEditing}">
+											Change Name / Picture
+											<i class="material-icons right">mode_edit</i>
+											<f:ajax render=":voteGroupInfo" />
+										</h:commandLink>
+									</ui:fragment>
+									<ui:fragment
+										rendered="#{ModifyVoteGroupController.editingVoteGroup}">
+										<div class="row">
+											<div class="col s8 input-field white-text">
+												<h:outputLabel class="active" for="voteGroupName">
 												Vote Group Name
 											</h:outputLabel>
-										<h:inputText id="voteGroupName"
-											value="#{ModifyVoteGroupController.editableVoteGroupName}"></h:inputText>
-									</div>
-									<div class="col s4 push-s2 right-align">
-										<label
-											class="#{style.textColorPrimary} file-field input-field"
-											style="display: inline-block; cursor: pointer;">
-											<h:inputFile id="fileUploadField"
-												value="#{ModifyVoteGroupController.pictureUpload}"
-												style="display:none;">
-												<f:validator validatorId="ImageFileValidator" />
-												<f:ajax execute="fileUploadField"
-													listener="#{ModifyVoteGroupController.uploadVoteGroupImage}" />
-											</h:inputFile>
-											<i class="material-icons">perm_media</i>
-										</label>
-									</div>
-								</div>
-								<div class="container row center-align">
-									<h:message for="voteGroupEditForm" style="color: red" />
-								</div>
-								<h:commandLink
-									styleClass="waves-effect waves-light btn #{style.colorPrimary}"
-									action="#{ModifyVoteGroupController.applyVoteGroupChanges}">
-									<i class="material-icons right">done</i>
-									<f:ajax execute="voteGroupName" render=":voteGroupInfo" />
-								</h:commandLink>
+												<h:inputText id="voteGroupName"
+													value="#{ModifyVoteGroupController.editableVoteGroupName}"></h:inputText>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col s4">
+												<div
+													class="waves-effect waves-light btn #{style.colorPrimary} file-field input-field" style="margin-top:0px">
+													Upload Image
+													<h:inputFile id="fileUploadField"
+														value="#{ModifyVoteGroupController.pictureUpload}"
+														style="display:none;">
+														<f:validator validatorId="ImageFileValidator" />
+														<f:ajax execute="fileUploadField"
+															listener="#{ModifyVoteGroupController.uploadVoteGroupImage}" />
+													</h:inputFile>
+													<i class="material-icons">perm_media</i>
+												</div>
+											</div>
+											<div class="col s4">
+												<h:commandLink
+													styleClass="waves-effect waves-light btn #{style.colorPrimary}"
+													action="#{ModifyVoteGroupController.applyVoteGroupChanges}">
+													Done
+													<i class="material-icons right">done</i>
+													<f:ajax execute="voteGroupName" render=":voteGroupInfo" />
+												</h:commandLink>
+											</div>
+										</div>
 
-							</ui:fragment>
+									</ui:fragment>
+								</div>
+							</div>
 						</ui:fragment>
 						<ui:fragment
 							rendered="#{ModifyVoteGroupController.voteGroup == null}">
@@ -166,15 +178,14 @@
 													</h:commandLink>
 													<label
 														class="#{style.colorPrimaryText} file-field input-field"
-														style="display: inline-block; cursor: pointer;">
-														<h:inputFile id="fileUploadField"
+														style="display: inline-block; cursor: pointer;"> <h:inputFile
+															id="fileUploadField"
 															value="#{ModifyVoteGroupController.pictureUpload}"
 															style="display:none;">
 															<f:validator validatorId="ImageFileValidator" />
 															<f:ajax execute="fileUploadField"
 																listener="#{ModifyVoteGroupController.uploadContestantImage}" />
-														</h:inputFile>
-														<i class="material-icons">perm_media</i>
+														</h:inputFile> <i class="material-icons">perm_media</i>
 													</label>
 													<h:message for="contestantEditForm" style="color: red" />
 													<!-- Display this if we ever get render working on file upload ajax <h:message for="fileUploadField" style="color: red" /> -->
