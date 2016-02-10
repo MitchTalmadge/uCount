@@ -2,204 +2,196 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-xmlns:h="http://xmlns.jcp.org/jsf/html"
-xmlns:f="http://xmlns.jcp.org/jsf/core">
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-	<ui:composition template="/WEB-INF/templates/default.xhtml">
+<ui:composition template="/WEB-INF/templates/default.xhtml">
 
-		<ui:define name="content">
-			<div class="section no-pad-top">
-				<div class="section parallax-container;">
-					<h:panelGroup id="voteGroupInfo">
-						<h:form id="voteGroupEditForm" enctype="multipart/form-data">
-							<h1 class="header center #{style.textColorPrimary}">Modify Vote
-							Group</h1>
-							<ui:fragment
+	<ui:define name="content">
+		<div class="section no-pad-top">
+			<div class="section #{style.colorPrimaryBase}">
+				<h:panelGroup id="voteGroupInfo">
+					<h:form id="voteGroupEditForm" enctype="multipart/form-data">
+						<h1 class="header center #{style.textColorPrimary}">Modify
+							Vote Group</h1>
+						<ui:fragment
 							rendered="#{ModifyVoteGroupController.voteGroup != null}">
-								<div class="parallax">
-									<h:graphicImage
-									value="/resources/votegroup_images/#{ModifyVoteGroupController.voteGroup.pictureFileName}" />
-								</div>
-								<ui:fragment
+							<h:graphicImage
+								value="/resources/votegroup_images/#{ModifyVoteGroupController.voteGroup.pictureFileName}" />
+							<ui:fragment
 								rendered="#{not ModifyVoteGroupController.editingVoteGroup}">
-									<h5 class="header center #{style.textColorPrimary}">Current
-									Vote Group: #{ModifyVoteGroupController.voteGroup.name}</h5>
-									<h:commandLink
+								<h5 class="header center #{style.textColorPrimary}">Current
+									Vote Group
+									: #{ModifyVoteGroupController.voteGroup.name}</h5>
+								<h:commandLink
 									styleClass="waves-effect waves-light btn #{style.colorPrimary}"
 									action="#{ModifyVoteGroupController.startVoteGroupEditing}">
-										<i class="material-icons right">mode_edit</i>
-										<f:ajax render=":voteGroupInfo" />
-									</h:commandLink>
-								</ui:fragment>
-								<ui:fragment
-								rendered="#{ModifyVoteGroupController.editingVoteGroup}">
-
-									<div class="container center-align row" style="margin-left: auto; margin-right: auto;">
-										<div class="col s4 input-field push-s2 white-text">
-											<h:outputLabel class="active" for="voteGroupName">
-												Vote Group Name
-											</h:outputLabel>
-											<h:inputText id="voteGroupName"
-											value="#{ModifyVoteGroupController.editableVoteGroupName}"></h:inputText>
-										</div>
-										<div class="col s4 push-s2 right-align">
-											<label
-											class="#{style.textColorPrimary} file-field input-field"
-											style="display: inline-block; cursor: pointer;">
-												<h:inputFile
-												id="fileUploadField"
-												value="#{ModifyVoteGroupController.pictureUpload}"
-												style="display:none;">
-													<f:validator validatorId="ImageFileValidator" />
-													<f:ajax execute="fileUploadField"
-													listener="#{ModifyVoteGroupController.uploadVoteGroupImage}" />
-												</h:inputFile> <i class="material-icons">perm_media</i> </label>
-										</div>
-									</div>
-									<div class="container row center-align">
-										<h:message for="voteGroupEditForm" style="color: red" />
-									</div>
-									<h:commandLink
-									styleClass="waves-effect waves-light btn #{style.colorPrimary}"
-									action="#{ModifyVoteGroupController.applyVoteGroupChanges}">
-										<i class="material-icons right">done</i>
-										<f:ajax execute="voteGroupName" render=":voteGroupInfo" />
-									</h:commandLink>
-
-								</ui:fragment>
+									<i class="material-icons right">mode_edit</i>
+									<f:ajax render=":voteGroupInfo" />
+								</h:commandLink>
 							</ui:fragment>
 							<ui:fragment
-							rendered="#{ModifyVoteGroupController.voteGroup == null}">
-								<h5 class="header center #{style.textColorPrimary}">No Vote
-								Group Selected for Editing!</h5>
-							</ui:fragment>
-						</h:form>
-					</h:panelGroup>
-				</div>
-				<br />
+								rendered="#{ModifyVoteGroupController.editingVoteGroup}">
 
-				<div class="container">
-					<div class="row">
-						<h:form>
-							<div class="col s6">
-								<h:commandLink value="Add New Contestant"
+								<div class="container center-align row"
+									style="margin-left: auto; margin-right: auto;">
+									<div class="col s4 input-field push-s2 white-text">
+										<h:outputLabel class="active" for="voteGroupName">
+												Vote Group Name
+											</h:outputLabel>
+										<h:inputText id="voteGroupName"
+											value="#{ModifyVoteGroupController.editableVoteGroupName}"></h:inputText>
+									</div>
+									<div class="col s4 push-s2 right-align">
+										<label
+											class="#{style.textColorPrimary} file-field input-field"
+											style="display: inline-block; cursor: pointer;">
+											<h:inputFile id="fileUploadField"
+												value="#{ModifyVoteGroupController.pictureUpload}"
+												style="display:none;">
+												<f:validator validatorId="ImageFileValidator" />
+												<f:ajax execute="fileUploadField"
+													listener="#{ModifyVoteGroupController.uploadVoteGroupImage}" />
+											</h:inputFile>
+											<i class="material-icons">perm_media</i>
+										</label>
+									</div>
+								</div>
+								<div class="container row center-align">
+									<h:message for="voteGroupEditForm" style="color: red" />
+								</div>
+								<h:commandLink
+									styleClass="waves-effect waves-light btn #{style.colorPrimary}"
+									action="#{ModifyVoteGroupController.applyVoteGroupChanges}">
+									<i class="material-icons right">done</i>
+									<f:ajax execute="voteGroupName" render=":voteGroupInfo" />
+								</h:commandLink>
+
+							</ui:fragment>
+						</ui:fragment>
+						<ui:fragment
+							rendered="#{ModifyVoteGroupController.voteGroup == null}">
+							<h5 class="header center #{style.textColorPrimary}">No Vote
+								Group Selected for Editing!</h5>
+						</ui:fragment>
+					</h:form>
+				</h:panelGroup>
+			</div>
+			<br />
+
+			<div class="container">
+				<div class="row">
+					<h:form>
+						<div class="col s6">
+							<h:commandLink value="Add New Contestant"
 								styleClass="waves-effect waves-light btn #{style.colorPrimary}"
 								action="#{ModifyVoteGroupController.addNewContestant}">
-									<i class="material-icons right">add</i>
-									<f:ajax render=":contestants" />
-								</h:commandLink>
-							</div>
-							<div class="col s6">
-								<h:commandLink value="Delete All Contestants"
+								<i class="material-icons right">add</i>
+								<f:ajax render=":contestants" />
+							</h:commandLink>
+						</div>
+						<div class="col s6">
+							<h:commandLink value="Delete All Contestants"
 								styleClass="waves-effect waves-light btn #{style.colorDelete} right"
 								action="#{ModifyVoteGroupController.deleteAllContestants}">
-									<i class="material-icons right">delete</i>
-									<f:ajax render=":contestants" />
-								</h:commandLink>
-							</div>
-						</h:form>
-					</div>
-					<h:panelGroup id="contestants">
-						<ui:fragment
+								<i class="material-icons right">delete</i>
+								<f:ajax render=":contestants" />
+							</h:commandLink>
+						</div>
+					</h:form>
+				</div>
+				<h:panelGroup id="contestants">
+					<ui:fragment
 						rendered="#{ModifyVoteGroupController.voteGroup != null}">
-							<div class="row">
-								<ui:repeat
+						<div class="row">
+							<ui:repeat
 								value="#{ModifyVoteGroupController.voteGroup.contestants}"
 								var="contestant">
-									<div class="col s3">
-										<div class="card" style="height: 450px">
-											<h:form id="contestantEditForm" enctype="multipart/form-data">
-												<div class="card-image">
-													<h:graphicImage
+								<div class="col s3">
+									<div class="card" style="height: 450px">
+										<h:form id="contestantEditForm" enctype="multipart/form-data">
+											<div class="card-image">
+												<h:graphicImage
 													value="/resources/contestant_images/#{contestant.pictureFileName}" />
-												</div>
-												<div class="card-content">
+											</div>
+											<div class="card-content">
 
-													<!-- Rendered if the Contestant currently being edited is not this Contestant. -->
-													<ui:fragment
+												<!-- Rendered if the Contestant currently being edited is not this Contestant. -->
+												<ui:fragment
 													rendered="#{ModifyVoteGroupController.contestantIdBeingEdited != contestant.id}">
-														<span class="card-title">#{contestant.firstName}
-															#{contestant.lastName}</span>
-													</ui:fragment>
+													<span class="card-title">#{contestant.firstName}
+														#{contestant.lastName}</span>
+												</ui:fragment>
 
-													<!-- Rendered if the Contestant currently being edited IS this Contestant. -->
-													<ui:fragment
+												<!-- Rendered if the Contestant currently being edited IS this Contestant. -->
+												<ui:fragment
 													rendered="#{ModifyVoteGroupController.contestantIdBeingEdited == contestant.id}">
-														<div class="input-field col s6">
-															<h:inputText id="firstNameTextField"
+													<div class="input-field col s6">
+														<h:inputText id="firstNameTextField"
 															value="#{ModifyVoteGroupController.editableFirstName}" />
-														</div>
-														<div class="input-field col s6">
-															<h:inputText id="lastNameTextField"
+													</div>
+													<div class="input-field col s6">
+														<h:inputText id="lastNameTextField"
 															value="#{ModifyVoteGroupController.editableLastName}" />
-														</div>
-													</ui:fragment>
+													</div>
+												</ui:fragment>
 
-												</div>
-												<div class="card-action">
+											</div>
+											<div class="card-action">
 
-													<!-- Rendered if the Contestant currently being edited is not this Contestant. -->
-													<ui:fragment
+												<!-- Rendered if the Contestant currently being edited is not this Contestant. -->
+												<ui:fragment
 													rendered="#{ModifyVoteGroupController.contestantIdBeingEdited != contestant.id}">
-														<h:commandLink class="#{style.colorPrimaryText}"
+													<h:commandLink class="#{style.colorPrimaryText}"
 														action="#{ModifyVoteGroupController.onEditButtonFired(contestant.id)}">
-															<i class="material-icons">mode_edit</i>
-															<f:ajax render=":contestants" />
-														</h:commandLink>
-														<h:commandLink class="#{style.colorDeleteText} right"
+														<i class="material-icons">mode_edit</i>
+														<f:ajax render=":contestants" />
+													</h:commandLink>
+													<h:commandLink class="#{style.colorDeleteText} right"
 														action="#{ModifyVoteGroupController.deleteContestant(contestant.id)}">
-															<i class="material-icons">delete</i>
-															<f:ajax render=":contestants" />
-														</h:commandLink>
-													</ui:fragment>
+														<i class="material-icons">delete</i>
+														<f:ajax render=":contestants" />
+													</h:commandLink>
+												</ui:fragment>
 
-													<!-- Rendered if the Contestant currently being edited IS this Contestant. -->
-													<ui:fragment
+												<!-- Rendered if the Contestant currently being edited IS this Contestant. -->
+												<ui:fragment
 													rendered="#{ModifyVoteGroupController.contestantIdBeingEdited == contestant.id}">
-														<h:commandLink class="#{style.colorPrimaryText}"
+													<h:commandLink class="#{style.colorPrimaryText}"
 														action="#{ModifyVoteGroupController.onEditDoneButtonFired}">
-															<i class="material-icons">done</i>
-															<f:ajax execute="firstNameTextField lastNameTextField"
+														<i class="material-icons">done</i>
+														<f:ajax execute="firstNameTextField lastNameTextField"
 															render=":contestants" />
-														</h:commandLink>
-														<label
+													</h:commandLink>
+													<label
 														class="#{style.colorPrimaryText} file-field input-field"
 														style="display: inline-block; cursor: pointer;">
-															<h:inputFile
-															id="fileUploadField"
+														<h:inputFile id="fileUploadField"
 															value="#{ModifyVoteGroupController.pictureUpload}"
 															style="display:none;">
-																<f:validator validatorId="ImageFileValidator" />
-																<f:ajax execute="fileUploadField"
+															<f:validator validatorId="ImageFileValidator" />
+															<f:ajax execute="fileUploadField"
 																listener="#{ModifyVoteGroupController.uploadContestantImage}" />
-															</h:inputFile> <i class="material-icons">perm_media</i> </label>
-														<h:message for="contestantEditForm" style="color: red" />
-														<!-- Display this if we ever get render working on file upload ajax <h:message for="fileUploadField" style="color: red" /> -->
-													</ui:fragment>
+														</h:inputFile>
+														<i class="material-icons">perm_media</i>
+													</label>
+													<h:message for="contestantEditForm" style="color: red" />
+													<!-- Display this if we ever get render working on file upload ajax <h:message for="fileUploadField" style="color: red" /> -->
+												</ui:fragment>
 
-												</div>
-											</h:form>
-										</div>
+											</div>
+										</h:form>
 									</div>
-								</ui:repeat>
-							</div>
-						</ui:fragment>
-					</h:panelGroup>
-				</div>
+								</div>
+							</ui:repeat>
+						</div>
+					</ui:fragment>
+				</h:panelGroup>
 			</div>
+		</div>
 
-		</ui:define>
+	</ui:define>
 
-		<ui:define name="javascript">
-
-			<script>
-				$(document).ready(function() {
-					$('.parallax').parallax();
-				});
-			</script>
-
-		</ui:define>
-
-	</ui:composition>
+</ui:composition>
 </html>
