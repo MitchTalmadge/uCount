@@ -85,53 +85,60 @@ xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 								<!-- This fragment will contain the votegroups and allow the user to vote -->
 								<ui:fragment rendered="#{!VotingController.votingComplete}">
-									<div class="row">
-										<h:form id="votingOptionsForm">
-											<!-- Iterate over the contestants of the voteGroup -->
-											<ui:repeat
-											value="#{VotingController.votingOptions}"
-											var="voteGroup">
 
-												<div class="col s10 m4">
-													<div class="card small">
-														<div class="card-image">
+									<h:form id="votingOptionsForm">
+										<!-- Iterate over the contestants of the voteGroup -->
+										<ui:repeat
+										value="#{VotingController.votingOptions}"
+										var="voteGroup">
+											<div class="card">
+												<div class="card-content">
+													<div class="row">
+														<div class="col s3">
 															<h:graphicImage
 															value="/resources/votegroup_images/#{voteGroup.pictureFileName}" />
-															<ui:repeat
-															value="#{voteGroup.contestants}"
-															var="contestant">
-
-																<h:graphicImage
-																value="/resources/contestant_images/#{contestant.pictureFileName}" />
-
-															</ui:repeat>
+														</div>
+														<div class="col s9">
 															<span class="card-title">#{voteGroup.name}</span>
 														</div>
-														<div class="card-content">
-															<ui:repeat value="#{voteGroup.contestants}"
-															var="contestant" varStatus="status">
-																#{contestant.firstName} #{contestant.lastName}#{status.last ? '' : ','}
-															</ui:repeat>
-														</div>
+														<ui:repeat value="#{voteGroup.contestants}"
+														var="contestant" varStatus="status">
+															<div class="col s3">
+																<div class="card">
+																	<div class="card-image">
+																		<h:graphicImage
+																		value="/resources/contestant_images/#{contestant.pictureFileName}" />
+																	</div>
+																	<div class="card-content">
+																		#{contestant.firstName} #{contestant.lastName}
+																	</div>
+																</div>
+															</div>
+														</ui:repeat>
+
+													</div>
+
+													<div class="row">
 														<h:commandLink value="Vote"
-														styleClass="card-action waves-effect waves-light btn #{style.colorPrimaryBase}"
-														action="#{VotingController.recordVote(votegroup)}">
+														styleClass="col s12 card-action waves-effect waves-light btn-large #{style.colorPrimaryBase}"
+														style="padding:0;padding-right:10px;font-size:28px"
+														action="#{VotingController.recordVote(voteGroup)}">
 															<i class="material-icons right">send</i>
 															<f:ajax render=":mainContent" />
 														</h:commandLink>
 													</div>
 												</div>
+											</div>
+											<!-- end row -->
+										</ui:repeat>
 
-											</ui:repeat>
-
-											<h:commandLink value="Add Dummy Vote"
-											styleClass="waves-effect waves-light btn #{style.colorPrimaryBase}"
-											action="#{VotingController.dummyVote}">
-												<i class="material-icons right">send</i>
-												<f:ajax render=":mainContent" />
-											</h:commandLink>
-										</h:form>
-									</div>
+										<h:commandLink value="Add Dummy Vote"
+										styleClass="waves-effect waves-light btn #{style.colorPrimaryBase}"
+										action="#{VotingController.dummyVote}">
+											<i class="material-icons right">send</i>
+											<f:ajax render=":mainContent" />
+										</h:commandLink>
+									</h:form>
 								</ui:fragment>
 
 								<!-- This fragment will tell the user thank you for voting. -->
