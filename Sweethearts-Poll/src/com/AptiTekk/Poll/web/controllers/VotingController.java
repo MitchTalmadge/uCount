@@ -9,6 +9,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.persistence.GenerationType;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -70,10 +71,15 @@ public class VotingController {
 	 * page.
 	 */
 	private boolean votingComplete = false;
+	
+	private List<VoteGroup> votingOptions;
 
 	@PostConstruct
 	public void init() {
 		this.setCredential(null);
+		
+		votingOptions = voteGroupService.getVoteGroupsFromPoll(getEnabledPoll());
+		System.out.println("Found " + votingOptions.size() + " voting options");
 	}
 
 	public Poll getEnabledPoll() {
@@ -228,6 +234,21 @@ public class VotingController {
 				System.out.println("Dummy Vote could not be added. VoteGroups was empty.");
 			}
 		}
+	}
+	
+	public void recordVote(VoteGroup voteGroup) {
+		Entry entry = new Entry(getCredential(), voteGroup, pollService.getEnabledPoll());
+		entryService.insert(entry);
+		pollService.getEnabledPoll().getEntries().add(entry);
+		setVotingComplete(true);
+	}
+
+	public List<VoteGroup> getVotingOptions() {
+		return votingOptions;
+	}
+
+	public void setVotingOptions(List<VoteGroup> votingOptions) {
+		this.votingOptions = votingOptions;
 	}
 
 }
