@@ -18,11 +18,11 @@ public class ImageFileValidator implements Validator {
 
 	@Override
 	public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
-		System.out.println("Validating Image Upload...");
+		Logger.logVerbose("Validating Image Upload...");
 		List<FacesMessage> msgs = new ArrayList<FacesMessage>();
 		Part file = (Part) value;
 		if (file.getSize() > 1024 * 1024 * 2) {
-		    	System.out.println("Image is too large. Maximum size is 2MB.");
+			Logger.logVerbose("Image is too large. Maximum size is 2MB.");
 			msgs.add(new FacesMessage("Image is too large. Maximum size is 2MB."));
 		}
 		boolean valid = false;
@@ -32,15 +32,13 @@ public class ImageFileValidator implements Validator {
 			}
 		}
 		if (!valid) {
-		    System.out.println("Invalid type. Use PNG, JPG, or GIF.");
+			Logger.logVerbose("Invalid type. Use PNG, JPG, or GIF.");
 			msgs.add(new FacesMessage("Invalid type. Use PNG, JPG, or GIF."));
 		}
 		if (!msgs.isEmpty()) {
 			throw new ValidatorException(msgs);
-		}
-		else
-		{
-		    System.out.println("Image is valid.");
+		} else {
+			Logger.logVerbose("Image is valid.");
 		}
 	}
 

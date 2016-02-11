@@ -18,6 +18,7 @@ import com.AptiTekk.Poll.core.VoteGroupService;
 import com.AptiTekk.Poll.core.entityBeans.Contestant;
 import com.AptiTekk.Poll.core.entityBeans.Poll;
 import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
+import com.AptiTekk.Poll.core.utilities.Logger;
 
 @ManagedBean
 @ViewScoped
@@ -32,8 +33,6 @@ public class ManagerController {
 	@EJB
 	ContestantService contestantService;
 
-	private int enabledPollRadioValue;
-	
 	private List<Poll> polls;
 
 	/**
@@ -60,14 +59,11 @@ public class ManagerController {
 
 	@PostConstruct
 	public void init() {
-		System.out.println("Init ManagerController");
+		Logger.logVerbose("Initialized ManagerController");
 		polls = pollService.getAll();
 		if (!polls.isEmpty()) {
 			setSelectedPoll(polls.get(0));
 		}
-		
-		if(pollService.getEnabledPoll() != null)
-			this.enabledPollRadioValue = pollService.getEnabledPoll().getId();
 	}
 
 	public Poll getEnabledPoll() {
@@ -87,7 +83,7 @@ public class ManagerController {
 	}
 
 	public void setSelectedPoll(Poll selectedPoll) {
-		System.out.println("Setting Selected Poll to " + selectedPoll.getName());
+		Logger.logVerbose("Setting Selected Poll to " + selectedPoll.getName());
 		this.selectedPoll = selectedPoll;
 		if (selectedPoll != null) {
 			this.setEditablePollName(selectedPoll.getName());
@@ -99,7 +95,7 @@ public class ManagerController {
 	public void addNewPoll() {
 		Poll poll = new Poll("New Poll", "This is a new poll. Edit its description here!", false);
 		pollService.insert(poll);
-		System.out.println("Added New Poll.");
+		Logger.logVerbose("Added New Poll.");
 		if(polls.isEmpty()) //If the number of available polls right now is 0, call init so that a poll is selected.
 			init();
 		else //Otherwise, just refresh the polls list; don't leave the currently selected poll.
@@ -111,7 +107,7 @@ public class ManagerController {
 			pollService.delete(selectedPoll.getId());
 			pollService.refreshEnabledPoll();
 			selectedPoll = null;
-			System.out.println("Deleted Selected Poll.");
+			Logger.logVerbose("Deleted Selected Poll.");
 			init();
 		}
 	}
@@ -199,7 +195,7 @@ public class ManagerController {
 
 	public void deleteVoteGroup(VoteGroup voteGroup) {
 		if (selectedPoll != null) {
-			System.out.println("Deleting VoteGroup with ID: " + voteGroup.getId());
+			Logger.logVerbose("Deleting VoteGroup with ID: " + voteGroup.getId());
 			voteGroupService.delete(voteGroup.getId());
 			Iterator<VoteGroup> iterator = selectedPoll.getVoteGroups().iterator();
 			while (iterator.hasNext()) {

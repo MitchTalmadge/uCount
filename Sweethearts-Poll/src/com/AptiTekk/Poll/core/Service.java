@@ -7,6 +7,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.AptiTekk.Poll.core.utilities.Logger;
+
 @Remote
 public abstract class Service<T> {
 
@@ -44,10 +46,10 @@ public abstract class Service<T> {
 	public void delete(int id) {
 		T old = entityManager.find(type, id);
 		if (old != null) {
-			System.out.println("Deleting " + old.getClass().getSimpleName() + " entity from database with ID: " + id);
+			Logger.logVerbose("Deleting " + old.getClass().getSimpleName() + " entity from database with ID: " + id);
 			entityManager.remove(merge(old));
 		} else
-			System.out.println("Tried to delete entity from database with ID: " + id + ", but it was not found!");
+			Logger.logError("Tried to delete entity from database with ID: " + id + ", but it was not found!");
 	}
 
 	public T merge(T entity) {

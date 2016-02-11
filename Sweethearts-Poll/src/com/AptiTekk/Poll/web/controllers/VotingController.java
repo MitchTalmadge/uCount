@@ -28,6 +28,7 @@ import com.AptiTekk.Poll.core.entityBeans.Credential;
 import com.AptiTekk.Poll.core.entityBeans.Entry;
 import com.AptiTekk.Poll.core.entityBeans.Poll;
 import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
+import com.AptiTekk.Poll.core.utilities.Logger;
 
 @ManagedBean
 @ViewScoped
@@ -79,7 +80,7 @@ public class VotingController {
 		this.setCredential(null);
 		
 		votingOptions = voteGroupService.getVoteGroupsFromPoll(getEnabledPoll());
-		System.out.println("Found " + votingOptions.size() + " voting options");
+		Logger.logVerbose("Found " + votingOptions.size() + " voting options");
 	}
 
 	public Poll getEnabledPoll() {
@@ -91,7 +92,7 @@ public class VotingController {
 	}
 
 	public void authenticate() {
-		System.out.println("Authenticating...");
+		Logger.logVerbose("Authenticating...");
 		this.setCredential(null);
 
 		if (studentIdInput != null && !studentIdInput.isEmpty()) {
@@ -99,7 +100,7 @@ public class VotingController {
 				try { // VERY HACKY METHOD of authenticating student IDs ---
 						// Uses Jordan School District's Overdrive login.
 					int studentId = Integer.parseInt(studentIdInput);
-					System.out.println("Using JSD Authentication...");
+					Logger.logVerbose("Using JSD Authentication...");
 
 					String url = "https://jordanut.libraryreserve.com/10/45/en/BANGAuthenticate.dll";
 
@@ -122,20 +123,20 @@ public class VotingController {
 					String location = httpResponse.getFirstHeader("Location").getValue();
 
 					if (location.contains("Error.htm")) {
-						System.out.println("ID Was Invalid!");
+						Logger.logVerbose("ID Was Invalid!");
 						FacesContext.getCurrentInstance().addMessage(null,
 								new FacesMessage("The entered Student ID is invalid."));
 					} else {
-						System.out.println("ID Was Valid!");
+						Logger.logVerbose("ID Was Valid!");
 						Credential credential;
 						// Inserts a Credential row so that an Entry can be
 						// made.
 						if ((credential = credentialService.getByStudentNumber(studentId)) == null) {
-							System.out.println("Creating new Credential.");
+							Logger.logVerbose("Creating new Credential.");
 							credential = new Credential(studentId);
 							credentialService.insert(credential);
 						} else {
-							System.out.println("Found existing Credential.");
+							Logger.logVerbose("Found existing Credential.");
 						}
 						setCredential(credential); // Sets the valid Student ID
 													// for use when voting.
@@ -148,24 +149,24 @@ public class VotingController {
 				}
 
 			} else { // Use basic authentication methods
-				System.out.println("Using Basic Authentication...");
+				Logger.logVerbose("Using Basic Authentication...");
 				try {
 					if (!studentIdInput.startsWith("8") || studentIdInput.length() != 7) {
-						System.out.println("Invalid Format!");
+						Logger.logVerbose("Invalid Format!");
 						FacesContext.getCurrentInstance().addMessage(null,
 								new FacesMessage("The Student ID you entered is invalid. Please try again."));
 					} else {
-						System.out.println("ID Was Valid!");
+						Logger.logVerbose("ID Was Valid!");
 						int studentId = Integer.parseInt(studentIdInput);
 						Credential credential;
 						// Inserts a Credential row so that an Entry can be
 						// made.
 						if ((credential = credentialService.getByStudentNumber(studentId)) == null) {
-							System.out.println("Creating new Credential.");
+							Logger.logVerbose("Creating new Credential.");
 							credential = new Credential(studentId);
 							credentialService.insert(credential);
 						} else {
-							System.out.println("Found existing Credential.");
+							Logger.logVerbose("Found existing Credential.");
 						}
 						setCredential(credential); // Sets the valid Student ID
 													// for use when voting.
@@ -175,7 +176,7 @@ public class VotingController {
 				}
 			}
 		} else {
-			System.out.println("Input was empty!");
+			Logger.logVerbose("Input was empty!");
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage("You must enter your Student ID to continue."));
 		}
@@ -200,7 +201,7 @@ public class VotingController {
 	}
 
 	public void setStudentIdInput(String studentIdInput) {
-		System.out.println("Setting Student ID Input to " + studentIdInput);
+		Logger.logVerbose("Setting Student ID Input to " + studentIdInput);
 		this.studentIdInput = studentIdInput;
 	}
 
@@ -221,7 +222,7 @@ public class VotingController {
 	}
 
 	public void dummyVote() {
-		System.out.println("Adding Dummy Vote");
+		Logger.logVerbose("Adding Dummy Vote");
 		if (credential != null && pollService.getEnabledPoll() != null) {
 			List<VoteGroup> voteGroups = pollService.getEnabledPoll().getVoteGroups();
 			if (!voteGroups.isEmpty()) {
@@ -229,9 +230,9 @@ public class VotingController {
 				entryService.insert(entry);
 				pollService.getEnabledPoll().getEntries().add(entry);
 				setVotingComplete(true);
-				System.out.println("Dummy Vote Added");
+				Logger.logVerbose("Dummy Vote Added");
 			} else {
-				System.out.println("Dummy Vote could not be added. VoteGroups was empty.");
+				Logger.logError("Dummy Vote could not be added. VoteGroups was empty.");
 			}
 		}
 	}

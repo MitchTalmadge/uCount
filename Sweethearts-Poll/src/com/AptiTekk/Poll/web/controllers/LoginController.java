@@ -13,6 +13,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.AptiTekk.Poll.core.utilities.Logger;
+
 @ManagedBean
 @SessionScoped
 public class LoginController {
@@ -34,7 +36,7 @@ public class LoginController {
 
 	public String login() {
 		FacesContext context = FacesContext.getCurrentInstance();
-		System.out.println("Logging In");
+		Logger.logVerbose("Logging In");
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 		try {
 			request.login(this.username, this.password);
@@ -45,7 +47,7 @@ public class LoginController {
 					request.logout();
 					return "error";
 				} else {
-					System.out.println("Login Successful - Adding Session Variables");
+					Logger.logVerbose("Login Successful - Adding Session Variables");
 					context.getExternalContext().getSessionMap().put("user", this.username);
 					context.getExternalContext().getSessionMap().put("userRole",
 							((request.isUserInRole("admin")) ? "admin" : "user"));

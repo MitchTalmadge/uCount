@@ -16,34 +16,13 @@
 		</resource-bundle>
 	</application>
     <managed-bean>
-    	<managed-bean-name>EntryController</managed-bean-name>
-    	<managed-bean-class>com.AptiTekk.Poll.web.controllers.EntryController</managed-bean-class>
-    	<managed-bean-scope>request</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
     	<managed-bean-name>LoginController</managed-bean-name>
     	<managed-bean-class>com.AptiTekk.Poll.web.controllers.LoginController</managed-bean-class>
     	<managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     <managed-bean>
-    	<managed-bean-name>ContestantController</managed-bean-name>
-    	<managed-bean-class>com.AptiTekk.Poll.web.controllers.ContestantController</managed-bean-class>
-    	<managed-bean-scope>session</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
     	<managed-bean-name>ManagerController</managed-bean-name>
     	<managed-bean-class>com.AptiTekk.Poll.web.controllers.ManagerController</managed-bean-class>
-    	<managed-bean-scope>view</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
-    	<description>Converts Poll objects to and from Strings.</description>
-    	<managed-bean-name>PollConverter</managed-bean-name>
-    	<managed-bean-class>com.AptiTekk.Poll.web.converters.PollConverter</managed-bean-class>
-    	<managed-bean-scope>request</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
-    	<managed-bean-name>ModifyContestantController</managed-bean-name>
-    	<managed-bean-class>com.AptiTekk.Poll.web.controllers.ModifyContestantController</managed-bean-class>
     	<managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
     <managed-bean>
