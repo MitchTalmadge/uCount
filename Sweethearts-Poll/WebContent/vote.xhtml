@@ -43,7 +43,7 @@
 								onkeypress="if (event.keyCode == 13) { document.getElementById('voteForm:submit').click(); return false; }">
 								<div class="row center">
 									<h:messages globalOnly="true" style="color: red" />
-									<div class="input-field col s6 push-s3">
+									<div class="input-field col s12 m6 push-m3">
 										<i class="material-icons prefix">account_circle</i>
 										<h:inputText id="studentIdField"
 											value="#{VotingController.studentIdInput}" required="true" />
@@ -53,12 +53,14 @@
 									</div>
 								</div>
 								<div class="row center">
-									<h:commandLink id="submit"
-										styleClass="#{style.colorPrimary} btn waves-effect waves-light"
-										value="Go Vote" action="#{VotingController.authenticate}">
-										<i class="material-icons right">send</i>
-										<f:ajax execute="studentIdField" render=":mainContent" />
-									</h:commandLink>
+									<div class="col s12 m4 push-m4">
+										<h:commandLink id="submit" style="width:100%; font-size:24px"
+											styleClass="#{style.colorPrimary} btn-large waves-effect waves-light"
+											value="Go Vote" action="#{VotingController.authenticate}">
+											<i class="material-icons right">send</i>
+											<f:ajax execute="studentIdField" render=":mainContent" />
+										</h:commandLink>
+									</div>
 								</div>
 							</h:form>
 						</div>
