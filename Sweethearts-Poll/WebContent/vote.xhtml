@@ -2,161 +2,150 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-xmlns:h="http://xmlns.jcp.org/jsf/html"
-xmlns:f="http://xmlns.jcp.org/jsf/core">
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-	<ui:composition template="/WEB-INF/templates/default.xhtml">
-		<ui:define name="content">
-			<div class="section no-pad-top">
+<ui:composition template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<div class="section no-pad-top">
 
-				<!-- Shown when a poll is enabled; displays poll name and description -->
-				<ui:fragment rendered="#{VotingController.enabledPoll != null}">
-					<div class="section #{style.colorPrimaryBase}">
-						<div class="container">
-							<h1 class="header center #{style.textColorPrimary}">#{VotingController.enabledPoll.name}</h1>
-							<h5 class="header center #{style.textColorPrimary}">#{VotingController.enabledPoll.description}</h5>
-						</div>
+			<!-- Shown when a poll is enabled; displays poll name and description -->
+			<ui:fragment rendered="#{VotingController.enabledPoll != null}">
+				<div class="section #{style.colorPrimaryBase}">
+					<div class="container">
+						<h1 class="header center #{style.textColorPrimary}">#{VotingController.enabledPoll.name}</h1>
+						<h5 class="header center #{style.textColorPrimary}">#{VotingController.enabledPoll.description}</h5>
 					</div>
-				</ui:fragment>
+				</div>
+			</ui:fragment>
 
-				<!-- Shown when no polls are enabled; asks the user to come back later. -->
-				<ui:fragment rendered="#{VotingController.enabledPoll == null}">
-					<div class="section #{style.colorPrimaryBase}">
-						<h1 class="header center #{style.textColorPrimary}">No polls
+			<!-- Shown when no polls are enabled; asks the user to come back later. -->
+			<ui:fragment rendered="#{VotingController.enabledPoll == null}">
+				<div class="section #{style.colorPrimaryBase}">
+					<h1 class="header center #{style.textColorPrimary}">No polls
 						are available.</h1>
-						<h2 class="header center #{style.textColorPrimary}">Please
+					<h2 class="header center #{style.textColorPrimary}">Please
 						check back soon.</h2>
-					</div>
-				</ui:fragment>
+				</div>
+			</ui:fragment>
 
-				<div class="container">
-					<!-- This group is only shown when a poll is enabled. -->
-					<h:panelGroup id="mainContent"
+			<div class="container">
+				<!-- This group is only shown when a poll is enabled. -->
+				<h:panelGroup id="mainContent"
 					rendered="#{VotingController.enabledPoll != null}">
 
-						<!-- Shown when the user is not authenticated (credential will be null). Asks the user to enter their Student ID -->
-						<ui:fragment rendered="#{VotingController.credential == null}">
-							<h5 class="header center">Please Enter Your Student ID</h5>
-							<div class="row center">
-								<h:form styleClass="col s12" id="voteForm" onkeypress="if (event.keyCode == 13) { document.getElementById('voteForm:submit').click(); return false; }">
-									<div class="row center">
-										<h:messages globalOnly="true" style="color: red" />
-										<div class="input-field col s6 push-s3">
-											<i class="material-icons prefix">account_circle</i>
-											<h:inputText id="studentIdField"
+					<!-- Shown when the user is not authenticated (credential will be null). Asks the user to enter their Student ID -->
+					<ui:fragment rendered="#{VotingController.credential == null}">
+						<h5 class="header center">Please Enter Your Student ID</h5>
+						<div class="row center">
+							<h:form styleClass="col s12" id="voteForm"
+								onkeypress="if (event.keyCode == 13) { document.getElementById('voteForm:submit').click(); return false; }">
+								<div class="row center">
+									<h:messages globalOnly="true" style="color: red" />
+									<div class="input-field col s12 m6 push-m3">
+										<i class="material-icons prefix">account_circle</i>
+										<h:inputText id="studentIdField"
 											value="#{VotingController.studentIdInput}" required="true" />
-											<h:outputLabel for="studentIdField">
+										<h:outputLabel for="studentIdField">
 												Student ID
 											</h:outputLabel>
-										</div>
 									</div>
-									<div class="row center">
-										<h:commandLink id="submit"
-										styleClass="#{style.colorPrimary} btn waves-effect waves-light"
-										value="Go Vote" action="#{VotingController.authenticate}">
+								</div>
+								<div class="row center">
+									<div class="col s12 m4 push-m4">
+										<h:commandLink id="submit" style="width:100%; font-size:24px"
+											styleClass="#{style.colorPrimary} btn-large waves-effect waves-light"
+											value="Go Vote" action="#{VotingController.authenticate}">
 											<i class="material-icons right">send</i>
 											<f:ajax execute="studentIdField" render=":mainContent" />
 										</h:commandLink>
 									</div>
-								</h:form>
-							</div>
-						</ui:fragment>
+								</div>
+							</h:form>
+						</div>
+					</ui:fragment>
 
-						<!-- Shown when the user is authenticated. -->
-						<ui:fragment rendered="#{VotingController.credential != null}">
+					<!-- Shown when the user is authenticated. -->
+					<ui:fragment rendered="#{VotingController.credential != null}">
 
-							<!-- Shown when the student has already submitted an entry. -->
-							<ui:fragment rendered="#{VotingController.studentHasAlreadyVoted}">
-								<h3 class="header center">You have already voted!</h3>
-								<p class="flow-text center">
-									It appears that you have already
-									voted. If you would like to change your vote, or believe that
-									someone else has voted using your ID, please talk to Mr.
-									McDonald in room V107, or <a href="mailto:mitch@mitchtalmadge.com">send us an email</a>.
-								</p>
-							</ui:fragment>
-
-							<!-- Shown when the user has not already submitted an entry. Should allow them to vote. -->
-							<ui:fragment
+						<!-- Shown when the user has not already submitted an entry. Should allow them to vote. -->
+						<ui:fragment
 							rendered="#{!VotingController.studentHasAlreadyVoted}">
 
-								<br />
+							<br />
 
-								<!-- This fragment will contain the votegroups and allow the user to vote -->
-								<ui:fragment rendered="#{!VotingController.votingComplete}">
+							<!-- This fragment will contain the votegroups and allow the user to vote -->
+							<ui:fragment rendered="#{!VotingController.votingComplete}">
 
-									<h:form id="votingOptionsForm">
-										<!-- Iterate over the contestants of the voteGroup -->
-										<ui:repeat
-										value="#{VotingController.votingOptions}"
+								<h:form id="votingOptionsForm">
+									<!-- Iterate over the contestants of the voteGroup -->
+									<ui:repeat value="#{VotingController.enabledPoll.voteGroups}"
 										var="voteGroup">
-											<div class="card">
-												<div class="card-content">
-													<div class="row">
-														<div class="col s3">
-															<h:graphicImage
+										<div class="card">
+											<div class="card-content">
+												<div class="row">
+													<div class="col s3 card-image">
+														<h:graphicImage
 															value="/resources/votegroup_images/#{voteGroup.pictureFileName}" />
-														</div>
-														<div class="col s9">
-															<span class="card-title">#{voteGroup.name}</span>
-														</div>
-														<ui:repeat value="#{voteGroup.contestants}"
-														var="contestant" varStatus="status">
-															<div class="col s3">
-																<div class="card">
-																	<div class="card-image">
-																		<h:graphicImage
-																		value="/resources/contestant_images/#{contestant.pictureFileName}" />
-																	</div>
-																	<div class="card-content">
-																		#{contestant.firstName} #{contestant.lastName}
-																	</div>
-																</div>
-															</div>
-														</ui:repeat>
-
 													</div>
+													<div class="col s9">
+														<span class="card-title">#{voteGroup.name}</span>
+													</div>
+													<ui:repeat value="#{voteGroup.contestants}"
+														var="contestant" varStatus="status">
+														<div class="col s3">
+															<div class="card">
+																<div class="card-image">
+																	<h:graphicImage
+																		value="/resources/contestant_images/#{contestant.pictureFileName}" />
+																</div>
+																<div class="card-content">#{contestant.firstName}
+																	#{contestant.lastName}</div>
+															</div>
+														</div>
+													</ui:repeat>
 
-													<div class="row">
-														<h:commandLink value="Vote"
+												</div>
+
+												<div class="row">
+													<h:commandLink value="Vote"
 														styleClass="col s12 card-action waves-effect waves-light btn-large #{style.colorPrimaryBase}"
 														style="padding:0;padding-right:10px;font-size:28px"
 														action="#{VotingController.recordVote(voteGroup)}">
-															<i class="material-icons right">send</i>
-															<f:ajax render=":mainContent" />
-														</h:commandLink>
-													</div>
+														<i class="material-icons right">send</i>
+														<f:ajax render=":mainContent" />
+													</h:commandLink>
 												</div>
 											</div>
-											<!-- end row -->
-										</ui:repeat>
-
-										<h:commandLink value="Add Dummy Vote"
-										styleClass="waves-effect waves-light btn #{style.colorPrimaryBase}"
-										action="#{VotingController.dummyVote}">
-											<i class="material-icons right">send</i>
-											<f:ajax render=":mainContent" />
-										</h:commandLink>
-									</h:form>
-								</ui:fragment>
-
-								<!-- This fragment will tell the user thank you for voting. -->
-								<ui:fragment rendered="#{VotingController.votingComplete}">
-									<h3 class="header center">Thank You!</h3>
-									<p class="flow-text center">
-										Your vote has been recorded.
-										Thank you for voting!
-									</p>
-								</ui:fragment>
-
-								<!-- TODO: Show list of votegroups/candidates, allow to vote. -->
+										</div>
+									</ui:repeat>
+								</h:form>
 							</ui:fragment>
 						</ui:fragment>
 
-					</h:panelGroup>
-				</div>
+						<!-- Shown when the student has already submitted an entry. -->
+						<ui:fragment rendered="#{VotingController.studentHasAlreadyVoted}">
+							<h3 class="header center">You have already voted!</h3>
+							<p class="flow-text center">
+								It appears that you have already voted. If you would like to
+								change your vote, or believe that someone else has voted using
+								your ID, please talk to Mr. McDonald in room V107, or <a
+									href="mailto:mitch@mitchtalmadge.com">send us an email</a>.
+							</p>
+						</ui:fragment>
+
+						<!-- This fragment will tell the user thank you for voting. -->
+						<ui:fragment rendered="#{VotingController.votingComplete}">
+							<h3 class="header center">Thank You!</h3>
+							<p class="flow-text center">Your vote has been recorded.
+								Thank you for voting!</p>
+						</ui:fragment>
+
+					</ui:fragment>
+				</h:panelGroup>
 			</div>
-		</ui:define>
-	</ui:composition>
+		</div>
+	</ui:define>
+</ui:composition>
 </html>

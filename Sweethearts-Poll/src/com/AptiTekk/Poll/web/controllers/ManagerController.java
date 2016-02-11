@@ -18,7 +18,7 @@ import com.AptiTekk.Poll.core.VoteGroupService;
 import com.AptiTekk.Poll.core.entityBeans.Contestant;
 import com.AptiTekk.Poll.core.entityBeans.Poll;
 import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
-import com.AptiTekk.Poll.core.utilities.Logger;
+import com.AptiTekk.Poll.core.utilities.PollLogger;
 
 @ManagedBean
 @ViewScoped
@@ -59,7 +59,7 @@ public class ManagerController {
 
 	@PostConstruct
 	public void init() {
-		Logger.logVerbose("Initialized ManagerController");
+		PollLogger.logVerbose("Initialized ManagerController");
 		polls = pollService.getAll();
 		if (!polls.isEmpty()) {
 			setSelectedPoll(polls.get(0));
@@ -83,7 +83,7 @@ public class ManagerController {
 	}
 
 	public void setSelectedPoll(Poll selectedPoll) {
-		Logger.logVerbose("Setting Selected Poll to " + selectedPoll.getName());
+		PollLogger.logVerbose("Setting Selected Poll to " + selectedPoll.getName());
 		this.selectedPoll = selectedPoll;
 		if (selectedPoll != null) {
 			this.setEditablePollName(selectedPoll.getName());
@@ -95,7 +95,7 @@ public class ManagerController {
 	public void addNewPoll() {
 		Poll poll = new Poll("New Poll", "This is a new poll. Edit its description here!", false);
 		pollService.insert(poll);
-		Logger.logVerbose("Added New Poll.");
+		PollLogger.logVerbose("Added New Poll.");
 		if(polls.isEmpty()) //If the number of available polls right now is 0, call init so that a poll is selected.
 			init();
 		else //Otherwise, just refresh the polls list; don't leave the currently selected poll.
@@ -107,7 +107,7 @@ public class ManagerController {
 			pollService.delete(selectedPoll.getId());
 			pollService.refreshEnabledPoll();
 			selectedPoll = null;
-			Logger.logVerbose("Deleted Selected Poll.");
+			PollLogger.logVerbose("Deleted Selected Poll.");
 			init();
 		}
 	}
@@ -195,7 +195,7 @@ public class ManagerController {
 
 	public void deleteVoteGroup(VoteGroup voteGroup) {
 		if (selectedPoll != null) {
-			Logger.logVerbose("Deleting VoteGroup with ID: " + voteGroup.getId());
+			PollLogger.logVerbose("Deleting VoteGroup with ID: " + voteGroup.getId());
 			voteGroupService.delete(voteGroup.getId());
 			Iterator<VoteGroup> iterator = selectedPoll.getVoteGroups().iterator();
 			while (iterator.hasNext()) {

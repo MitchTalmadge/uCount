@@ -19,8 +19,10 @@ public class VoteGroupService extends Service<VoteGroup> {
 	}
 
 	public List<VoteGroup> getVoteGroupsFromPoll(Poll poll) {
+	    if(poll != null)
 		return new JPAQuery(entityManager).from(voteGroupTable).where(voteGroupTable.poll.eq(poll))
 				.list(voteGroupTable);
+	    return null;
 	}
 
 	@Override

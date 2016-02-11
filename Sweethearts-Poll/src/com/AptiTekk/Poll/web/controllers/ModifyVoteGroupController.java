@@ -16,7 +16,7 @@ import com.AptiTekk.Poll.core.VoteGroupService;
 import com.AptiTekk.Poll.core.entityBeans.Contestant;
 import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
 import com.AptiTekk.Poll.core.utilities.FileUploadUtilities;
-import com.AptiTekk.Poll.core.utilities.Logger;
+import com.AptiTekk.Poll.core.utilities.PollLogger;
 
 @ManagedBean
 @ViewScoped
@@ -41,8 +41,7 @@ public class ModifyVoteGroupController {
 	 * Temporary fields used for validation before inserting values into the
 	 * Contestant itself.
 	 */
-	private String editableFirstName = "";
-	private String editableLastName = "";
+	private String editableName = "";
 	
 	private String editableVoteGroupName = "";
 	private boolean editingVoteGroup = false;
@@ -67,12 +66,12 @@ public class ModifyVoteGroupController {
 	}
 
 	public void addNewContestant() {
-		Contestant contestant = new Contestant(voteGroup, "John", "Doe", "notFound.png");
+		Contestant contestant = new Contestant(voteGroup, "John Doe", "notFound.png");
 		contestantService.insert(contestant);
 
 		voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
 																// voteGroup
-		Logger.logVerbose("Contestant Added");
+		PollLogger.logVerbose("Contestant Added");
 	}
 
 	public void deleteContestant(int contestantId) {
@@ -80,7 +79,7 @@ public class ModifyVoteGroupController {
 
 		voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
 																// voteGroup
-		Logger.logVerbose("Contestant Deleted");
+		PollLogger.logVerbose("Contestant Deleted");
 	}
 
 	public void deleteAllContestants() {
@@ -88,7 +87,7 @@ public class ModifyVoteGroupController {
 
 		voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
 																// voteGroup
-		Logger.logVerbose("All Contestants Deleted");
+		PollLogger.logVerbose("All Contestants Deleted");
 	}
 
 	public int getContestantIdBeingEdited() {
@@ -102,38 +101,28 @@ public class ModifyVoteGroupController {
 			Contestant contestant = contestantService.get(contestantIdBeingEdited);
 			if (contestant != null) {
 				this.contestantIdBeingEdited = contestantIdBeingEdited;
-				this.setEditableFirstName(contestant.getFirstName());
-				this.setEditableLastName(contestant.getLastName());
-				Logger.logVerbose("Contestant Editing ID has been set to " + this.contestantIdBeingEdited);
+				this.setEditableName(contestant.getName());
+				PollLogger.logVerbose("Contestant Editing ID has been set to " + this.contestantIdBeingEdited);
 			} else {
 				this.contestantIdBeingEdited = -1;
 			}
 		}
 	}
 
-	public String getEditableFirstName() {
-		return editableFirstName;
+	public String getEditableName() {
+		return editableName;
 	}
 
-	public void setEditableFirstName(String editableFirstName) {
-		this.editableFirstName = editableFirstName;
+	public void setEditableName(String editableName) {
+		this.editableName = editableName;
 	}
 
-	public String getEditableLastName() {
-		return editableLastName;
-	}
-
-	public void setEditableLastName(String editableLastName) {
-		this.editableLastName = editableLastName;
-	}
-	
 	public void startVoteGroupEditing() {
 		this.setEditingVoteGroup(true);
 	}
 	
 	public void applyVoteGroupChanges() {
 		if (this.getEditableVoteGroupName().isEmpty()) {
-			//System.out.println("First name was empty");
 			FacesContext.getCurrentInstance().addMessage("voteGroupEditForm",
 					new FacesMessage("The Vote Group Name cannot be empty!"));
 			return;
@@ -147,28 +136,22 @@ public class ModifyVoteGroupController {
 	}
 
 	public void onEditButtonFired(int contestantId) {
-		Logger.logVerbose("Editing Contestant with ID: " + contestantId);
+		PollLogger.logVerbose("Editing Contestant with ID: " + contestantId);
 		this.setContestantIdBeingEdited(contestantId);
 	}
 
 	public void onEditDoneButtonFired() {
-		Logger.logVerbose("Editing Done Button Fired.");
-		if (this.getEditableFirstName().isEmpty()) {
-			Logger.logVerbose("First name was empty");
+		PollLogger.logVerbose("Editing Done Button Fired.");
+		if (this.getEditableName().isEmpty()) {
+			PollLogger.logVerbose("Contestant name was empty");
 			FacesContext.getCurrentInstance().addMessage("contestantEditForm",
-					new FacesMessage("The First Name cannot be empty!"));
-			return;
-		} else if (this.getEditableLastName().isEmpty()) {
-			Logger.logVerbose("Last name was empty");
-			FacesContext.getCurrentInstance().addMessage("contestantEditForm",
-					new FacesMessage("The Last Name cannot be empty!"));
+					new FacesMessage("The Contestant Name cannot be empty!"));
 			return;
 		}
 		Contestant contestant = contestantService.get(contestantIdBeingEdited);
 		if (contestant != null) {
-			Logger.logVerbose("Setting contestant fields...");
-			contestant.setFirstName(getEditableFirstName());
-			contestant.setLastName(getEditableLastName());
+			PollLogger.logVerbose("Setting contestant fields...");
+			contestant.setName(getEditableName());
 			contestantService.merge(contestant);
 
 			voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
@@ -180,11 +163,11 @@ public class ModifyVoteGroupController {
 	public void uploadContestantImage() {
 		Contestant contestant = contestantService.get(contestantIdBeingEdited);
 		if (contestant == null) {
-			Logger.logError("Contestant not found.");
+			PollLogger.logError("Contestant not found.");
 			return;
 		}
 
-		Logger.logVerbose("Uploading...");
+		PollLogger.logVerbose("Uploading...");
 
 		// Generate a random file name.
 		String fileName = UUID.randomUUID().toString();
@@ -198,7 +181,7 @@ public class ModifyVoteGroupController {
 
 			voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
 																	// voteGroup
-			Logger.logVerbose("Contestant Image Added.");
+			PollLogger.logVerbose("Contestant Image Added.");
 		} catch (IOException e) {
 			FacesContext.getCurrentInstance().addMessage("contestantEditForm",
 					new FacesMessage("The image could not be applied."));
@@ -209,7 +192,7 @@ public class ModifyVoteGroupController {
 	}
 	
 	public void uploadVoteGroupImage() {
-		Logger.logVerbose("Uploading...");
+		PollLogger.logVerbose("Uploading...");
 
 		// Generate a random file name.
 		String fileName = String.valueOf(voteGroup.getId());
@@ -223,7 +206,7 @@ public class ModifyVoteGroupController {
 
 			voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
 																	// voteGroup
-			Logger.logVerbose("VoteGroup Image Updated.");
+			PollLogger.logVerbose("VoteGroup Image Updated.");
 		} catch (IOException e) {
 			FacesContext.getCurrentInstance().addMessage("contestantEditForm",
 					new FacesMessage("The image could not be applied."));

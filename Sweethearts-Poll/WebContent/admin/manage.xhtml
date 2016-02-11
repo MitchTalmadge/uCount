@@ -208,7 +208,7 @@
 												<td>#{voteGroup.name}</td>
 												<td><ui:repeat value="#{voteGroup.contestants}"
 														var="contestant" varStatus="status">
-													#{contestant.firstName} #{contestant.lastName}#{status.last ? '' : ','}
+													#{contestant.name} #{status.last ? '' : ','}
 												</ui:repeat></td>
 												<td style="width: 50px"><h:form>
 														<h:link
