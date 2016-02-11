@@ -30,7 +30,7 @@ public class ModifyVoteGroupController {
 	private VoteGroup voteGroup;
 
 	private Part pictureUpload;
-
+	
 	/**
 	 * Refers to the id of the Contestant currently being edited. -1 for none.
 	 */

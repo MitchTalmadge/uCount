@@ -9,78 +9,101 @@
 <ui:composition template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
 		<div class="section no-pad-top">
+
+			<!-- Header section, displaying the current page and the poll selection label -->
 			<div class="section #{style.colorPrimaryBase}">
 				<h1 class="header center #{style.textColorPrimary}">Poll
 					Management</h1>
-			</div>
-			<br />
 
-			<div class="container">
-				<div class="row">
-					<div class="col s6">
-						<h:form id="enabledPollSelector">
-							<h:selectOneMenu value="#{ManagerController.enabledPoll}"
-								converter="#{PollConverter}">
-								<f:selectItem itemValue="#{null}"
-									itemLabel="-- No Polls Enabled --" noSelectionOption="true" />
-								<f:selectItems value="#{ManagerController.polls}" var="poll"
-									itemLabel="#{poll.name}" itemValue="#{poll}" />
-								<label>Enabled Poll</label>
-								<f:ajax listener="#{ManagerController.onEnabledPollChanged}" />
-							</h:selectOneMenu>
-						</h:form>
-					</div>
+				<div class="container">
+					<h5 class="white-text">Poll Selected For Modification:</h5>
+					<p class="white-text">
+						<i class="material-icons">play_arrow</i> = Enabled Poll
+					</p>
 				</div>
+			</div>
 
-				<h:panelGroup id="navBar">
-					<nav class="light-blue darken-4">
-					<div class="nav-wrapper">
+			<!-- Selected Poll Nav Bar -->
+			<h:panelGroup id="navBar">
+				<nav class="light-blue darken-2">
+				<div class="nav-wrapper">
+					<div class="container">
 						<h:form>
+
 							<ul id="nav-mobile" class="left hide-on-med-and-down">
 								<ui:repeat value="#{ManagerController.polls}" var="poll">
 									<li
 										class="#{poll.id == ManagerController.selectedPoll.id ? 'active' : ''}">
 										<h:commandLink value="#{poll.name}"
 											action="#{ManagerController.setSelectedPoll(poll)}">
+											<ui:fragment
+												rendered="#{ManagerController.enabledPoll != null and poll.id == ManagerController.enabledPoll.id}">
+												<i class='material-icons right'>play_arrow</i>
+											</ui:fragment>
 											<f:ajax render=":pollContent :navBar" />
 										</h:commandLink>
 									</li>
+
 								</ui:repeat>
 								<li><h:commandLink
 										action="#{ManagerController.addNewPoll()}">
 										<i class="material-icons">add</i>
-										<f:ajax render=":pollContent :navBar :enabledPollSelector"
-											onevent="refreshEnabledPollSelector" />
+										<f:ajax render=":pollContent :navBar" />
 									</h:commandLink></li>
 							</ul>
+
 						</h:form>
 					</div>
-					</nav>
-				</h:panelGroup>
+				</div>
+				</nav>
+			</h:panelGroup>
 
-				<br />
+			<br />
 
+			<div class="container">
 				<h:panelGroup id="pollContent">
 					<ui:fragment rendered="#{ManagerController.selectedPoll != null}">
 						<div class="row">
-							<div class="col s12">
-								<h:form>
+							<h:form>
+								<div class="col">
+									<ui:fragment
+										rendered="#{ManagerController.enabledPoll == null or ManagerController.selectedPoll.id != ManagerController.enabledPoll.id}">
+										<h:commandLink value="Enable Poll"
+											styleClass="waves-effect waves-light btn #{style.colorPrimaryBase}"
+											action="#{ManagerController.setEnabledPoll(ManagerController.selectedPoll)}">
+											<i class="material-icons right">play_arrow</i>
+											<f:ajax render=":pollContent :navBar" />
+										</h:commandLink>
+									</ui:fragment>
+									<ui:fragment
+										rendered="#{ManagerController.enabledPoll != null and ManagerController.selectedPoll.id == ManagerController.enabledPoll.id}">
+										<h:commandLink value="Disable Poll"
+											styleClass="waves-effect waves-light btn #{style.colorPrimaryBase}"
+											action="#{ManagerController.setEnabledPoll(null)}">
+											<i class="material-icons right">stop</i>
+											<f:ajax render=":pollContent :navBar" />
+										</h:commandLink>
+									</ui:fragment>
+								</div>
+								<div class="col">
 									<h:link value="View Poll Entries"
 										styleClass="waves-effect waves-light btn #{style.colorPrimaryBase}"
 										outcome="pollEntries?pollId=#{ManagerController.selectedPoll.id}"
 										includeViewParams="true">
 										<i class="material-icons right">send</i>
 									</h:link>
+								</div>
+								<div class="col right">
 									<h:commandLink value="Delete Poll"
 										styleClass="waves-effect waves-light btn #{style.colorDelete} right"
 										action="#{ManagerController.deleteSelectedPoll()}">
 										<i class="material-icons right">delete</i>
-										<f:ajax render=":pollContent :navBar :enabledPollSelector"
-											onevent="refreshEnabledPollSelector" />
+										<f:ajax render=":pollContent :navBar" />
 									</h:commandLink>
-								</h:form>
-							</div>
+								</div>
+							</h:form>
 						</div>
+
 						<div class="row">
 							<div class="col s6">
 								<div class="card">
@@ -110,10 +133,8 @@
 											<ui:fragment rendered="#{ManagerController.editingName}">
 												<h:commandLink class="#{style.colorPrimaryText}">
 													<i class="material-icons">done</i>
-													<f:ajax execute="nameTextField"
-														render=":nameForm :navBar :enabledPollSelector"
-														listener="#{ManagerController.onEditNameDoneButtonFired}"
-														onevent="refreshEnabledPollSelector" />
+													<f:ajax execute="nameTextField" render=":nameForm :navBar"
+														listener="#{ManagerController.onEditNameDoneButtonFired}" />
 												</h:commandLink>
 											</ui:fragment>
 											<h:message for="nameForm" style="color: red" />
@@ -219,20 +240,6 @@
 				</h:panelGroup>
 			</div>
 		</div>
-
-	</ui:define>
-	<ui:define name="javascript">
-		<script type="text/javascript">
-			$(document).ready(function() {
-				$('select').material_select();
-			});
-
-			function refreshEnabledPollSelector(data) {
-				if (data.status === 'success') {
-					$('select').material_select();
-				}
-			}
-		</script>
 	</ui:define>
 </ui:composition>
 </html>

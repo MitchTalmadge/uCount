@@ -32,6 +32,8 @@ public class ManagerController {
 	@EJB
 	ContestantService contestantService;
 
+	private int enabledPollRadioValue;
+	
 	private List<Poll> polls;
 
 	/**
@@ -63,6 +65,9 @@ public class ManagerController {
 		if (!polls.isEmpty()) {
 			setSelectedPoll(polls.get(0));
 		}
+		
+		if(pollService.getEnabledPoll() != null)
+			this.enabledPollRadioValue = pollService.getEnabledPoll().getId();
 	}
 
 	public Poll getEnabledPoll() {
@@ -71,14 +76,6 @@ public class ManagerController {
 
 	public void setEnabledPoll(Poll poll) {
 		pollService.enablePoll(poll);
-	}
-
-	public void onEnabledPollChanged() {
-		Poll currentEnabledPoll = pollService.getEnabledPoll();
-		if (currentEnabledPoll != null)
-			System.out.println("Enabled Poll has been set to: " + currentEnabledPoll.getName());
-		else
-			System.out.println("Enabled Poll has been cleared. No polls are currently enabled.");
 	}
 
 	public List<Poll> getPolls() {
@@ -214,5 +211,5 @@ public class ManagerController {
 			pollService.refreshEnabledPoll();
 		}
 	}
-
+	
 }
