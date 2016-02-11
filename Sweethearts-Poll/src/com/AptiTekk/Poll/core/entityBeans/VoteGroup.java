@@ -17,89 +17,92 @@ import com.AptiTekk.Poll.core.Service;
 @Entity
 public class VoteGroup {
 
-	@Id
-	@GeneratedValue
-	private int id;
+    @Id
+    @GeneratedValue
+    private int id;
 
-	@ManyToOne
-	@JoinColumn(name = "pollId")
-	private Poll poll;
+    @ManyToOne
+    @JoinColumn(name = "pollId")
+    private Poll poll;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "voteGroup", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Contestant> contestants;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "voteGroup", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Contestant> contestants;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "voteGroup", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Entry> entries;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "voteGroup", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Entry> entries;
 
-	@Column(length = 128)
-	private String name;
-	
-	@Column(length = 64)
-	private String pictureFileName = Service.NOTFOUND_IMAGE_FILENAME;
+    @Column(length = 128)
+    private String name;
 
-	public VoteGroup() {
-		
-	}
-	
-	public VoteGroup(Poll poll, String name)
-	{
-		setPoll(poll);
-		setName(name);
-	}
+    @Column(length = 64)
+    private String pictureFileName = Service.NOTFOUND_IMAGE_FILENAME;
 
-	public VoteGroup(Poll poll, String name, String imageFileName)
-	{
-		setPoll(poll);
-		setName(name);
-		setPictureFileName(imageFileName);
-	}
+    public VoteGroup() {
 
-	public int getId() {
-		return id;
-	}
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public VoteGroup(Poll poll, String name) {
+	setPoll(poll);
+	setName(name);
+    }
 
-	public List<Contestant> getContestants() {
-		return contestants;
-	}
+    public VoteGroup(Poll poll, String name, String imageFileName) {
+	setPoll(poll);
+	setName(name);
+	setPictureFileName(imageFileName);
+    }
 
-	public void setContestants(List<Contestant> contestants) {
-		this.contestants = contestants;
-	}
+    public int getId() {
+	return id;
+    }
 
-	public Poll getPoll() {
-		return poll;
-	}
+    public void setId(int id) {
+	this.id = id;
+    }
 
-	public void setPoll(Poll poll) {
-		this.poll = poll;
-	}
+    public List<Contestant> getContestants() {
+	return contestants;
+    }
 
-	public List<Entry> getEntries() {
-		return entries;
-	}
+    public void setContestants(List<Contestant> contestants) {
+	this.contestants = contestants;
+    }
 
-	public void setEntries(List<Entry> entries) {
-		this.entries = entries;
-	}
+    public Poll getPoll() {
+	return poll;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setPoll(Poll poll) {
+	this.poll = poll;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public List<Entry> getEntries() {
+	return entries;
+    }
 
-	public String getPictureFileName() {
-		return pictureFileName;
-	}
+    public void setEntries(List<Entry> entries) {
+	this.entries = entries;
+    }
 
-	public void setPictureFileName(String pictureFileName) {
-		this.pictureFileName = pictureFileName;
-	}
+    public String getName() {
+	return name;
+    }
+
+    public void setName(String name) {
+	this.name = name;
+    }
+
+    public String getPictureFileName() {
+	return pictureFileName;
+    }
+
+    public void setPictureFileName(String pictureFileName) {
+	this.pictureFileName = pictureFileName;
+    }
+
+    public boolean hasPicture() {
+	return this.pictureFileName != null && !this.pictureFileName.isEmpty()
+		&& !this.pictureFileName.equals(Service.NOTFOUND_IMAGE_FILENAME);
+    }
 
 }

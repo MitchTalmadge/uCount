@@ -68,5 +68,10 @@ public class Contestant {
 	public void setPictureFileName(String pictureFileName) {
 		this.pictureFileName = pictureFileName;
 	}
+	
+	public boolean hasPicture() {
+		return this.pictureFileName != null && !this.pictureFileName.isEmpty()
+			&& !this.pictureFileName.equals(Service.NOTFOUND_IMAGE_FILENAME);
+	    }
 
 }

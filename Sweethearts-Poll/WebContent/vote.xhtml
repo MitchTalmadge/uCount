@@ -85,21 +85,25 @@
 										<div class="card">
 											<div class="card-content">
 												<div class="row">
-													<div class="col s3 card-image">
+													<h:panelGroup layout="block"
+														rendered="#{voteGroup.hasPicture()}"
+														class="col s3 card-image">
 														<h:graphicImage
 															value="/resources/votegroup_images/#{voteGroup.pictureFileName}" />
-													</div>
-													<div class="col s9">
+													</h:panelGroup>
+													<div class="col #{voteGroup.hasPicture() ? 's9' : 's12'}">
 														<span class="card-title">#{voteGroup.name}</span>
 													</div>
 													<ui:repeat value="#{voteGroup.contestants}"
 														var="contestant" varStatus="status">
 														<div class="col s3">
 															<div class="card">
-																<div class="card-image">
+																<h:panelGroup layout="block" class="card-image"
+																	style="padding: 10px"
+																	rendered="#contestant.hasPicture()">
 																	<h:graphicImage
 																		value="/resources/contestant_images/#{contestant.pictureFileName}" />
-																</div>
+																</h:panelGroup>
 																<div class="card-content">#{contestant.name}</div>
 															</div>
 														</div>
