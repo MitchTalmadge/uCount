@@ -48,13 +48,13 @@ public class PollService extends Service<Poll> {
 
 				httpGet.setHeader("User-Agent",
 						"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.103 Safari/537.36");
-				
+
 				HttpResponse httpResponse = httpClient.execute(httpGet);
 
 				System.out.println("\nSending 'GET' request to URL : " + url);
 				System.out.println("Response Code : " + httpResponse.getStatusLine().getStatusCode());
 				System.out.println("Cookie: " + httpResponse.getFirstHeader("Set-Cookie").getValue());
-				
+
 				this.cookie = httpResponse.getFirstHeader("Set-Cookie").getValue();
 
 			} catch (ClientProtocolException e) {
@@ -90,21 +90,19 @@ public class PollService extends Service<Poll> {
 		else
 			this.enabledPoll = null;
 	}
-	
+
 	@Override
-	public void delete(int id)
-	{
-	    Poll poll = get(id);
-	    if(poll != null)
-	    {
-		for(VoteGroup votegroup : poll.getVoteGroups())
-		{
-		    for(Contestant contestant : votegroup.getContestants())
-		    {
-			ContestantService.deleteContestantImage(contestant.getPictureFileName());
-		    }
+	public void delete(int id) {
+		Poll poll = get(id);
+		if (poll != null) {
+			for (VoteGroup votegroup : poll.getVoteGroups()) {
+				for (Contestant contestant : votegroup.getContestants()) {
+					ContestantService.deleteContestantImage(contestant.getPictureFileName());
+				}
+			}
 		}
-	    }
+		
+		super.delete(id);
 	}
 
 	public String getCookie() {

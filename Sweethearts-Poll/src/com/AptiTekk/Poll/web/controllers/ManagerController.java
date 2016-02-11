@@ -193,7 +193,7 @@ public class ManagerController {
 
 	public void addNewVoteGroup() {
 		if (selectedPoll != null) {
-			VoteGroup voteGroup = new VoteGroup(selectedPoll, "New Votegroup", "notFound.png");
+			VoteGroup voteGroup = new VoteGroup(selectedPoll, "New Votegroup");
 			voteGroupService.insert(voteGroup);
 			selectedPoll.getVoteGroups().add(voteGroup);
 			pollService.refreshEnabledPoll();

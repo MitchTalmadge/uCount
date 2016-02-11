@@ -19,18 +19,19 @@ public class VoteGroupService extends Service<VoteGroup> {
 	}
 
 	public List<VoteGroup> getVoteGroupsFromPoll(Poll poll) {
-		return new JPAQuery(entityManager).from(voteGroupTable).where(voteGroupTable.poll.eq(poll)).list(voteGroupTable);
+		return new JPAQuery(entityManager).from(voteGroupTable).where(voteGroupTable.poll.eq(poll))
+				.list(voteGroupTable);
 	}
-	
+
 	@Override
-	public void delete(int id)
-	{
-	    VoteGroup voteGroup = get(id);
-	    if(voteGroup != null)
-	    {
-		for(Contestant contestant : voteGroup.getContestants())
-		    ContestantService.deleteContestantImage(contestant.getPictureFileName());
-	    }
+	public void delete(int id) {
+		VoteGroup voteGroup = get(id);
+		if (voteGroup != null) {
+			for (Contestant contestant : voteGroup.getContestants())
+				ContestantService.deleteContestantImage(contestant.getPictureFileName());
+		}
+		
+		super.delete(id);
 	}
 
 }

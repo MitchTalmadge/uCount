@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.AptiTekk.Poll.core.Service;
+
 @Entity
 public class VoteGroup {
 
@@ -32,11 +34,17 @@ public class VoteGroup {
 	@Column(length = 128)
 	private String name;
 	
-	@Column
-	private String pictureFileName;
+	@Column(length = 64)
+	private String pictureFileName = Service.NOTFOUND_IMAGE_FILENAME;
 
 	public VoteGroup() {
 		
+	}
+	
+	public VoteGroup(Poll poll, String name)
+	{
+		setPoll(poll);
+		setName(name);
 	}
 
 	public VoteGroup(Poll poll, String name, String imageFileName)

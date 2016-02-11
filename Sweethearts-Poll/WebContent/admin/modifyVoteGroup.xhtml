@@ -29,7 +29,7 @@
 
 								<!-- This column contains the card for the vote group image. -->
 								<div class="col s2">
-									<div class="card">
+									<div class="card" style="margin: 0">
 										<div class="card-image" style="padding: 10px">
 											<h:graphicImage
 												value="/resources/votegroup_images/#{ModifyVoteGroupController.voteGroup.pictureFileName}" />
@@ -43,42 +43,39 @@
 									<!-- This fragment is shown if we are not editing the vote group -->
 									<ui:fragment
 										rendered="#{not ModifyVoteGroupController.editingVoteGroup}">
-										<h5 class="header #{style.textColorPrimary} left-align">Vote
-											Group Name: #{ModifyVoteGroupController.voteGroup.name}</h5>
-										<h:commandLink
-											styleClass="waves-effect waves-light btn #{style.colorPrimary}"
-											action="#{ModifyVoteGroupController.startVoteGroupEditing}">
+
+										<!-- This row is for the vote group info action buttons -->
+										<div class="row">
+											<h:commandLink
+												styleClass="waves-effect waves-light btn #{style.colorPrimary}"
+												action="#{ModifyVoteGroupController.startVoteGroupEditing}">
 											Change Name / Picture
 											<i class="material-icons right">mode_edit</i>
-											<f:ajax render=":voteGroupInfo" />
-										</h:commandLink>
+												<f:ajax render=":voteGroupInfo" />
+											</h:commandLink>
+										</div>
+
+										<!-- This row is for the vote group name -->
+										<div class="row">
+											<h3 class="header #{style.textColorPrimary} left-align">
+												#{ModifyVoteGroupController.voteGroup.name}</h3>
+										</div>
+
 									</ui:fragment>
 
 									<!-- This fragment is shown if we are editing the vote group -->
 									<ui:fragment
 										rendered="#{ModifyVoteGroupController.editingVoteGroup}">
 
-										<!-- This first row contains the field for editing the name -->
-										<div class="row">
-											<div class="col s8 input-field white-text">
-												<h:outputLabel class="active" for="voteGroupName">
-												Vote Group Name
-											</h:outputLabel>
-												<h:inputText id="voteGroupName"
-													value="#{ModifyVoteGroupController.editableVoteGroupName}"></h:inputText>
-											</div>
-										</div>
-
-										<!-- This second row contains the buttons for uploading images and saving. -->
+										<!-- This first row contains the buttons for uploading images and saving. -->
 										<div class="row">
 
 											<!-- Upload Image Button -->
-											<div class="col s5">
-												<div class="file-field input-field">
+											<div class="col s6">
+												<div class="upload-button file-field input-field">
 													<label
-														class="waves-effect waves-light btn #{style.colorPrimary} white-text"
-														style="display: inline-block; cursor: pointer;">
-														Upload Image <i class="material-icons">perm_media</i> <h:inputFile
+														class="waves-effect waves-light btn #{style.colorPrimary} white-text">
+														Upload Image <i class="material-icons right">perm_media</i> <h:inputFile
 															id="fileUploadField"
 															value="#{ModifyVoteGroupController.pictureUpload}"
 															style="display:none;">
@@ -91,7 +88,7 @@
 											</div>
 
 											<!-- Save Changes Button -->
-											<div class="col s4">
+											<div class="col s6">
 												<h:commandLink
 													styleClass="waves-effect waves-light btn #{style.colorPrimary}"
 													action="#{ModifyVoteGroupController.applyVoteGroupChanges}">
@@ -99,6 +96,17 @@
 													<i class="material-icons right">done</i>
 													<f:ajax execute="voteGroupName" render=":voteGroupInfo" />
 												</h:commandLink>
+											</div>
+										</div>
+
+										<!-- This second row contains the field for editing the name -->
+										<div class="row">
+											<div class="col s8 input-field white-text">
+												<h:outputLabel class="active" for="voteGroupName">
+												Vote Group Name
+											</h:outputLabel>
+												<h:inputText id="voteGroupName"
+													value="#{ModifyVoteGroupController.editableVoteGroupName}"></h:inputText>
 											</div>
 										</div>
 

@@ -1,46 +1,64 @@
- body {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-  }
+body {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+}
 
-  main {
-    flex: 1 0 auto;
-  }
-  
-    /* label color */
-   .input-field label {
-     color: #666;
-   }
-   
-   .input-field.white-text label {
-   	color: #FFF;   	
-   }
-   
-   /* label focus color */
-   .input-field input[type=text]:focus + label, .input-field input[type=password]:focus + label, .input-field textarea.materialize-textarea + label {
-     color: #01579b;
-   }
-   /* label underline focus color */
-   .input-field input[type=text]:focus, .input-field input[type=password]:focus, .input-field textarea.materialize-textarea:focus {
-     border-bottom: 1px solid #01579b;
-     box-shadow: 0 1px 0 0 #01579b;
-   }
-   /* valid color */
-   .input-field input[type=text].valid, .input-field input[type=password].valid, .input-field textarea.materialize-textarea.valid {
-     border-bottom: 1px solid #4CAF50;
-     box-shadow: 0 1px 0 0 #4CAF50;
-   }
-   /* invalid color */
-   .input-field input[type=text].invalid, .input-field input[type=password].invalid, .input-field textarea.materialize-textarea.invalid {
-     border-bottom: 1px solid #F44336;
-     box-shadow: 0 1px 0 0 #F44336;
-   }
-   /* icon prefix color */
-   .input-field .prefix {
-     color: #666;
-   }   
-   /* icon prefix focus color */
-   .input-field .prefix.active {
-     color: #01579b;
-   }
+main {
+	flex: 1 0 auto;
+}
+
+.upload-button {
+	margin:0 !important;
+}
+
+.upload-button label{
+    cursor: pointer !important;
+    float: none !important;
+    height: 36px !important;
+    line-height: 36px !important;
+    position: relative;
+    top: initial;
+    left: initial;
+}
+
+/* label color */
+.input-field label {
+	color: #666;
+}
+
+.input-field.white-text label {
+	color: #FFF;
+}
+
+/* label focus color */
+.input-field input[type=text]:focus+label, .input-field input[type=password]:focus+label,
+	.input-field textarea.materialize-textarea+label {
+	color: #01579b;
+}
+/* label underline focus color */
+.input-field input[type=text]:focus, .input-field input[type=password]:focus,
+	.input-field textarea.materialize-textarea:focus {
+	border-bottom: 1px solid #01579b;
+	box-shadow: 0 1px 0 0 #01579b;
+}
+/* valid color */
+.input-field input[type=text].valid, .input-field input[type=password].valid,
+	.input-field textarea.materialize-textarea.valid {
+	border-bottom: 1px solid #4CAF50;
+	box-shadow: 0 1px 0 0 #4CAF50;
+}
+/* invalid color */
+.input-field input[type=text].invalid, .input-field input[type=password].invalid,
+	.input-field textarea.materialize-textarea.invalid {
+	border-bottom: 1px solid #F44336;
+	box-shadow: 0 1px 0 0 #F44336;
+}
+/* icon prefix color */
+.input-field .prefix {
+	color: #666;
+}
+/* icon prefix focus color */
+.input-field .prefix.active {
+	color: #01579b;
+}
