@@ -195,20 +195,15 @@
 												<!-- Rendered if the Contestant currently being edited is not this Contestant. -->
 												<ui:fragment
 													rendered="#{ModifyVoteGroupController.contestantIdBeingEdited != contestant.id}">
-													<span class="card-title">#{contestant.firstName}
-														#{contestant.lastName}</span>
+													<span class="card-title">#{contestant.name}</span>
 												</ui:fragment>
 
 												<!-- Rendered if the Contestant currently being edited IS this Contestant. -->
 												<ui:fragment
 													rendered="#{ModifyVoteGroupController.contestantIdBeingEdited == contestant.id}">
-													<div class="input-field col s6">
-														<h:inputText id="firstNameTextField"
-															value="#{ModifyVoteGroupController.editableFirstName}" />
-													</div>
-													<div class="input-field col s6">
-														<h:inputText id="lastNameTextField"
-															value="#{ModifyVoteGroupController.editableLastName}" />
+													<div class="input-field col s12">
+														<h:inputText id="nameTextField"
+															value="#{ModifyVoteGroupController.editableName}" />
 													</div>
 												</ui:fragment>
 
@@ -240,7 +235,7 @@
 													<h:commandLink class="#{style.colorPrimaryText}"
 														action="#{ModifyVoteGroupController.onEditDoneButtonFired}">
 														<i class="material-icons">done</i>
-														<f:ajax execute="firstNameTextField lastNameTextField"
+														<f:ajax execute="nameTextField"
 															render=":contestants" />
 													</h:commandLink>
 

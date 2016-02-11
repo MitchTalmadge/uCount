@@ -41,8 +41,7 @@ public class ModifyVoteGroupController {
 	 * Temporary fields used for validation before inserting values into the
 	 * Contestant itself.
 	 */
-	private String editableFirstName = "";
-	private String editableLastName = "";
+	private String editableName = "";
 	
 	private String editableVoteGroupName = "";
 	private boolean editingVoteGroup = false;
@@ -67,7 +66,7 @@ public class ModifyVoteGroupController {
 	}
 
 	public void addNewContestant() {
-		Contestant contestant = new Contestant(voteGroup, "John", "Doe", "notFound.png");
+		Contestant contestant = new Contestant(voteGroup, "John Doe", "notFound.png");
 		contestantService.insert(contestant);
 
 		voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
@@ -102,8 +101,7 @@ public class ModifyVoteGroupController {
 			Contestant contestant = contestantService.get(contestantIdBeingEdited);
 			if (contestant != null) {
 				this.contestantIdBeingEdited = contestantIdBeingEdited;
-				this.setEditableFirstName(contestant.getFirstName());
-				this.setEditableLastName(contestant.getLastName());
+				this.setEditableName(contestant.getName());
 				PollLogger.logVerbose("Contestant Editing ID has been set to " + this.contestantIdBeingEdited);
 			} else {
 				this.contestantIdBeingEdited = -1;
@@ -111,29 +109,20 @@ public class ModifyVoteGroupController {
 		}
 	}
 
-	public String getEditableFirstName() {
-		return editableFirstName;
+	public String getEditableName() {
+		return editableName;
 	}
 
-	public void setEditableFirstName(String editableFirstName) {
-		this.editableFirstName = editableFirstName;
+	public void setEditableName(String editableName) {
+		this.editableName = editableName;
 	}
 
-	public String getEditableLastName() {
-		return editableLastName;
-	}
-
-	public void setEditableLastName(String editableLastName) {
-		this.editableLastName = editableLastName;
-	}
-	
 	public void startVoteGroupEditing() {
 		this.setEditingVoteGroup(true);
 	}
 	
 	public void applyVoteGroupChanges() {
 		if (this.getEditableVoteGroupName().isEmpty()) {
-			//System.out.println("First name was empty");
 			FacesContext.getCurrentInstance().addMessage("voteGroupEditForm",
 					new FacesMessage("The Vote Group Name cannot be empty!"));
 			return;
@@ -153,22 +142,16 @@ public class ModifyVoteGroupController {
 
 	public void onEditDoneButtonFired() {
 		PollLogger.logVerbose("Editing Done Button Fired.");
-		if (this.getEditableFirstName().isEmpty()) {
-			PollLogger.logVerbose("First name was empty");
+		if (this.getEditableName().isEmpty()) {
+			PollLogger.logVerbose("Contestant name was empty");
 			FacesContext.getCurrentInstance().addMessage("contestantEditForm",
-					new FacesMessage("The First Name cannot be empty!"));
-			return;
-		} else if (this.getEditableLastName().isEmpty()) {
-			PollLogger.logVerbose("Last name was empty");
-			FacesContext.getCurrentInstance().addMessage("contestantEditForm",
-					new FacesMessage("The Last Name cannot be empty!"));
+					new FacesMessage("The Contestant Name cannot be empty!"));
 			return;
 		}
 		Contestant contestant = contestantService.get(contestantIdBeingEdited);
 		if (contestant != null) {
 			PollLogger.logVerbose("Setting contestant fields...");
-			contestant.setFirstName(getEditableFirstName());
-			contestant.setLastName(getEditableLastName());
+			contestant.setName(getEditableName());
 			contestantService.merge(contestant);
 
 			voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh

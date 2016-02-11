@@ -21,11 +21,8 @@ public class Contestant {
 	@JoinColumn(name = "voteGroupId")
 	private VoteGroup voteGroup;
 
-	@Column(length = 32)
-	private String firstName;
-
-	@Column(length = 32)
-	private String lastName;
+	@Column(length = 64)
+	private String name;
 
 	@Column(length = 64)
 	private String pictureFileName = Service.NOTFOUND_IMAGE_FILENAME;
@@ -34,10 +31,9 @@ public class Contestant {
 		
 	}
 
-	public Contestant(VoteGroup voteGroup, String firstName, String lastName, String pictureFileName) {
+	public Contestant(VoteGroup voteGroup, String name, String pictureFileName) {
 		setVoteGroup(voteGroup);
-		setFirstName(firstName);
-		setLastName(lastName);
+		setName(name);
 		setPictureFileName(pictureFileName);
 	}
 
@@ -57,20 +53,12 @@ public class Contestant {
 		this.voteGroup = voteGroup;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getName() {
+		return name;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getPictureFileName() {
