@@ -73,14 +73,9 @@ public class VotingController {
 	 */
 	private boolean votingComplete = false;
 	
-	private List<VoteGroup> votingOptions;
-
 	@PostConstruct
 	public void init() {
 		this.setCredential(null);
-		
-		votingOptions = voteGroupService.getVoteGroupsFromPoll(getEnabledPoll());
-		PollLogger.logVerbose("Found " + votingOptions.size() + " voting options");
 	}
 
 	public Poll getEnabledPoll() {
@@ -242,14 +237,6 @@ public class VotingController {
 		entryService.insert(entry);
 		pollService.getEnabledPoll().getEntries().add(entry);
 		setVotingComplete(true);
-	}
-
-	public List<VoteGroup> getVotingOptions() {
-		return votingOptions;
-	}
-
-	public void setVotingOptions(List<VoteGroup> votingOptions) {
-		this.votingOptions = votingOptions;
 	}
 
 }
