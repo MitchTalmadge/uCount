@@ -10,13 +10,13 @@ import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
 public class ResultViewModel {
 
 	private String key;
-	private String value;
+	private int value;
 
 	public ResultViewModel() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ResultViewModel(String key, String value) {
+	public ResultViewModel(String key, int value) {
 		setKey(key);
 		setValue(value);
 	}
@@ -29,11 +29,11 @@ public class ResultViewModel {
 		this.key = key;
 	}
 
-	public String getValue() {
+	public int getValue() {
 		return value;
 	}
 
-	public void setValue(String value) {
+	public void setValue(int value) {
 		this.value = value;
 	}
 
@@ -46,7 +46,7 @@ public class ResultViewModel {
 				key += contestant.getName() + ((i == entry.getKey().getContestants().size()-1) ? "" : ", ");
 			}
 			
-			resultViewModels.add(new ResultViewModel(key, entry.getValue().toString()));
+			resultViewModels.add(new ResultViewModel(key, entry.getValue()));
 		}
 		return resultViewModels;
 	}

@@ -136,16 +136,11 @@ var redrawChart = function(targetID, newdata) {
 // Since our data is fake, adds some random changes to simulate a data stream.
 // Uses a callback because d3.json loading is asynchronous
 var pullData = function(settings, callback) {
-	d3.json("/ResultsProvider", function(err, data) {
+	d3.json("/Sweethearts-Poll/ResultsProvider", function(err, data) {
 		if (err)
 			return console.warn(err);
 
 		var newData = data;
-		data.forEach(function(d, i) {
-			var newValue = d.value
-					+ Math.floor((Math.random() * 10) - 5)(
-							newData[i].value = newValue) <= 0 ? 10 : newValue
-		})
 		newData = formatData(newData);
 
 		callback(settings, newData);

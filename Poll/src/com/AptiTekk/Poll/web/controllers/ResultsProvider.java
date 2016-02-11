@@ -41,7 +41,6 @@ public class ResultsProvider extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<ResultViewModel> results = ResultViewModel.toViewModels(service.calculateResults(pollService.getEnabledPoll().getId()));
-
 		
 		String json = new Gson().toJson(results);
 		
