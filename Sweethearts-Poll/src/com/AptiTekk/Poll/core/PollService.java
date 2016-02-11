@@ -16,7 +16,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import com.AptiTekk.Poll.core.entityBeans.Contestant;
 import com.AptiTekk.Poll.core.entityBeans.Poll;
 import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
-import com.AptiTekk.Poll.core.utilities.Logger;
+import com.AptiTekk.Poll.core.utilities.PollLogger;
 import com.AptiTekk.Poll.web.controllers.VotingController;
 
 @Startup
@@ -31,7 +31,7 @@ public class PollService extends Service<Poll> {
 
 	@PostConstruct
 	public void init() {
-		Logger.logVerbose("Starting PollService");
+		PollLogger.logVerbose("Starting PollService");
 		List<Poll> polls = getAll();
 		for (Poll poll : polls) {
 			if (poll.isEnabled()) {
@@ -40,7 +40,7 @@ public class PollService extends Service<Poll> {
 			}
 		}
 		if (VotingController.USE_JSD_AUTH) { // Must get cookie from Overdrive
-			Logger.logVerbose("Connecting to JSD Overdrive...");
+			PollLogger.logVerbose("Connecting to JSD Overdrive...");
 			try {
 				String url = "https://jordanut.libraryreserve.com/10/45/en/SignIn.htm?url=Default.htm";
 
@@ -52,9 +52,9 @@ public class PollService extends Service<Poll> {
 
 				HttpResponse httpResponse = httpClient.execute(httpGet);
 
-				Logger.logVerbose("\nSending 'GET' request to URL : " + url);
-				Logger.logVerbose("Response Code : " + httpResponse.getStatusLine().getStatusCode());
-				Logger.logVerbose("Cookie: " + httpResponse.getFirstHeader("Set-Cookie").getValue());
+				PollLogger.logVerbose("\nSending 'GET' request to URL : " + url);
+				PollLogger.logVerbose("Response Code : " + httpResponse.getStatusLine().getStatusCode());
+				PollLogger.logVerbose("Cookie: " + httpResponse.getFirstHeader("Set-Cookie").getValue());
 
 				this.cookie = httpResponse.getFirstHeader("Set-Cookie").getValue();
 
@@ -76,11 +76,11 @@ public class PollService extends Service<Poll> {
 			merge(enabledPoll);
 		}
 		if (poll != null) {
-			Logger.logVerbose("Setting Enabled Poll to " + poll.getName());
+			PollLogger.logVerbose("Setting Enabled Poll to " + poll.getName());
 			poll.setEnabled(true);
 			merge(poll);
 		} else {
-			Logger.logVerbose("Clearing Enabled Poll.");
+			PollLogger.logVerbose("Clearing Enabled Poll.");
 		}
 		this.enabledPoll = poll;
 	}
