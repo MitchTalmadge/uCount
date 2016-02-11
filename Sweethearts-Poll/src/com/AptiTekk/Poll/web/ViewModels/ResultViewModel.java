@@ -43,7 +43,7 @@ public class ResultViewModel {
 			String key = entry.getKey().getName() + " - ";
 			for(int i =0; i< entry.getKey().getContestants().size(); i++) {
 				Contestant contestant = entry.getKey().getContestants().get(i);
-				key += contestant.getFirstName() + " " + contestant.getLastName() + ((i == entry.getKey().getContestants().size()-1) ? "" : ", ");
+				key += contestant.getName() + ((i == entry.getKey().getContestants().size()-1) ? "" : ", ");
 			}
 			
 			resultViewModels.add(new ResultViewModel(key, entry.getValue().toString()));

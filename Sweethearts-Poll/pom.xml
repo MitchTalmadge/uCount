@@ -7,7 +7,7 @@
 	<packaging>war</packaging>
 	<name>Sweethearts Poll</name>
 	<properties>
-	
+
 		<!-- Explicitly declaring the source encoding eliminates the following 
 			message: -->
 		<!-- [WARNING] Using platform encoding (UTF-8 actually) to copy filtered 
@@ -31,7 +31,7 @@
 		<!-- maven-compiler-plugin -->
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.source>1.8</maven.compiler.source>
-				
+
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -292,6 +292,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.5</version>
+		</dependency>
+
+		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 			<version>7.0</version>
@@ -306,6 +312,6 @@
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.5.1</version>
-		</dependency>	
+		</dependency>
 	</dependencies>
 </project>
