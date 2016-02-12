@@ -4,7 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <ui:composition template="/WEB-INF/templates/default.xhtml">
 
@@ -166,14 +167,12 @@
 					<!-- This panel group contains the cards for each contestant -->
 					<h:panelGroup id="contestants">
 
-
-
 						<!-- We only use one row; the cards will overflow to the next row automatically. -->
 						<div class="row">
 
 							<!-- Iterate over the contestants of the voteGroup -->
-							<ui:repeat
-								value="#{ModifyVoteGroupController.voteGroup.contestants}"
+							<c:forEach
+								items="#{ModifyVoteGroupController.voteGroup.contestants}"
 								var="contestant">
 
 								<!-- Since we use s3, which is 1/4 of 12, we can fit 4 cards on each row. -->
@@ -202,7 +201,7 @@
 												<ui:fragment
 													rendered="#{ModifyVoteGroupController.contestantIdBeingEdited == contestant.id}">
 													<div class="input-field col s12">
-														<h:inputText id="nameTextField"
+														<h:inputText
 															value="#{ModifyVoteGroupController.editableName}" />
 													</div>
 												</ui:fragment>
@@ -256,7 +255,7 @@
 										</h:form>
 									</div>
 								</div>
-							</ui:repeat>
+							</c:forEach>
 						</div>
 					</h:panelGroup>
 				</ui:fragment>

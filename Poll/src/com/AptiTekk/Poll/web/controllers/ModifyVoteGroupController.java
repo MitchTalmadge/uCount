@@ -130,7 +130,7 @@ public class ModifyVoteGroupController {
 	    uploadVoteGroupImage();
 	else
 	    PollLogger.logVerbose("Not uploading picture -- it is null.");
-	
+
 	voteGroup.setName(editableVoteGroupName);
 	voteGroupService.merge(voteGroup);
 	voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
@@ -169,7 +169,7 @@ public class ModifyVoteGroupController {
     }
 
     public void uploadContestantImage() {
-	PollLogger.logVerbose("Uploading...");
+	PollLogger.logVerbose("Uploading Contestant Image...");
 
 	Contestant contestant = contestantService.get(contestantIdBeingEdited);
 
@@ -188,7 +188,7 @@ public class ModifyVoteGroupController {
     }
 
     public void uploadVoteGroupImage() {
-	PollLogger.logVerbose("Uploading...");
+	PollLogger.logVerbose("Uploading Votegroup Image...");
 
 	try {
 	    voteGroupService.uploadVoteGroupImage(voteGroup, getPictureUpload());
@@ -209,7 +209,6 @@ public class ModifyVoteGroupController {
     }
 
     public void setPictureUpload(Part pictureUpload) {
-	PollLogger.logVerbose("Picture has been uploaded to Controller.");
 	this.pictureUpload = pictureUpload;
     }
 
