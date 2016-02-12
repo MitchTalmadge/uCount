@@ -8,18 +8,26 @@ main {
 	flex: 1 0 auto;
 }
 
-.upload-button {
-	margin:0 !important;
+nav ul li.nav-message:hover {
+	background-color: initial !important;	
 }
 
-.upload-button label{
-    cursor: pointer !important;
-    float: none !important;
-    height: 36px !important;
-    line-height: 36px !important;
-    position: relative;
-    top: initial;
-    left: initial;
+nav ul li.nav-message {
+	font-weight:500;	
+}
+
+.upload-button {
+	margin: 0 !important;
+}
+
+.upload-button label {
+	cursor: pointer !important;
+	float: none !important;
+	height: 36px !important;
+	line-height: 36px !important;
+	position: relative;
+	top: initial;
+	left: initial;
 }
 
 /* label color */
