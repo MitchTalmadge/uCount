@@ -181,7 +181,7 @@
 
 									<!-- We force the card to be 450px tall. -->
 									<div class="card" style="height: 450px">
-										<h:form id="contestantEditForm" enctype="multipart/form-data">
+										<h:form enctype="multipart/form-data">
 
 											<!-- This displays the image of the contestant. -->
 											<div class="card-image" style="padding: 10px">
@@ -241,18 +241,15 @@
 													<!-- Upload image button -->
 													<label
 														class="#{style.colorPrimaryText} file-field input-field"
-														style="display: inline-block; cursor: pointer;"> <h:inputFile
-															id="fileUploadField"
+														style="display: inline-block; cursor: pointer;">
+														<h:inputFile
 															value="#{ModifyVoteGroupController.pictureUpload}"
 															style="display:none;">
 															<f:validator validatorId="ImageFileValidator" />
-														</h:inputFile> <i class="material-icons">perm_media</i>
+														</h:inputFile>
+														<i class="material-icons">perm_media</i>
 													</label>
 
-													<!-- Error messages -->
-													<h:message for="contestantEditForm" style="color: red" />
-
-													<!-- Display this if we ever get render working on file upload ajax <h:message for="fileUploadField" style="color: red" /> -->
 												</ui:fragment>
 
 											</div>
