@@ -44,7 +44,7 @@ public class ResultsProvider extends HttpServlet {
 		
 		String json = new Gson().toJson(results);
 		
-		System.out.println("RESULTS: "+ json);
+		//System.out.println("RESULTS: "+ json);
 	    response.setContentType("application/json");
 	    response.setCharacterEncoding("UTF-8");
 	    response.getWriter().write(json);
