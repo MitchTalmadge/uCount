@@ -15,6 +15,7 @@ import com.AptiTekk.Poll.core.entityBeans.QVoteGroup;
 import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
 import com.AptiTekk.Poll.core.utilities.FileUploadUtilities;
 import com.AptiTekk.Poll.core.utilities.PollLogger;
+import com.mysema.query.jpa.impl.JPADeleteClause;
 import com.mysema.query.jpa.impl.JPAQuery;
 
 @Singleton
@@ -46,11 +47,10 @@ public class VoteGroupService extends Service<VoteGroup> {
 	}
 
 	public void uploadVoteGroupImage(VoteGroup voteGroup, Part part) throws IOException {
-		if(voteGroup == null)
-		{
+		if (voteGroup == null) {
 			PollLogger.logError("VoteGroup was null.");
 		}
-		
+
 		// Generate a random file name.
 		String fileName = UUID.randomUUID().toString();
 
@@ -66,6 +66,10 @@ public class VoteGroupService extends Service<VoteGroup> {
 
 	public static void deleteVoteGroupImage(String fileName) {
 		FileUploadUtilities.deleteUploadedImage(VOTEGROUP_IMAGES_DIRECTORY_REL_PATH, fileName);
+	}
+
+	public void deleteAll(int pollId) {
+		new JPADeleteClause(entityManager, voteGroupTable).where(voteGroupTable.poll.id.eq(pollId)).execute();
 	}
 
 }

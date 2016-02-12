@@ -96,9 +96,11 @@ public class ManagerController {
 		Poll poll = new Poll("New Poll", "This is a new poll. Edit its description here!", false);
 		pollService.insert(poll);
 		PollLogger.logVerbose("Added New Poll.");
-		if(polls.isEmpty()) //If the number of available polls right now is 0, call init so that a poll is selected.
+		if (polls.isEmpty()) // If the number of available polls right now is 0,
+								// call init so that a poll is selected.
 			init();
-		else //Otherwise, just refresh the polls list; don't leave the currently selected poll.
+		else // Otherwise, just refresh the polls list; don't leave the
+				// currently selected poll.
 			polls = pollService.getAll();
 	}
 
@@ -207,5 +209,14 @@ public class ManagerController {
 			pollService.refreshEnabledPoll();
 		}
 	}
-	
+
+	public void deleteAllVoteGroups() {
+		if (selectedPoll != null) {
+			PollLogger.logVerbose("Deleting All Vote Groups");
+			voteGroupService.deleteAll(selectedPoll.getId());
+			selectedPoll.getVoteGroups().clear();
+			pollService.refreshEnabledPoll();
+		}
+	}
+
 }
