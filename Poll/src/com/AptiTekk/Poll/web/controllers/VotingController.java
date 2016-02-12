@@ -1,7 +1,7 @@
 package com.AptiTekk.Poll.web.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -9,15 +9,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.persistence.GenerationType;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
 
 import com.AptiTekk.Poll.core.ContestantService;
 import com.AptiTekk.Poll.core.CredentialService;
@@ -30,240 +21,192 @@ import com.AptiTekk.Poll.core.entityBeans.Poll;
 import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
 import com.AptiTekk.Poll.core.utilities.BanHelper;
 import com.AptiTekk.Poll.core.utilities.PollLogger;
+import com.AptiTekk.Poll.core.utilities.PropertiesHelper;
+import com.AptiTekk.Poll.core.utilities.StudentIDAuthenticator;
+import com.AptiTekk.Poll.core.utilities.StudentIDAuthenticator.AuthenticationException;
 
 @ManagedBean
 @ViewScoped
 public class VotingController {
 
-	public static final boolean USE_JSD_AUTH = true;
+    @EJB
+    PollService pollService;
 
-	@EJB
-	PollService pollService;
+    @EJB
+    VoteGroupService voteGroupService;
 
-	@EJB
-	VoteGroupService voteGroupService;
+    @EJB
+    ContestantService contestantService;
 
-	@EJB
-	ContestantService contestantService;
+    @EJB
+    EntryService entryService;
 
-	@EJB
-	EntryService entryService;
+    @EJB
+    CredentialService credentialService;
 
-	@EJB
-	CredentialService credentialService;
+    @EJB
+    StudentIDAuthenticator studentIdAuthenticator;
 
-	/**
-	 * The student's credential. Null if the user has not yet validated their
-	 * student ID.
-	 */
-	private Credential credential;
+    private static String AUTH_METHOD = "Basic";
 
-	/**
-	 * The input string when the student types in their ID.
-	 */
-	private String studentIdInput;
-
-	/**
-	 * Will be set to true if an entry is found with the student's ID.
-	 */
-	private boolean studentHasAlreadyVoted = false;
-
-	/**
-	 * Will be set to true upon voting completion. Used to display thank-you
-	 * page.
-	 */
-	private boolean votingComplete = false;
-
-	private final static String BAN_NAME = "Vote";
-	private final static int MAX_FAILED_COUNT = 4;
-	private final static int BAN_LENGTH_HOURS = 6;
-
-	/**
-	 * True if the user has entered too many invalid ids and was banned.
-	 */
-	private boolean isBanned = BanHelper.isUserBanned(BAN_NAME);
-
-	@PostConstruct
-	public void init() {
-		this.setCredential(null);
+    static {
+	String authMethod = PropertiesHelper.getApplicationProperty("authentication_method");
+	if (authMethod != null
+		&& (authMethod.equals("JSD") || authMethod.equals("Basic") || authMethod.equals("Table"))) {
+	    PollLogger.logVerbose("Authentication Method has been set to " + authMethod);
+	    AUTH_METHOD = authMethod;
 	}
+    }
 
-	public Poll getEnabledPoll() {
-		return pollService.getEnabledPoll();
-	}
+    /**
+     * The student's credential. Null if the user has not yet validated their
+     * student ID.
+     */
+    private Credential credential;
 
-	public List<VoteGroup> getVoteGroups() {
-		return voteGroupService.getVoteGroupsFromPoll(getEnabledPoll());
-	}
+    /**
+     * The input string when the student types in their ID.
+     */
+    private String studentIdInput;
 
-	public void authenticate() {
-		PollLogger.logVerbose("Authenticating...");
-		this.setCredential(null);
+    /**
+     * Will be set to true if an entry is found with the student's ID.
+     */
+    private boolean studentHasAlreadyVoted = false;
 
-		if (studentIdInput != null && !studentIdInput.isEmpty()) {
-			if (USE_JSD_AUTH) {
-				try { // VERY HACKY METHOD of authenticating student IDs ---
-						// Uses Jordan School District's Overdrive login.
-					int studentId = Integer.parseInt(studentIdInput);
-					PollLogger.logVerbose("Using JSD Authentication...");
+    /**
+     * Will be set to true upon voting completion. Used to display thank-you
+     * page.
+     */
+    private boolean votingComplete = false;
 
-					String url = "https://jordanut.libraryreserve.com/10/45/en/BANGAuthenticate.dll";
+    private final static String BAN_NAME = "Vote";
+    private final static int MAX_FAILED_COUNT = 4;
+    private final static int BAN_LENGTH_HOURS = 6;
 
-					HttpClient httpClient = HttpClientBuilder.create().build();
-					HttpPost httpPost = new HttpPost(url);
+    /**
+     * True if the user has entered too many invalid ids and was banned.
+     */
+    private boolean isBanned = BanHelper.isUserBanned(BAN_NAME);
 
-					httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
-					httpPost.setHeader("User-Agent",
-							"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.103 Safari/537.36");
-					httpPost.setHeader("Cookie", pollService.getCookie());
+    @PostConstruct
+    public void init() {
+	this.setCredential(null);
+	studentIdAuthenticator.updateOverdriveCookie(false);
+    }
 
-					List<NameValuePair> urlParameters = new ArrayList<>();
-					urlParameters.add(new BasicNameValuePair("URL", "Default.htm"));
-					urlParameters.add(new BasicNameValuePair("LibraryCardILS", "jordan"));
-					urlParameters.add(new BasicNameValuePair("lcn", studentId + ""));
+    public Poll getEnabledPoll() {
+	return pollService.getEnabledPoll();
+    }
 
-					httpPost.setEntity(new UrlEncodedFormEntity(urlParameters));
+    public List<VoteGroup> getVoteGroups() {
+	return voteGroupService.getVoteGroupsFromPoll(getEnabledPoll());
+    }
 
-					HttpResponse httpResponse = httpClient.execute(httpPost);
-					String location = httpResponse.getFirstHeader("Location").getValue();
+    public void authenticate() {
+	PollLogger.logVerbose("Authenticating...");
+	this.setCredential(null);
 
-					if (location.contains("Error.htm")) {
-						PollLogger.logVerbose("ID Was Invalid!");
-						FacesContext.getCurrentInstance().addMessage(null,
-								new FacesMessage("The entered Student ID is invalid."));
+	if (studentIdInput != null && !studentIdInput.isEmpty()) {
+	    try {
+		int studentId = Integer.parseInt(studentIdInput);
 
-						BanHelper.recordFailedAttempt(BAN_NAME);
-						if (BanHelper.getNumberFailedAttempts(BAN_NAME) >= MAX_FAILED_COUNT) {
-							BanHelper.banUser(BAN_NAME, BAN_LENGTH_HOURS);
-							isBanned = true;
-						}
-					} else {
-						PollLogger.logVerbose("ID Was Valid!");
-						Credential credential;
-						// Inserts a Credential row so that an Entry can be
-						// made.
-						if ((credential = credentialService.getByStudentNumber(studentId)) == null) {
-							PollLogger.logVerbose("Creating new Credential.");
-							credential = new Credential(studentId);
-							credentialService.insert(credential);
-						} else {
-							PollLogger.logVerbose("Found existing Credential.");
-						}
-						setCredential(credential); // Sets the valid Student ID
-													// for use when voting.
+		if (AUTH_METHOD.equals("JSD"))
+		    setCredential(studentIdAuthenticator.authenticateIdUsingOverdrive(studentId));
+		else if (AUTH_METHOD.equals("Basic"))
+		    setCredential(studentIdAuthenticator.authenticateIdUsingBasicVerification(studentId));
+		else if (AUTH_METHOD.equals("Table"))
+		    setCredential(studentIdAuthenticator.authenticateIdUsingCredentialsTable(studentId));
 
-						BanHelper.clearFailedAttempts(BAN_NAME);
-						BanHelper.unBanUser(BAN_NAME);
-					}
+		BanHelper.clearFailedAttempts(BAN_NAME);
+		BanHelper.unBanUser(BAN_NAME);
+	    } catch (NumberFormatException e) {
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Please only enter numbers."));
+	    } catch (AuthenticationException e) {
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
 
-				} catch (NumberFormatException e) {
-					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Please only enter numbers."));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
-			} else { // Use basic authentication methods
-				PollLogger.logVerbose("Using Basic Authentication...");
-				try {
-					if (!studentIdInput.startsWith("8") || studentIdInput.length() != 7) {
-						PollLogger.logVerbose("Invalid Format!");
-						FacesContext.getCurrentInstance().addMessage(null,
-								new FacesMessage("The Student ID you entered is invalid. Please try again."));
-					} else {
-						PollLogger.logVerbose("ID Was Valid!");
-						int studentId = Integer.parseInt(studentIdInput);
-						Credential credential;
-						// Inserts a Credential row so that an Entry can be
-						// made.
-						if ((credential = credentialService.getByStudentNumber(studentId)) == null) {
-							PollLogger.logVerbose("Creating new Credential.");
-							credential = new Credential(studentId);
-							credentialService.insert(credential);
-						} else {
-							PollLogger.logVerbose("Found existing Credential.");
-						}
-						setCredential(credential); // Sets the valid Student ID
-													// for use when voting.
-					}
-				} catch (NumberFormatException e) {
-					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Please only enter numbers."));
-				}
-			}
-		} else {
-			PollLogger.logVerbose("Input was empty!");
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage("You must enter your Student ID to continue."));
+		BanHelper.recordFailedAttempt(BAN_NAME);
+		if (BanHelper.getNumberFailedAttempts(BAN_NAME) >= MAX_FAILED_COUNT) {
+		    BanHelper.banUser(BAN_NAME, BAN_LENGTH_HOURS);
+		    isBanned = true;
 		}
-		studentIdInput = null; // Clear input
+	    }
+	} else {
+	    PollLogger.logVerbose("Input was empty!");
+	    FacesContext.getCurrentInstance().addMessage(null,
+		    new FacesMessage("You must enter your Student ID to continue."));
 	}
+	studentIdInput = null; // Clear input
 
-	public Credential getCredential() {
-		return credential;
-	}
+    }
 
-	public void setCredential(Credential credential) {
-		this.credential = credential;
-		if (credential == null)
-			this.setStudentHasAlreadyVoted(false);
-		else
-			this.setStudentHasAlreadyVoted(
-					entryService.hasStudentVoted(credential.getId(), pollService.getEnabledPoll().getId()));
-	}
+    public Credential getCredential() {
+	return credential;
+    }
 
-	public String getStudentIdInput() {
-		return studentIdInput;
-	}
+    public void setCredential(Credential credential) {
+	this.credential = credential;
+	if (credential == null)
+	    this.setStudentHasAlreadyVoted(false);
+	else
+	    this.setStudentHasAlreadyVoted(
+		    entryService.hasStudentVoted(credential.getId(), pollService.getEnabledPoll().getId()));
+    }
 
-	public void setStudentIdInput(String studentIdInput) {
-		PollLogger.logVerbose("Setting Student ID Input to " + studentIdInput);
-		this.studentIdInput = studentIdInput;
-	}
+    public String getStudentIdInput() {
+	return studentIdInput;
+    }
 
-	public boolean getStudentHasAlreadyVoted() {
-		return studentHasAlreadyVoted;
-	}
+    public void setStudentIdInput(String studentIdInput) {
+	PollLogger.logVerbose("Setting Student ID Input to " + studentIdInput);
+	this.studentIdInput = studentIdInput;
+    }
 
-	public void setStudentHasAlreadyVoted(boolean studentHasAlreadyVoted) {
-		this.studentHasAlreadyVoted = studentHasAlreadyVoted;
-	}
+    public boolean getStudentHasAlreadyVoted() {
+	return studentHasAlreadyVoted;
+    }
 
-	public boolean isVotingComplete() {
-		return votingComplete;
-	}
+    public void setStudentHasAlreadyVoted(boolean studentHasAlreadyVoted) {
+	this.studentHasAlreadyVoted = studentHasAlreadyVoted;
+    }
 
-	public void setVotingComplete(boolean votingComplete) {
-		this.votingComplete = votingComplete;
-	}
+    public boolean isVotingComplete() {
+	return votingComplete;
+    }
 
-	public void dummyVote() {
-		PollLogger.logVerbose("Adding Dummy Vote");
-		if (credential != null && pollService.getEnabledPoll() != null) {
-			List<VoteGroup> voteGroups = pollService.getEnabledPoll().getVoteGroups();
-			if (!voteGroups.isEmpty()) {
-				Entry entry = new Entry(getCredential(), voteGroups.get(0), pollService.getEnabledPoll());
-				entryService.insert(entry);
-				pollService.getEnabledPoll().getEntries().add(entry);
-				setVotingComplete(true);
-				PollLogger.logVerbose("Dummy Vote Added");
-			} else {
-				PollLogger.logError("Dummy Vote could not be added. VoteGroups was empty.");
-			}
-		}
-	}
+    public void setVotingComplete(boolean votingComplete) {
+	this.votingComplete = votingComplete;
+    }
 
-	public void recordVote(VoteGroup voteGroup) {
-		Entry entry = new Entry(getCredential(), voteGroup, pollService.getEnabledPoll());
+    public void dummyVote() {
+	PollLogger.logVerbose("Adding Dummy Vote");
+	if (credential != null && pollService.getEnabledPoll() != null) {
+	    List<VoteGroup> voteGroups = pollService.getEnabledPoll().getVoteGroups();
+	    if (!voteGroups.isEmpty()) {
+		Entry entry = new Entry(getCredential(), voteGroups.get(0), pollService.getEnabledPoll());
 		entryService.insert(entry);
 		pollService.getEnabledPoll().getEntries().add(entry);
 		setVotingComplete(true);
+		PollLogger.logVerbose("Dummy Vote Added");
+	    } else {
+		PollLogger.logError("Dummy Vote could not be added. VoteGroups was empty.");
+	    }
 	}
+    }
 
-	public boolean getBanned() {
-		return isBanned;
-	}
+    public void recordVote(VoteGroup voteGroup) {
+	Entry entry = new Entry(getCredential(), voteGroup, pollService.getEnabledPoll());
+	entryService.insert(entry);
+	pollService.getEnabledPoll().getEntries().add(entry);
+	setVotingComplete(true);
+    }
 
-	public void setBanned(boolean isBanned) {
-		this.isBanned = isBanned;
-	}
+    public boolean getBanned() {
+	return isBanned;
+    }
+
+    public void setBanned(boolean isBanned) {
+	this.isBanned = isBanned;
+    }
 
 }

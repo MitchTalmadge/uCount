@@ -23,7 +23,6 @@ import com.AptiTekk.Poll.web.controllers.VotingController;
 @Singleton
 public class PollService extends Service<Poll> {
 	private Poll enabledPoll;
-	private String cookie = "";
 
 	public PollService() {
 		this.type = Poll.class;
@@ -37,31 +36,6 @@ public class PollService extends Service<Poll> {
 			if (poll.isEnabled()) {
 				this.enabledPoll = poll;
 				break;
-			}
-		}
-		if (VotingController.USE_JSD_AUTH) { // Must get cookie from Overdrive
-			PollLogger.logVerbose("Connecting to JSD Overdrive...");
-			try {
-				String url = "https://jordanut.libraryreserve.com/10/45/en/SignIn.htm?url=Default.htm";
-
-				HttpClient httpClient = HttpClientBuilder.create().build();
-				HttpGet httpGet = new HttpGet(url);
-
-				httpGet.setHeader("User-Agent",
-						"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.103 Safari/537.36");
-
-				HttpResponse httpResponse = httpClient.execute(httpGet);
-
-				PollLogger.logVerbose("\nSending 'GET' request to URL : " + url);
-				PollLogger.logVerbose("Response Code : " + httpResponse.getStatusLine().getStatusCode());
-				PollLogger.logVerbose("Cookie: " + httpResponse.getFirstHeader("Set-Cookie").getValue());
-
-				this.cookie = httpResponse.getFirstHeader("Set-Cookie").getValue();
-
-			} catch (ClientProtocolException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
 	}
@@ -102,12 +76,8 @@ public class PollService extends Service<Poll> {
 				}
 			}
 		}
-		
-		super.delete(id);
-	}
 
-	public String getCookie() {
-		return cookie;
+		super.delete(id);
 	}
 
 }
