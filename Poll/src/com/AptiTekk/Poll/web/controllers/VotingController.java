@@ -1,7 +1,7 @@
 package com.AptiTekk.Poll.web.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -9,15 +9,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.persistence.GenerationType;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
 
 import com.AptiTekk.Poll.core.ContestantService;
 import com.AptiTekk.Poll.core.CredentialService;
@@ -30,12 +21,12 @@ import com.AptiTekk.Poll.core.entityBeans.Poll;
 import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
 import com.AptiTekk.Poll.core.utilities.BanHelper;
 import com.AptiTekk.Poll.core.utilities.PollLogger;
+import com.AptiTekk.Poll.core.utilities.StudentIDAuthenticator;
+import com.AptiTekk.Poll.core.utilities.StudentIDAuthenticator.AuthenticationException;
 
 @ManagedBean
 @ViewScoped
 public class VotingController {
-
-	public static final boolean USE_JSD_AUTH = true;
 
 	@EJB
 	PollService pollService;
@@ -51,6 +42,18 @@ public class VotingController {
 
 	@EJB
 	CredentialService credentialService;
+
+	private static String AUTH_METHOD = "Basic";
+
+	static {
+		ResourceBundle resourceBundle = ResourceBundle.getBundle("application",
+				FacesContext.getCurrentInstance().getViewRoot().getLocale());
+		String authMethod = resourceBundle.getString("authentication_method");
+		if (authMethod != null
+				&& (authMethod.equals("JSD") || authMethod.equals("Basic") || authMethod.equals("Table"))) {
+			AUTH_METHOD = authMethod;
+		}
+	}
 
 	/**
 	 * The student's credential. Null if the user has not yet validated their
@@ -101,92 +104,27 @@ public class VotingController {
 		this.setCredential(null);
 
 		if (studentIdInput != null && !studentIdInput.isEmpty()) {
-			if (USE_JSD_AUTH) {
-				try { // VERY HACKY METHOD of authenticating student IDs ---
-						// Uses Jordan School District's Overdrive login.
-					int studentId = Integer.parseInt(studentIdInput);
-					PollLogger.logVerbose("Using JSD Authentication...");
+			try {
+				int studentId = Integer.parseInt(studentIdInput);
 
-					String url = "https://jordanut.libraryreserve.com/10/45/en/BANGAuthenticate.dll";
+				if (AUTH_METHOD.equals("JSD"))
+					setCredential(StudentIDAuthenticator.authenticateIdUsingOverdrive(studentId));
+				else if (AUTH_METHOD.equals("Basic"))
+					setCredential(StudentIDAuthenticator.authenticateIdUsingBasicVerification(studentId));
+				else if (AUTH_METHOD.equals("Table"))
+					setCredential(StudentIDAuthenticator.authenticateIdUsingCredentialsTable(studentId));
 
-					HttpClient httpClient = HttpClientBuilder.create().build();
-					HttpPost httpPost = new HttpPost(url);
+				BanHelper.clearFailedAttempts(BAN_NAME);
+				BanHelper.unBanUser(BAN_NAME);
+			} catch (NumberFormatException e) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Please only enter numbers."));
+			} catch (AuthenticationException e) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
 
-					httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
-					httpPost.setHeader("User-Agent",
-							"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.103 Safari/537.36");
-					httpPost.setHeader("Cookie", pollService.getCookie());
-
-					List<NameValuePair> urlParameters = new ArrayList<>();
-					urlParameters.add(new BasicNameValuePair("URL", "Default.htm"));
-					urlParameters.add(new BasicNameValuePair("LibraryCardILS", "jordan"));
-					urlParameters.add(new BasicNameValuePair("lcn", studentId + ""));
-
-					httpPost.setEntity(new UrlEncodedFormEntity(urlParameters));
-
-					HttpResponse httpResponse = httpClient.execute(httpPost);
-					String location = httpResponse.getFirstHeader("Location").getValue();
-
-					if (location.contains("Error.htm")) {
-						PollLogger.logVerbose("ID Was Invalid!");
-						FacesContext.getCurrentInstance().addMessage(null,
-								new FacesMessage("The entered Student ID is invalid."));
-
-						BanHelper.recordFailedAttempt(BAN_NAME);
-						if (BanHelper.getNumberFailedAttempts(BAN_NAME) >= MAX_FAILED_COUNT) {
-							BanHelper.banUser(BAN_NAME, BAN_LENGTH_HOURS);
-							isBanned = true;
-						}
-					} else {
-						PollLogger.logVerbose("ID Was Valid!");
-						Credential credential;
-						// Inserts a Credential row so that an Entry can be
-						// made.
-						if ((credential = credentialService.getByStudentNumber(studentId)) == null) {
-							PollLogger.logVerbose("Creating new Credential.");
-							credential = new Credential(studentId);
-							credentialService.insert(credential);
-						} else {
-							PollLogger.logVerbose("Found existing Credential.");
-						}
-						setCredential(credential); // Sets the valid Student ID
-													// for use when voting.
-
-						BanHelper.clearFailedAttempts(BAN_NAME);
-						BanHelper.unBanUser(BAN_NAME);
-					}
-
-				} catch (NumberFormatException e) {
-					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Please only enter numbers."));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
-			} else { // Use basic authentication methods
-				PollLogger.logVerbose("Using Basic Authentication...");
-				try {
-					if (!studentIdInput.startsWith("8") || studentIdInput.length() != 7) {
-						PollLogger.logVerbose("Invalid Format!");
-						FacesContext.getCurrentInstance().addMessage(null,
-								new FacesMessage("The Student ID you entered is invalid. Please try again."));
-					} else {
-						PollLogger.logVerbose("ID Was Valid!");
-						int studentId = Integer.parseInt(studentIdInput);
-						Credential credential;
-						// Inserts a Credential row so that an Entry can be
-						// made.
-						if ((credential = credentialService.getByStudentNumber(studentId)) == null) {
-							PollLogger.logVerbose("Creating new Credential.");
-							credential = new Credential(studentId);
-							credentialService.insert(credential);
-						} else {
-							PollLogger.logVerbose("Found existing Credential.");
-						}
-						setCredential(credential); // Sets the valid Student ID
-													// for use when voting.
-					}
-				} catch (NumberFormatException e) {
-					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Please only enter numbers."));
+				BanHelper.recordFailedAttempt(BAN_NAME);
+				if (BanHelper.getNumberFailedAttempts(BAN_NAME) >= MAX_FAILED_COUNT) {
+					BanHelper.banUser(BAN_NAME, BAN_LENGTH_HOURS);
+					isBanned = true;
 				}
 			}
 		} else {
@@ -195,6 +133,7 @@ public class VotingController {
 					new FacesMessage("You must enter your Student ID to continue."));
 		}
 		studentIdInput = null; // Clear input
+
 	}
 
 	public Credential getCredential() {
