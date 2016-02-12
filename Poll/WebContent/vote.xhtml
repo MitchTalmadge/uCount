@@ -31,120 +31,133 @@
 			</ui:fragment>
 
 			<div class="container">
+			
 				<!-- This group is only shown when a poll is enabled. -->
 				<h:panelGroup id="mainContent"
 					rendered="#{VotingController.enabledPoll != null}">
 
-					<!-- Shown when the user is not authenticated (credential will be null). Asks the user to enter their Student ID -->
-					<ui:fragment rendered="#{VotingController.credential == null}">
-						<h5 class="header center">Please Enter Your Student ID</h5>
-						<div class="row center">
-							<h:form styleClass="col s12" id="voteForm"
-								onkeypress="if (event.keyCode == 13) { document.getElementById('voteForm:submit').click(); return false; }">
-								<div class="row center">
-									<h:messages globalOnly="true" style="color: red" />
-									<div class="input-field col s12 m6 push-m3">
-										<i class="material-icons prefix">account_circle</i>
-										<h:inputText id="studentIdField"
-											value="#{VotingController.studentIdInput}" required="true" />
-										<h:outputLabel for="studentIdField">
+					<!-- This fragment is shown if the user is not banned. -->
+					<ui:fragment rendered="#{!VotingController.banned}">
+
+						<!-- Shown when the user is not authenticated (credential will be null). Asks the user to enter their Student ID -->
+						<ui:fragment rendered="#{VotingController.credential == null}">
+							<h5 class="header center">Please Enter Your Student ID</h5>
+							<div class="row center">
+								<h:form styleClass="col s12" id="voteForm"
+									onkeypress="if (event.keyCode == 13) { document.getElementById('voteForm:submit').click(); return false; }">
+									<div class="row center">
+										<h:messages globalOnly="true" style="color: red" />
+										<div class="input-field col s12 m6 push-m3">
+											<i class="material-icons prefix">account_circle</i>
+											<h:inputText id="studentIdField"
+												value="#{VotingController.studentIdInput}" required="true" />
+											<h:outputLabel for="studentIdField">
 												Student ID
 											</h:outputLabel>
+										</div>
 									</div>
-								</div>
-								<div class="row center">
-									<div class="col s12 m4 push-m4">
-										<h:commandLink id="submit" style="width:100%; font-size:24px"
-											styleClass="#{style.colorPrimary} btn-large waves-effect waves-light"
-											value="Go Vote" action="#{VotingController.authenticate}">
-											<i class="material-icons right">send</i>
-											<f:ajax execute="studentIdField" render=":mainContent" />
-										</h:commandLink>
+									<div class="row center">
+										<div class="col s12 m4 push-m4">
+											<h:commandLink id="submit" style="width:100%; font-size:24px"
+												styleClass="#{style.colorPrimary} btn-large waves-effect waves-light"
+												value="Go Vote" action="#{VotingController.authenticate}">
+												<i class="material-icons right">send</i>
+												<f:ajax execute="studentIdField" render=":mainContent" />
+											</h:commandLink>
+										</div>
 									</div>
-								</div>
-							</h:form>
-						</div>
-					</ui:fragment>
+								</h:form>
+							</div>
+						</ui:fragment>
 
-					<!-- Shown when the user is authenticated. -->
-					<ui:fragment rendered="#{VotingController.credential != null}">
+						<!-- Shown when the user is authenticated. -->
+						<ui:fragment rendered="#{VotingController.credential != null}">
 
-						<!-- Shown when the user has not already submitted an entry. Should allow them to vote. -->
-						<ui:fragment
-							rendered="#{!VotingController.studentHasAlreadyVoted}">
+							<!-- Shown when the user has not already submitted an entry. Should allow them to vote. -->
+							<ui:fragment
+								rendered="#{!VotingController.studentHasAlreadyVoted}">
 
-							<br />
+								<br />
 
-							<!-- This fragment will contain the votegroups and allow the user to vote -->
-							<ui:fragment rendered="#{!VotingController.votingComplete}">
+								<!-- This fragment will contain the votegroups and allow the user to vote -->
+								<ui:fragment rendered="#{!VotingController.votingComplete}">
 
-								<h:form id="votingOptionsForm">
-									<!-- Iterate over the contestants of the voteGroup -->
-									<ui:repeat value="#{VotingController.enabledPoll.voteGroups}"
-										var="voteGroup">
-										<div class="card">
-											<div class="card-content">
-												<div class="row">
-													<h:panelGroup layout="block"
-														rendered="#{voteGroup.hasPicture()}"
-														class="col s3 card-image">
-														<h:graphicImage
-															value="/resources/votegroup_images/#{voteGroup.pictureFileName}" />
-													</h:panelGroup>
-													<div class="col #{voteGroup.hasPicture() ? 's9' : 's12'}">
-														<span class="card-title">#{voteGroup.name}</span>
-													</div>
-													<ui:repeat value="#{voteGroup.contestants}"
-														var="contestant" varStatus="status">
-														<div class="col s4 m3">
-															<div class="card">
-																<h:panelGroup layout="block" class="card-image"
-																	style="padding: 10px"
-																	rendered="#{contestant.hasPicture()}">
-																	<h:graphicImage
-																		value="/resources/contestant_images/#{contestant.pictureFileName}" />
-																</h:panelGroup>
-																<div class="card-content">#{contestant.name}</div>
-															</div>
+									<h:form id="votingOptionsForm">
+										<!-- Iterate over the contestants of the voteGroup -->
+										<ui:repeat value="#{VotingController.enabledPoll.voteGroups}"
+											var="voteGroup">
+											<div class="card">
+												<div class="card-content">
+													<div class="row">
+														<h:panelGroup layout="block"
+															rendered="#{voteGroup.hasPicture()}"
+															class="col s3 card-image">
+															<h:graphicImage
+																value="/resources/votegroup_images/#{voteGroup.pictureFileName}" />
+														</h:panelGroup>
+														<div class="col #{voteGroup.hasPicture() ? 's9' : 's12'}">
+															<span class="card-title">#{voteGroup.name}</span>
 														</div>
-													</ui:repeat>
+														<ui:repeat value="#{voteGroup.contestants}"
+															var="contestant" varStatus="status">
+															<div class="col s4 m3">
+																<div class="card">
+																	<h:panelGroup layout="block" class="card-image"
+																		style="padding: 10px"
+																		rendered="#{contestant.hasPicture()}">
+																		<h:graphicImage
+																			value="/resources/contestant_images/#{contestant.pictureFileName}" />
+																	</h:panelGroup>
+																	<div class="card-content">#{contestant.name}</div>
+																</div>
+															</div>
+														</ui:repeat>
 
+													</div>
+												</div>
+												<div class="card-action">
+													<h:commandLink value="Vote"
+														styleClass="col s12 card-action waves-effect waves-light btn-large #{style.colorPrimaryBase} white-text"
+														style="padding:0 10px 0 0;font-size:28px;width:100%"
+														action="#{VotingController.recordVote(voteGroup)}">
+														<i class="material-icons right">send</i>
+														<f:ajax render=":mainContent" />
+													</h:commandLink>
 												</div>
 											</div>
-											<div class="card-action">
-												<h:commandLink value="Vote"
-													styleClass="col s12 card-action waves-effect waves-light btn-large #{style.colorPrimaryBase} white-text"
-													style="padding:0 10px 0 0;font-size:28px;width:100%"
-													action="#{VotingController.recordVote(voteGroup)}">
-													<i class="material-icons right">send</i>
-													<f:ajax render=":mainContent" />
-												</h:commandLink>
-											</div>
-										</div>
-									</ui:repeat>
-								</h:form>
+										</ui:repeat>
+									</h:form>
+								</ui:fragment>
 							</ui:fragment>
-						</ui:fragment>
 
-						<!-- Shown when the student has already submitted an entry. -->
-						<ui:fragment rendered="#{VotingController.studentHasAlreadyVoted}">
-							<h3 class="header center">You have already voted!</h3>
-							<p class="flow-text center">
-								It appears that you have already voted. If you would like to
-								change your vote, or believe that someone else has voted using
-								your ID, please talk to Mr. McDonald in room V107, or <a
-									href="mailto:mitch@mitchtalmadge.com">send us an email</a>.
-							</p>
-						</ui:fragment>
+							<!-- Shown when the student has already submitted an entry. -->
+							<ui:fragment
+								rendered="#{VotingController.studentHasAlreadyVoted}">
+								<h3 class="header center">You have already voted!</h3>
+								<p class="flow-text center">It appears that you have already
+									voted. If you would like to change your vote, or believe that
+									someone else has voted using your ID, please talk to Mr.
+									McDonald in room V107.</p>
+							</ui:fragment>
 
-						<!-- This fragment will tell the user thank you for voting. -->
-						<ui:fragment rendered="#{VotingController.votingComplete}">
-							<h3 class="header center">Thank You!</h3>
-							<p class="flow-text center">Your vote has been recorded.
-								Thank you for voting!</p>
-						</ui:fragment>
+							<!-- This fragment will tell the user thank you for voting. -->
+							<ui:fragment rendered="#{VotingController.votingComplete}">
+								<h3 class="header center">Thank You!</h3>
+								<p class="flow-text center">Your vote has been recorded.
+									Thank you for voting!</p>
+							</ui:fragment>
 
+						</ui:fragment>
 					</ui:fragment>
+
+					<!-- This fragment is shown if the user IS banned. -->
+					<ui:fragment rendered="#{VotingController.banned}">
+						<h3 class="header center">You have been banned.</h3>
+						<p class="flow-text center">You have entered an invalid
+							Student ID too many times and have been banned. Please talk to
+							Mr. McDonald in room V107 if you believe this is in error.</p>
+					</ui:fragment>
+
 				</h:panelGroup>
 			</div>
 		</div>

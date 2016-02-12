@@ -28,6 +28,7 @@ import com.AptiTekk.Poll.core.entityBeans.Credential;
 import com.AptiTekk.Poll.core.entityBeans.Entry;
 import com.AptiTekk.Poll.core.entityBeans.Poll;
 import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
+import com.AptiTekk.Poll.core.utilities.BanHelper;
 import com.AptiTekk.Poll.core.utilities.PollLogger;
 
 @ManagedBean
@@ -72,7 +73,16 @@ public class VotingController {
 	 * page.
 	 */
 	private boolean votingComplete = false;
-	
+
+	private final static String BAN_NAME = "Vote";
+	private final static int MAX_FAILED_COUNT = 4;
+	private final static int BAN_LENGTH_HOURS = 6;
+
+	/**
+	 * True if the user has entered too many invalid ids and was banned.
+	 */
+	private boolean isBanned = BanHelper.isUserBanned(BAN_NAME);
+
 	@PostConstruct
 	public void init() {
 		this.setCredential(null);
@@ -121,6 +131,12 @@ public class VotingController {
 						PollLogger.logVerbose("ID Was Invalid!");
 						FacesContext.getCurrentInstance().addMessage(null,
 								new FacesMessage("The entered Student ID is invalid."));
+
+						BanHelper.recordFailedAttempt(BAN_NAME);
+						if (BanHelper.getNumberFailedAttempts(BAN_NAME) >= MAX_FAILED_COUNT) {
+							BanHelper.banUser(BAN_NAME, BAN_LENGTH_HOURS);
+							isBanned = true;
+						}
 					} else {
 						PollLogger.logVerbose("ID Was Valid!");
 						Credential credential;
@@ -135,6 +151,9 @@ public class VotingController {
 						}
 						setCredential(credential); // Sets the valid Student ID
 													// for use when voting.
+
+						BanHelper.clearFailedAttempts(BAN_NAME);
+						BanHelper.unBanUser(BAN_NAME);
 					}
 
 				} catch (NumberFormatException e) {
@@ -231,12 +250,20 @@ public class VotingController {
 			}
 		}
 	}
-	
+
 	public void recordVote(VoteGroup voteGroup) {
 		Entry entry = new Entry(getCredential(), voteGroup, pollService.getEnabledPoll());
 		entryService.insert(entry);
 		pollService.getEnabledPoll().getEntries().add(entry);
 		setVotingComplete(true);
+	}
+
+	public boolean getBanned() {
+		return isBanned;
+	}
+
+	public void setBanned(boolean isBanned) {
+		this.isBanned = isBanned;
 	}
 
 }
