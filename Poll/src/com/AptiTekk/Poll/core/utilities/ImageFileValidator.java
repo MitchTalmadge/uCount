@@ -21,6 +21,10 @@ public class ImageFileValidator implements Validator {
 		PollLogger.logVerbose("Validating Image Upload...");
 		List<FacesMessage> msgs = new ArrayList<FacesMessage>();
 		Part file = (Part) value;
+		if (file == null) {
+			PollLogger.logVerbose("No image was uploaded.");
+			return;
+		}
 		if (file.getSize() > 1024 * 1024 * 2) {
 			PollLogger.logVerbose("Image is too large. Maximum size is 2MB.");
 			msgs.add(new FacesMessage("Image is too large. Maximum size is 2MB."));

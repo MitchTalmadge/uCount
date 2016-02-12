@@ -51,8 +51,8 @@
 													<h:commandLink
 														styleClass="waves-effect waves-light btn #{style.colorPrimary}"
 														action="#{ModifyVoteGroupController.startVoteGroupEditing}">
-											Change Name / Picture
-											<i class="material-icons right">mode_edit</i>
+														Change Name / Picture
+														<i class="material-icons right">mode_edit</i>
 														<f:ajax render=":voteGroupInfo" />
 													</h:commandLink>
 												</div>
@@ -82,12 +82,10 @@
 														<label
 															class="waves-effect waves-light btn #{style.colorPrimary} white-text">
 															Upload Image <i class="material-icons right">perm_media</i>
-															<h:inputFile id="fileUploadField"
+															<h:inputFile id="voteGroupImageUploader"
 																value="#{ModifyVoteGroupController.pictureUpload}"
 																style="display:none;">
 																<f:validator validatorId="ImageFileValidator" />
-																<f:ajax execute="fileUploadField"
-																	listener="#{ModifyVoteGroupController.uploadVoteGroupImage}" />
 															</h:inputFile>
 														</label>
 													</div>
@@ -98,9 +96,10 @@
 													<h:commandLink
 														styleClass="waves-effect waves-light btn #{style.colorPrimary}"
 														action="#{ModifyVoteGroupController.applyVoteGroupChanges}">
-													Done
-													<i class="material-icons right">done</i>
-														<f:ajax execute="voteGroupName" render=":voteGroupInfo" />
+														Done
+														<i class="material-icons right">done</i>
+														<!-- <f:ajax execute="@form"
+															render=":voteGroupInfo" /> -->
 													</h:commandLink>
 												</div>
 											</div>
@@ -135,38 +134,39 @@
 
 			<div class="container">
 
-				<!-- This row contains the buttons at the top of the page, under the header. -->
-				<div class="row">
-					<h:form>
+				<!-- We only show the page contents if the voteGroup is not null. -->
+				<ui:fragment
+					rendered="#{ModifyVoteGroupController.voteGroup != null}">
+					<!-- This row contains the buttons at the top of the page, under the header. -->
+					<div class="row">
+						<h:form>
 
-						<!-- Add New Contestant Button -->
-						<div class="col s6">
-							<h:commandLink value="Add New Contestant"
-								styleClass="waves-effect waves-light btn #{style.colorPrimary}"
-								action="#{ModifyVoteGroupController.addNewContestant}">
-								<i class="material-icons right">add</i>
-								<f:ajax render=":contestants" />
-							</h:commandLink>
-						</div>
+							<!-- Add New Contestant Button -->
+							<div class="col s6">
+								<h:commandLink value="Add New Contestant"
+									styleClass="waves-effect waves-light btn #{style.colorPrimary}"
+									action="#{ModifyVoteGroupController.addNewContestant}">
+									<i class="material-icons right">add</i>
+									<f:ajax render=":contestants" />
+								</h:commandLink>
+							</div>
 
-						<!-- Delete All Contestants Button -->
-						<div class="col s6">
-							<h:commandLink value="Delete All Contestants"
-								styleClass="waves-effect waves-light btn #{style.colorDelete} right"
-								action="#{ModifyVoteGroupController.deleteAllContestants}">
-								<i class="material-icons right">delete</i>
-								<f:ajax render=":contestants" />
-							</h:commandLink>
-						</div>
-					</h:form>
-				</div>
+							<!-- Delete All Contestants Button -->
+							<div class="col s6">
+								<h:commandLink value="Delete All Contestants"
+									styleClass="waves-effect waves-light btn #{style.colorDelete} right"
+									action="#{ModifyVoteGroupController.deleteAllContestants}">
+									<i class="material-icons right">delete</i>
+									<f:ajax render=":contestants" />
+								</h:commandLink>
+							</div>
+						</h:form>
+					</div>
 
-				<!-- This panel group contains the cards for each contestant -->
-				<h:panelGroup id="contestants">
+					<!-- This panel group contains the cards for each contestant -->
+					<h:panelGroup id="contestants">
 
-					<!-- We only show the cards (and ui:repeat) if the voteGroup is not null. -->
-					<ui:fragment
-						rendered="#{ModifyVoteGroupController.voteGroup != null}">
+
 
 						<!-- We only use one row; the cards will overflow to the next row automatically. -->
 						<div class="row">
@@ -216,7 +216,7 @@
 												<ui:fragment
 													rendered="#{ModifyVoteGroupController.contestantIdBeingEdited != contestant.id}">
 													<h:commandLink class="#{style.colorPrimaryText}"
-														action="#{ModifyVoteGroupController.onEditButtonFired(contestant.id)}">
+														action="#{ModifyVoteGroupController.startContestantEditing(contestant.id)}">
 														<i class="material-icons">mode_edit</i>
 														<f:ajax render=":contestants" />
 													</h:commandLink>
@@ -233,10 +233,9 @@
 
 													<!-- Done button -->
 													<h:commandLink class="#{style.colorPrimaryText}"
-														action="#{ModifyVoteGroupController.onEditDoneButtonFired}">
+														action="#{ModifyVoteGroupController.applyContestantChanges}">
 														<i class="material-icons">done</i>
-														<f:ajax execute="nameTextField"
-															render=":contestants" />
+														<!-- <f:ajax execute="@form" render=":contestants" /> -->
 													</h:commandLink>
 
 													<!-- Upload image button -->
@@ -247,8 +246,6 @@
 															value="#{ModifyVoteGroupController.pictureUpload}"
 															style="display:none;">
 															<f:validator validatorId="ImageFileValidator" />
-															<f:ajax execute="fileUploadField"
-																listener="#{ModifyVoteGroupController.uploadContestantImage}" />
 														</h:inputFile> <i class="material-icons">perm_media</i>
 													</label>
 
@@ -264,8 +261,8 @@
 								</div>
 							</ui:repeat>
 						</div>
-					</ui:fragment>
-				</h:panelGroup>
+					</h:panelGroup>
+				</ui:fragment>
 			</div>
 		</div>
 	</ui:define>

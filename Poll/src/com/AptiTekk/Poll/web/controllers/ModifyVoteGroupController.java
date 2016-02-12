@@ -1,7 +1,6 @@
 package com.AptiTekk.Poll.web.controllers;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -15,7 +14,6 @@ import com.AptiTekk.Poll.core.ContestantService;
 import com.AptiTekk.Poll.core.VoteGroupService;
 import com.AptiTekk.Poll.core.entityBeans.Contestant;
 import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
-import com.AptiTekk.Poll.core.utilities.FileUploadUtilities;
 import com.AptiTekk.Poll.core.utilities.PollLogger;
 
 @ManagedBean
@@ -31,7 +29,7 @@ public class ModifyVoteGroupController {
 	private VoteGroup voteGroup;
 
 	private Part pictureUpload;
-	
+
 	/**
 	 * Refers to the id of the Contestant currently being edited. -1 for none.
 	 */
@@ -42,7 +40,7 @@ public class ModifyVoteGroupController {
 	 * Contestant itself.
 	 */
 	private String editableName = "";
-	
+
 	private String editableVoteGroupName = "";
 	private boolean editingVoteGroup = false;
 
@@ -120,98 +118,84 @@ public class ModifyVoteGroupController {
 	public void startVoteGroupEditing() {
 		this.setEditingVoteGroup(true);
 	}
-	
+
 	public void applyVoteGroupChanges() {
 		if (this.getEditableVoteGroupName().isEmpty()) {
 			FacesContext.getCurrentInstance().addMessage("voteGroupEditForm",
 					new FacesMessage("The Vote Group Name cannot be empty!"));
 			return;
 		}
+
+		if (getPictureUpload() != null)
+			uploadVoteGroupImage();
+
 		voteGroup.setName(editableVoteGroupName);
 		voteGroupService.merge(voteGroup);
-
 		voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
-																// voteGroup
+																// VoteGroup
+
 		this.setEditingVoteGroup(false);
 	}
 
-	public void onEditButtonFired(int contestantId) {
+	public void startContestantEditing(int contestantId) {
 		PollLogger.logVerbose("Editing Contestant with ID: " + contestantId);
 		this.setContestantIdBeingEdited(contestantId);
 	}
 
-	public void onEditDoneButtonFired() {
-		PollLogger.logVerbose("Editing Done Button Fired.");
+	public void applyContestantChanges() {
 		if (this.getEditableName().isEmpty()) {
-			PollLogger.logVerbose("Contestant name was empty");
 			FacesContext.getCurrentInstance().addMessage("contestantEditForm",
 					new FacesMessage("The Contestant Name cannot be empty!"));
 			return;
 		}
+
+		if (getPictureUpload() != null)
+			uploadContestantImage();
+
 		Contestant contestant = contestantService.get(contestantIdBeingEdited);
 		if (contestant != null) {
-			PollLogger.logVerbose("Setting contestant fields...");
 			contestant.setName(getEditableName());
 			contestantService.merge(contestant);
 
 			voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
 																	// voteGroup
 		}
+
 		this.setContestantIdBeingEdited(-1);
 	}
 
 	public void uploadContestantImage() {
-		Contestant contestant = contestantService.get(contestantIdBeingEdited);
-		if (contestant == null) {
-			PollLogger.logError("Contestant not found.");
-			return;
-		}
-
 		PollLogger.logVerbose("Uploading...");
 
-		// Generate a random file name.
-		String fileName = UUID.randomUUID().toString();
+		Contestant contestant = contestantService.get(contestantIdBeingEdited);
 
 		try {
-			FileUploadUtilities.uploadPartToPathAndCrop(getPictureUpload(), "/resources/contestant_images/", fileName,
-					300);
-
-			contestant.setPictureFileName(fileName);
-			contestantService.merge(contestant);
-
-			voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
-																	// voteGroup
-			PollLogger.logVerbose("Contestant Image Added.");
+			contestantService.uploadContestantImage(contestant, getPictureUpload());
 		} catch (IOException e) {
 			FacesContext.getCurrentInstance().addMessage("contestantEditForm",
 					new FacesMessage("The image could not be applied."));
 			e.printStackTrace();
 		}
+
+		voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
+																// VoteGroup
 
 		setPictureUpload(null);
 	}
-	
+
 	public void uploadVoteGroupImage() {
 		PollLogger.logVerbose("Uploading...");
 
-		// Generate a random file name.
-		String fileName = String.valueOf(voteGroup.getId());
-
 		try {
-			FileUploadUtilities.uploadPartToPathAndCrop(getPictureUpload(), "/resources/votegroup_images/", fileName,
-					300);
-
-			voteGroup.setPictureFileName(fileName);
-			voteGroupService.merge(voteGroup);
-
-			voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
-																	// voteGroup
-			PollLogger.logVerbose("VoteGroup Image Updated.");
+			voteGroupService.uploadVoteGroupImage(voteGroup, getPictureUpload());
 		} catch (IOException e) {
 			FacesContext.getCurrentInstance().addMessage("contestantEditForm",
 					new FacesMessage("The image could not be applied."));
 			e.printStackTrace();
 		}
+
+		voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
+																// VoteGroup
 
 		setPictureUpload(null);
 	}

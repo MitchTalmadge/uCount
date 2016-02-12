@@ -5,7 +5,7 @@
 	<artifactId>Poll</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>Sweethearts Poll</name>
+	<name>Poll</name>
 	<properties>
 
 		<!-- Explicitly declaring the source encoding eliminates the following 

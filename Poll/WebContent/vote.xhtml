@@ -96,11 +96,11 @@
 													</div>
 													<ui:repeat value="#{voteGroup.contestants}"
 														var="contestant" varStatus="status">
-														<div class="col s3">
+														<div class="col s4 m3">
 															<div class="card">
 																<h:panelGroup layout="block" class="card-image"
 																	style="padding: 10px"
-																	rendered="#contestant.hasPicture()">
+																	rendered="#{contestant.hasPicture()}">
 																	<h:graphicImage
 																		value="/resources/contestant_images/#{contestant.pictureFileName}" />
 																</h:panelGroup>
@@ -110,16 +110,15 @@
 													</ui:repeat>
 
 												</div>
-
-												<div class="row">
-													<h:commandLink value="Vote"
-														styleClass="col s12 card-action waves-effect waves-light btn-large #{style.colorPrimaryBase}"
-														style="padding:0;padding-right:10px;font-size:28px"
-														action="#{VotingController.recordVote(voteGroup)}">
-														<i class="material-icons right">send</i>
-														<f:ajax render=":mainContent" />
-													</h:commandLink>
-												</div>
+											</div>
+											<div class="card-action">
+												<h:commandLink value="Vote"
+													styleClass="col s12 card-action waves-effect waves-light btn-large #{style.colorPrimaryBase} white-text"
+													style="padding:0 10px 0 0;font-size:28px;width:100%"
+													action="#{VotingController.recordVote(voteGroup)}">
+													<i class="material-icons right">send</i>
+													<f:ajax render=":mainContent" />
+												</h:commandLink>
 											</div>
 										</div>
 									</ui:repeat>
