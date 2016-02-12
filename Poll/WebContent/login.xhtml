@@ -16,40 +16,47 @@
 			<br />
 
 			<div class="container">
-				<div class="row center">
-					<div class="col s12 m4 push-m4">
-						<h:form id="loginForm"
-							onkeypress="if (event.keyCode == 13) { document.getElementById('loginForm:submit').click(); return false; }">
-							<h:messages globalOnly="true" style="color: red" />
-							<div class="row">
-								<div class="input-field col s12">
-									<h:outputLabel for="username">
+				<ui:fragment rendered="#{!LoginController.banned}">
+					<div class="row center">
+						<div class="col s12 m4 push-m4">
+							<h:form id="loginForm"
+								onkeypress="if (event.keyCode == 13) { document.getElementById('loginForm:submit').click(); return false; }">
+								<h:messages globalOnly="true" style="color: red" />
+								<div class="row">
+									<div class="input-field col s12">
+										<h:outputLabel for="username">
 											Name
 										</h:outputLabel>
-									<h:inputText id="username"
-										value="#{LoginController.submitUsername}"></h:inputText>
+										<h:inputText id="username"
+											value="#{LoginController.submitUsername}"></h:inputText>
+									</div>
 								</div>
-							</div>
-							<div class="row">
-								<div class="input-field col s12">
-									<h:outputLabel for="password">
+								<div class="row">
+									<div class="input-field col s12">
+										<h:outputLabel for="password">
 											Password
 										</h:outputLabel>
-									<h:inputSecret id="password"
-										value="#{LoginController.password}"></h:inputSecret>
+										<h:inputSecret id="password"
+											value="#{LoginController.password}"></h:inputSecret>
+									</div>
 								</div>
-							</div>
-							<h:commandLink id="submit"
-								styleClass="#{style.colorPrimary} btn waves-effect waves-light"
-								value="Login" action="#{LoginController.login}">
-								<i class="material-icons right">send</i>
-							</h:commandLink>
-						</h:form>
+								<h:commandLink id="submit"
+									styleClass="#{style.colorPrimary} btn waves-effect waves-light"
+									value="Login" action="#{LoginController.login}">
+									<i class="material-icons right">send</i>
+								</h:commandLink>
+							</h:form>
+						</div>
+						<div class="col s12 m4">
+							<br />
+						</div>
 					</div>
-					<div class="col s12 m4">
-						<br />
-					</div>
-				</div>
+				</ui:fragment>
+				<ui:fragment rendered="#{LoginController.banned}">
+					<h3 class="header center">You have been banned.</h3>
+					<p class="flow-text center">You have been banned from logging
+						in due to too many failed attempts.</p>
+				</ui:fragment>
 				<br /> <br />
 			</div>
 		</div>

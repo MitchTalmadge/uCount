@@ -1,6 +1,5 @@
 package com.AptiTekk.Poll.web.controllers;
 
-import java.io.IOException;
 import java.security.Principal;
 
 import javax.annotation.PostConstruct;
@@ -11,13 +10,15 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
+import com.AptiTekk.Poll.core.utilities.BanHelper;
 import com.AptiTekk.Poll.core.utilities.PollLogger;
 
 @ManagedBean
 @SessionScoped
 public class LoginController {
+
+	private final static String BAN_NAME = "Login";
 
 	@PostConstruct
 	public void init() {
@@ -27,6 +28,8 @@ public class LoginController {
 
 	private String username;
 	private String password;
+
+	private boolean isBanned = BanHelper.isUserBanned(BAN_NAME);
 
 	public Principal getUser() {
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -49,8 +52,9 @@ public class LoginController {
 				} else {
 					PollLogger.logVerbose("Login Successful - Adding Session Variables");
 					context.getExternalContext().getSessionMap().put("user", this.username);
-					context.getExternalContext().getSessionMap().put("userRole",
-							((request.isUserInRole("admin")) ? "admin" : "user"));
+					context.getExternalContext().getSessionMap().put("userRole", "admin");
+					BanHelper.unBanUser(BAN_NAME);
+					BanHelper.clearFailedAttempts(BAN_NAME);
 				}
 			} else {
 				request.logout();
@@ -60,6 +64,11 @@ public class LoginController {
 
 		} catch (ServletException e) {
 			context.addMessage(null, new FacesMessage("Login Failed: Incorrect Credentials."));
+			BanHelper.recordFailedAttempt(BAN_NAME);
+			if (BanHelper.getNumberFailedAttempts(BAN_NAME) >= 3) {
+				BanHelper.banUser(BAN_NAME, 6);
+				setBanned(true);
+			}
 			return "error";
 		}
 		return "manage";
@@ -94,6 +103,14 @@ public class LoginController {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public boolean getBanned() {
+		return isBanned;
+	}
+
+	public void setBanned(boolean isBanned) {
+		this.isBanned = isBanned;
 	}
 
 }
