@@ -8,12 +8,24 @@ main {
 	flex: 1 0 auto;
 }
 
+nav ul li.nav-message {
+	font-weight:500;
+	padding: 0 10px;	
+}
+
 nav ul li.nav-message:hover {
 	background-color: initial !important;	
 }
 
-nav ul li.nav-message {
-	font-weight:500;	
+nav ul li.nav-message-mobile {
+	color: #444;
+    font-weight: 500;
+    font-size: 18px;
+    padding: 0 30px;	
+}
+
+nav ul li.nav-message-mobile:hover {
+	background-color: initial !important;	
 }
 
 .upload-button {

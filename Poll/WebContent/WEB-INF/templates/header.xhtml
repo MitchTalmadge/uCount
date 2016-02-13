@@ -9,53 +9,48 @@
 		<div class="nav-wrapper container">
 			<h:link id="logo-container" styleClass="brand-logo" outcome="vote"
 				value="Bingham Sweethearts" />
-				
-			<!-- Desktop Navigation Menu -->
-			<ul class="right hide-on-med-and-down">
-				
-				<!-- Shown when an admin is logged in -->
-				<ui:fragment rendered="#{LoginController.user != null}">
-					<li style="padding: 0 10px" class="nav-message">Hello,
-						#{LoginController.user.name}!</li>
-					<li>
-						<h:link outcome="manage" value="Admin Panel" />
-					</li>
-					<li>
-						<h:link outcome="liveResults" value="Live Results" />
-					</li>
-					<li>
-						<h:form>
-							<h:commandLink action="#{LoginController.logout}">Sign Out</h:commandLink>
-						</h:form>
-					</li>
-				</ui:fragment>
-				
-				<!-- Shown to the public (nobody is logged in) -->
-				<ui:fragment rendered="#{LoginController.user == null}">
-					<li>
-						<h:link outcome="login" value="Login" />
-					</li>
-				</ui:fragment>
-			</ul>
-			
-			<!-- Mobile Navigation Menu -->
-			<ul id="nav-mobile" class="side-nav">
-				<ui:fragment rendered="#{LoginController.user != null}">
-					<li>
-						<h:form>
-							<h:commandLink action="#{LoginController.logout}">Sign Out</h:commandLink>
-						</h:form>
-					</li>
-				</ui:fragment>
-				<ui:fragment rendered="#{LoginController.user == null}">
-					<li>
-						<h:link outcome="login" value="Login" />
-					</li>
-				</ui:fragment>
-			</ul>
-			
 			<a href="#" data-activates="nav-mobile" class="button-collapse"><i
 				class="material-icons">menu</i></a>
+
+			<!-- Desktop Navigation Menu -->
+			<ul class="right hide-on-med-and-down">
+
+				<!-- Shown when an admin is logged in -->
+				<ui:fragment rendered="#{LoginController.user != null}">
+					<li class="nav-message">Hello,
+						#{LoginController.user.name}!</li>
+					<li><h:link outcome="manage" value="Admin Panel" /></li>
+					<li><h:link outcome="liveResults" value="Live Results" /></li>
+					<li><h:form>
+							<h:commandLink action="#{LoginController.logout}">Sign Out</h:commandLink>
+						</h:form></li>
+				</ui:fragment>
+
+				<!-- Shown to the public (nobody is logged in) -->
+				<ui:fragment rendered="#{LoginController.user == null}">
+					<li><h:link outcome="login" value="Login" /></li>
+				</ui:fragment>
+			</ul>
+
+			<!-- Mobile Navigation Menu -->
+			<ul class="side-nav" id="nav-mobile">
+
+				<!-- Shown when an admin is logged in -->
+				<ui:fragment rendered="#{LoginController.user != null}">
+					<li class="nav-message-mobile">Hello,
+						#{LoginController.user.name}!</li>
+					<li><h:link outcome="manage" value="Admin Panel" /></li>
+					<li><h:link outcome="liveResults" value="Live Results" /></li>
+					<li><h:form>
+							<h:commandLink action="#{LoginController.logout}">Sign Out</h:commandLink>
+						</h:form></li>
+				</ui:fragment>
+
+				<!-- Shown to the public (nobody is logged in) -->
+				<ui:fragment rendered="#{LoginController.user == null}">
+					<li><h:link outcome="login" value="Login" /></li>
+				</ui:fragment>
+			</ul>
 		</div>
 	</nav>
 </ui:composition>

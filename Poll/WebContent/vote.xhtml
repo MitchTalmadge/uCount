@@ -31,7 +31,7 @@
 			</ui:fragment>
 
 			<div class="container">
-			
+
 				<!-- This group is only shown when a poll is enabled. -->
 				<h:panelGroup id="mainContent"
 					rendered="#{VotingController.enabledPoll != null}">
@@ -50,7 +50,8 @@
 										<div class="input-field col s12 m6 push-m3">
 											<i class="material-icons prefix">account_circle</i>
 											<h:inputText id="studentIdField"
-												value="#{VotingController.studentIdInput}" required="true" />
+												value="#{VotingController.studentIdInput}" required="true"
+												style="font-size:40px" />
 											<h:outputLabel for="studentIdField">
 												Student ID
 											</h:outputLabel>
@@ -91,16 +92,17 @@
 													<div class="row">
 														<h:panelGroup layout="block"
 															rendered="#{voteGroup.hasPicture()}"
-															class="col s3 card-image">
+															class="col s6 m3 card-image">
 															<h:graphicImage
 																value="/images/#{voteGroup.pictureFileName}" />
 														</h:panelGroup>
-														<div class="col #{voteGroup.hasPicture() ? 's9' : 's12'}">
+														<div
+															class="col s12 #{voteGroup.hasPicture() ? 'm9' : 'm12'}">
 															<span class="card-title">#{voteGroup.name}</span>
 														</div>
 														<ui:repeat value="#{voteGroup.contestants}"
 															var="contestant" varStatus="status">
-															<div class="col s4 m3">
+															<div class="col s6 m4">
 																<div class="card">
 																	<h:panelGroup layout="block" class="card-image"
 																		style="padding: 10px"
@@ -108,7 +110,9 @@
 																		<h:graphicImage
 																			value="/images/#{contestant.pictureFileName}" />
 																	</h:panelGroup>
-																	<div class="card-content">#{contestant.name}</div>
+																	<div class="card-content">
+																		<p class="flow-text">#{contestant.name}</p>
+																	</div>
 																</div>
 															</div>
 														</ui:repeat>
@@ -125,6 +129,7 @@
 													</h:commandLink>
 												</div>
 											</div>
+											<br />
 										</ui:repeat>
 									</h:form>
 								</ui:fragment>
