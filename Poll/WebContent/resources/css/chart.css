@@ -5,6 +5,7 @@ h1 {
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
+
 h2 {
 	font-size: 12px;
 	font-style: italic;
@@ -12,23 +13,28 @@ h2 {
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
-#everything{
-	width:600px;
-	margin:20px;
+
+#everything {
+	width: 600px;
+	margin: 20px;
 }
+
 #chart {
-	width:600px;
-	height:400px;
+	width: 600px;
+	height: 400px;
 }
+
 .bar {
 	fill: #01579b;
 }
+
 text.label {
 	fill: #FFF;
 	color: #FFF;
 	font-size: 20px;
 	font-weight: bold;
 }
+
 text.category {
 	fill: #444;
 	font-size: 20px;

@@ -11,8 +11,8 @@ var setup = function(targetID) {
 			- margin.bottom, defaultBarWidth = 2000;
 
 	// Set up scales
-	var x = d3.scale.linear().domain([ 0, defaultBarWidth ])
-			.range([ 0, width ]);
+	var x = d3.scale.linear().domain([ 30, defaultBarWidth ])
+			.range([ 30, width ]);
 	var y = d3.scale.ordinal().rangeRoundBands([ 0, height ], 0.1, 0);
 
 	// Create SVG element
@@ -65,24 +65,23 @@ var redrawChart = function(targetID, newdata) {
 
 	// Add Headlines
 	newRow.insert("text").attr("class", "category").attr("text-overflow",
-			"ellipsis").attr("y", 10).attr("x", 0)
-			.attr("opacity", 0).attr("dy", ".35em").attr("dx", "0.5em").text(
-					function(d) {
-						return d.key
-					});
-	
+			"ellipsis").attr("y", 10).attr("x", 0).attr("opacity", 0).attr(
+			"dy", ".35em").attr("dx", "0.5em").text(function(d) {
+		return d.key
+	});
+
 	// Add rectangles
-	newRow.append("rect").attr("class", "bar").attr("x", 0).attr("y", 25).attr("opacity", 0)
-			.attr("height", y.rangeBand() - 25).attr("width", function(d) {
+	newRow.append("rect").attr("class", "bar").attr("x", 0).attr("y", 25).attr(
+			"opacity", 0).attr("height", y.rangeBand() - 25).attr("width",
+			function(d) {
 				return x(d.value);
 			})
 	// Add value labels
-	newRow.append("text").attr("class", "label").attr("y", y.rangeBand() / 2 + 12.5)
-			.attr("x", 0).attr("opacity", 0).attr("dy", ".35em").attr("dx",
-					"0.5em").text(function(d) {
-				return d.value;
-			});
-
+	newRow.append("text").attr("class", "label").attr("y",
+			y.rangeBand() / 2 + 12.5).attr("x", 0).attr("opacity", 0).attr(
+			"dy", ".35em").attr("dx", "0.5em").text(function(d) {
+		return d.value;
+	});
 
 	// ////////
 	// UPDATE//
