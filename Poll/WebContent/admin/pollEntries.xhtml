@@ -10,18 +10,18 @@
 
 	<ui:define name="content">
 		<div class="section no-pad-top">
-			<div class="section #{style.colorPrimaryBase}">
+			<div class="section #{style.colorPrimary}">
 
-				<h1 class="header center #{style.textColorPrimary}">Poll
+				<h1 class="header center #{style.colorWhiteText}">Poll
 					Entries</h1>
 
 				<ui:fragment rendered="#{PollEntriesController.poll != null}">
-					<h5 class="header center #{style.textColorPrimary}">Viewing
+					<h5 class="header center #{style.colorWhiteText}">Viewing
 						Entries For: #{PollEntriesController.poll.name}</h5>
 				</ui:fragment>
 
 				<ui:fragment rendered="#{PollEntriesController.poll == null}">
-					<h5 class="header center #{style.textColorPrimary}">No Poll
+					<h5 class="header center #{style.colorWhiteText}">No Poll
 						has been Selected!</h5>
 				</ui:fragment>
 

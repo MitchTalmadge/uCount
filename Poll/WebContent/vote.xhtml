@@ -12,20 +12,20 @@
 
 			<!-- Shown when a poll is enabled; displays poll name and description -->
 			<ui:fragment rendered="#{VotingController.enabledPoll != null}">
-				<div class="section #{style.colorPrimaryBase}">
+				<div class="section #{style.colorPrimary}">
 					<div class="container">
-						<h1 class="header center #{style.textColorPrimary}">#{VotingController.enabledPoll.name}</h1>
-						<h5 class="header center #{style.textColorPrimary}">#{VotingController.enabledPoll.description}</h5>
+						<h1 class="header center #{style.colorWhiteText}">#{VotingController.enabledPoll.name}</h1>
+						<h5 class="header center #{style.colorWhiteText}">#{VotingController.enabledPoll.description}</h5>
 					</div>
 				</div>
 			</ui:fragment>
 
 			<!-- Shown when no polls are enabled; asks the user to come back later. -->
 			<ui:fragment rendered="#{VotingController.enabledPoll == null}">
-				<div class="section #{style.colorPrimaryBase}">
-					<h1 class="header center #{style.textColorPrimary}">No polls
+				<div class="section #{style.colorPrimary}">
+					<h1 class="header center #{style.colorWhiteText}">No polls
 						are available.</h1>
-					<h2 class="header center #{style.textColorPrimary}">Please
+					<h2 class="header center #{style.colorWhiteText}">Please
 						check back soon.</h2>
 				</div>
 			</ui:fragment>
@@ -121,7 +121,7 @@
 												</div>
 												<div class="card-action">
 													<h:commandLink value="Vote"
-														styleClass="col s12 card-action waves-effect waves-light btn-large #{style.colorPrimaryBase} white-text"
+														styleClass="col s12 card-action waves-effect waves-light btn-large #{style.colorPrimary} #{style.colorWhiteText}"
 														style="padding:0 10px 0 0;font-size:28px;width:100%"
 														action="#{VotingController.recordVote(voteGroup)}">
 														<i class="material-icons right">send</i>

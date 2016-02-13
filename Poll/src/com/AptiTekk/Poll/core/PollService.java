@@ -1,11 +1,14 @@
 package com.AptiTekk.Poll.core;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 
 import com.AptiTekk.Poll.core.entityBeans.Contestant;
+import com.AptiTekk.Poll.core.entityBeans.Entry;
 import com.AptiTekk.Poll.core.entityBeans.Poll;
 import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
 import com.AptiTekk.Poll.core.utilities.PollLogger;
@@ -67,6 +70,20 @@ public class PollService extends Service<Poll> {
 		}
 
 		super.delete(id);
+	}
+
+	public Map<VoteGroup, Integer> getResults(int pollId) {
+		Poll poll = get(pollId);
+		if (poll != null) {
+			List<VoteGroup> voteGroups = poll.getVoteGroups();
+			Map<VoteGroup, Integer> results = new HashMap<>();
+
+			for (VoteGroup voteGroup : voteGroups) {
+				results.put(voteGroup, voteGroup.getEntries().size());
+			}
+			return results;
+		}
+		return null;
 	}
 
 }

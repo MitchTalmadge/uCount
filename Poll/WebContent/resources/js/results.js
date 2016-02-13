@@ -132,9 +132,6 @@ var redrawChart = function(targetID, newdata) {
 			});
 };
 
-// Pulls data
-// Since our data is fake, adds some random changes to simulate a data stream.
-// Uses a callback because d3.json loading is asynchronous
 var pullData = function(settings, callback) {
 	d3.json("/Poll/ResultsProvider", function(err, data) {
 		if (err)

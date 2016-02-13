@@ -31,23 +31,4 @@ public class EntryService extends Service<Entry> {
     new JPADeleteClause(entityManager, entryTable).where(entryTable.poll.id.eq(pollId)).execute();
   }
   
-  public List<Entry> getEntriesByPoll(int pollId) {
-	  return new JPAQuery(entityManager).from(entryTable)
-		        .where(entryTable.poll.id.eq(pollId)).list(entryTable);
-  }
-  
-  public Map<VoteGroup, Integer> calculateResults(int pollId) {
-	  List<Entry> entries = getEntriesByPoll(pollId);
-	  Map<VoteGroup, Integer> results = new HashMap<>();
-	  for(Entry entry : entries) {
-		  if(results.containsKey(entry.getVoteGroup())) {
-			  int newCount = results.get(entry.getVoteGroup()) + 1;
-			  results.replace(entry.getVoteGroup(), newCount);
-		  } else {
-			  results.put(entry.getVoteGroup(), 1);
-		  }
-	  }
-	  return results;
-  }
-  
 }

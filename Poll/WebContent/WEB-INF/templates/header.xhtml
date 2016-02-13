@@ -5,10 +5,10 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 <ui:composition>
-	<nav class="#{style.colorPrimary}" role="navigation">
+	<nav class="#{style.colorPrimaryDark}" role="navigation">
 		<div class="nav-wrapper container">
 			<h:link id="logo-container" styleClass="brand-logo" outcome="vote"
-				value="Bingham Sweethearts" />
+				value="#{settings.header_title}" />
 			<a href="#" data-activates="nav-mobile" class="button-collapse"><i
 				class="material-icons">menu</i></a>
 

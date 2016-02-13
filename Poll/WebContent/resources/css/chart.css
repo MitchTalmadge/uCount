@@ -21,7 +21,7 @@ h2 {
 	height:400px;
 }
 .bar {
-	fill: #0078FF;
+	fill: #01579b;
 }
 text.label {
 	fill: #FFF;
@@ -31,5 +31,5 @@ text.label {
 }
 text.category {
 	fill: #FFF;
-	font-size: 14px;
+	font-size: 30px;
 }
