@@ -8,7 +8,7 @@ var setup = function(targetID) {
 		bottom : 0,
 		left : 0
 	}, width = 600 - margin.left - margin.right, height = 400 - margin.top
-			- margin.bottom, categoryIndent = 4 * 15 + 5, defaultBarWidth = 2000;
+			- margin.bottom, defaultBarWidth = 2000;
 
 	// Set up scales
 	var x = d3.scale.linear().domain([ 0, defaultBarWidth ])
@@ -27,7 +27,6 @@ var setup = function(targetID) {
 		margin : margin,
 		width : width,
 		height : height,
-		categoryIndent : categoryIndent,
 		svg : svg,
 		x : x,
 		y : y
@@ -64,25 +63,26 @@ var redrawChart = function(targetID, newdata) {
 			"transform",
 			"translate(0," + height + margin.top + margin.bottom + ")");
 
+	// Add Headlines
+	newRow.insert("text").attr("class", "category").attr("text-overflow",
+			"ellipsis").attr("y", 10).attr("x", 0)
+			.attr("opacity", 0).attr("dy", ".35em").attr("dx", "0.5em").text(
+					function(d) {
+						return d.key
+					});
+	
 	// Add rectangles
-	newRow.insert("rect").attr("class", "bar").attr("x", 0).attr("opacity", 0)
-			.attr("height", y.rangeBand()).attr("width", function(d) {
+	newRow.append("rect").attr("class", "bar").attr("x", 0).attr("y", 25).attr("opacity", 0)
+			.attr("height", y.rangeBand() - 25).attr("width", function(d) {
 				return x(d.value);
 			})
 	// Add value labels
-	newRow.append("text").attr("class", "label").attr("y", y.rangeBand() / 2)
+	newRow.append("text").attr("class", "label").attr("y", y.rangeBand() / 2 + 12.5)
 			.attr("x", 0).attr("opacity", 0).attr("dy", ".35em").attr("dx",
 					"0.5em").text(function(d) {
 				return d.value;
 			});
 
-	// Add Headlines
-	newRow.append("text").attr("class", "category").attr("text-overflow",
-			"ellipsis").attr("y", y.rangeBand() / 2).attr("x", categoryIndent)
-			.attr("opacity", 0).attr("dy", ".35em").attr("dx", "0.5em").text(
-					function(d) {
-						return d.key
-					});
 
 	// ////////
 	// UPDATE//
