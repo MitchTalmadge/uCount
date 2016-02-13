@@ -38,10 +38,10 @@ public class ImageServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String filename = request.getPathInfo().substring(1);
 		File file = new File(FileUploadUtilities.IMAGE_UPLOADS_DIR, filename);
-		
-		if (!file.exists())
+
+		if (!file.exists() || filename.isEmpty() || filename.equals("/"))
 			file = imageNotFoundFile;
-		
+
 		if (file != null) {
 			response.setHeader("Content-Type", getServletContext().getMimeType(filename));
 			response.setHeader("Content-Length", String.valueOf(file.length()));
