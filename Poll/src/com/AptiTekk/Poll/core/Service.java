@@ -17,8 +17,6 @@ public abstract class Service<T> {
 
 	protected Class<T> type;
 
-	public static final String NOTFOUND_IMAGE_FILENAME = "notFound.png";
-	
 	public Service() {
 
 	}

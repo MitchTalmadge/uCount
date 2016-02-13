@@ -21,8 +21,6 @@ import com.mysema.query.jpa.impl.JPAQuery;
 public class ContestantService extends Service<Contestant> {
 	QContestant contestantTable = QContestant.contestant;
 	
-	public static final String CONTESTANT_IMAGES_DIRECTORY_REL_PATH = "/resources/contestant_images/";
-	
 	@EJB
 	VoteGroupService voteGroupService;
 
@@ -41,7 +39,7 @@ public class ContestantService extends Service<Contestant> {
 		{
 			for(Contestant contestant : voteGroup.getContestants())
 			{
-				FileUploadUtilities.deleteUploadedImage(CONTESTANT_IMAGES_DIRECTORY_REL_PATH, contestant.getPictureFileName());
+				FileUploadUtilities.deleteUploadedImage(contestant.getPictureFileName());
 			}
 		}
 		
@@ -70,7 +68,7 @@ public class ContestantService extends Service<Contestant> {
 		// Generate a random file name.
 		String fileName = UUID.randomUUID().toString();
 
-		FileUploadUtilities.uploadPartToPathAndCrop(part, CONTESTANT_IMAGES_DIRECTORY_REL_PATH, fileName, 300);
+		FileUploadUtilities.uploadImageToPathAndCrop(part, fileName, 300);
 
 		deleteContestantImage(contestant.getPictureFileName());
 
@@ -82,7 +80,7 @@ public class ContestantService extends Service<Contestant> {
 	
 	public static void deleteContestantImage(String fileName)
 	{
-	    FileUploadUtilities.deleteUploadedImage(CONTESTANT_IMAGES_DIRECTORY_REL_PATH, fileName);
+	    FileUploadUtilities.deleteUploadedImage(fileName);
 	}
 
 }

@@ -33,7 +33,7 @@
 									<h:panelGroup layout="block"
 										rendered="#{voteGroup.hasPicture()}" class="col s3 card-image">
 										<h:graphicImage
-											value="/resources/votegroup_images/#{voteGroup.pictureFileName}" />
+											value="/images/#{voteGroup.pictureFileName}" />
 									</h:panelGroup>
 									<div class="col #{voteGroup.hasPicture() ? 's9' : 's12'}">
 										<span class="card-title">#{voteGroup.name}</span>
@@ -45,7 +45,7 @@
 												<h:panelGroup layout="block" class="card-image"
 													style="padding: 10px" rendered="#{contestant.hasPicture()}">
 													<h:graphicImage
-														value="/resources/contestant_images/#{contestant.pictureFileName}" />
+														value="/images/#{contestant.pictureFileName}" />
 												</h:panelGroup>
 												<div class="card-content">#{contestant.name}</div>
 											</div>

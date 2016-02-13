@@ -17,7 +17,7 @@ public class Contestant {
 	@GeneratedValue
 	private int id;
 
-	@ManyToOne(fetch=FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "voteGroupId")
 	private VoteGroup voteGroup;
 
@@ -25,16 +25,15 @@ public class Contestant {
 	private String name;
 
 	@Column(length = 64)
-	private String pictureFileName = Service.NOTFOUND_IMAGE_FILENAME;
-	
+	private String pictureFileName = "";
+
 	public Contestant() {
-		
+
 	}
 
-	public Contestant(VoteGroup voteGroup, String name, String pictureFileName) {
+	public Contestant(VoteGroup voteGroup, String name) {
 		setVoteGroup(voteGroup);
 		setName(name);
-		setPictureFileName(pictureFileName);
 	}
 
 	public int getId() {
@@ -68,10 +67,9 @@ public class Contestant {
 	public void setPictureFileName(String pictureFileName) {
 		this.pictureFileName = pictureFileName;
 	}
-	
+
 	public boolean hasPicture() {
-		return this.pictureFileName != null && !this.pictureFileName.isEmpty()
-			&& !this.pictureFileName.equals(Service.NOTFOUND_IMAGE_FILENAME);
-	    }
+		return this.pictureFileName != null && !this.pictureFileName.isEmpty();
+	}
 
 }

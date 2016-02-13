@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 
-import javax.faces.context.FacesContext;
 import javax.imageio.ImageIO;
 import javax.servlet.http.Part;
 
@@ -17,35 +16,43 @@ import com.AptiTekk.Poll.core.Service;
 
 public class FileUploadUtilities {
 
+	public static final File UPLOADS_DIR = new File(System.getProperty("jboss.server.data.dir"), "Poll_Uploads");
+	public static File IMAGE_UPLOADS_DIR;
+
+	static {
+		if (!UPLOADS_DIR.exists())
+			UPLOADS_DIR.mkdir();
+
+		IMAGE_UPLOADS_DIR = new File(UPLOADS_DIR, "images");
+		if (!IMAGE_UPLOADS_DIR.exists())
+			IMAGE_UPLOADS_DIR.mkdir();
+	}
+
 	/**
-	 * Uploads a Part to a specified path.
+	 * Uploads an image to a specified path.
 	 * 
 	 * @param part
 	 *            The Part from the fileInput
-	 * @param relativeDirectoryPath
-	 *            The directory location. e.x.: /resources/images/
+	 * @param uploadsDirName
+	 *            The uploads directory name. E.x.: "images"
 	 * @param fileName
 	 *            The new file name of the upload.
 	 * @throws IOException
 	 */
-	public static void uploadPartToPath(Part part, String relativeDirectoryPath, String fileName) throws IOException {
-		deleteUploadedImage(relativeDirectoryPath, fileName);
+	public static void uploadImageToPath(Part imagePart, String fileName) throws IOException {
+		deleteUploadedImage(fileName);
 
-		InputStream input = part.getInputStream();
-		Files.copy(input,
-				new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath(relativeDirectoryPath),
-						fileName).toPath());
+		InputStream input = imagePart.getInputStream();
+		Files.copy(input, new File(IMAGE_UPLOADS_DIR, fileName).toPath());
 
 	}
 
 	/**
-	 * Uploads a Part to a specified path, and crops and/or resizes it to a
+	 * Uploads an image to a specified path, and crops and/or resizes it to a
 	 * desired width, using a 1:1 aspect ratio.
 	 * 
 	 * @param part
 	 *            The Part from the fileInput
-	 * @param relativeDirectoryPath
-	 *            The directory location. e.x.: /resources/images/
 	 * @param fileName
 	 *            The new file name of the upload.
 	 * @param desiredWidth
@@ -53,13 +60,11 @@ public class FileUploadUtilities {
 	 *            aspect ratio)
 	 * @throws IOException
 	 */
-	public static void uploadPartToPathAndCrop(Part part, String relativeDirectoryPath, String fileName,
-			int desiredWidth) throws IOException {
+	public static void uploadImageToPathAndCrop(Part imagePart, String fileName, int desiredWidth) throws IOException {
 
-		uploadPartToPath(part, relativeDirectoryPath, fileName);
+		uploadImageToPath(imagePart, fileName);
 
-		File uploadedPath = new File(
-				FacesContext.getCurrentInstance().getExternalContext().getRealPath(relativeDirectoryPath), fileName);
+		File uploadedPath = new File(IMAGE_UPLOADS_DIR, fileName);
 
 		BufferedImage bufferedImage = ImageIO.read(uploadedPath);
 
@@ -96,19 +101,13 @@ public class FileUploadUtilities {
 	/**
 	 * Deletes an uploaded image
 	 * 
-	 * @param relativeDirectoryPath
-	 *            The directory location. e.x.: /resources/images/
 	 * @param fileName
-	 *            The filename of the upload.
+	 *            The filename of the uploaded image.
 	 */
-	public static void deleteUploadedImage(String relativeDirectoryPath, String fileName) {
-		if (!fileName.equals(Service.NOTFOUND_IMAGE_FILENAME)) {
-			File uploadedImageFile = new File(
-					FacesContext.getCurrentInstance().getExternalContext().getRealPath(relativeDirectoryPath),
-					fileName);
-			if (uploadedImageFile.exists()) {
-				uploadedImageFile.delete();
-			}
+	public static void deleteUploadedImage(String fileName) {
+		File uploadedImageFile = new File(IMAGE_UPLOADS_DIR, fileName);
+		if (uploadedImageFile.exists()) {
+			uploadedImageFile.delete();
 		}
 	}
 

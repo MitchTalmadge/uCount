@@ -22,8 +22,6 @@ import com.mysema.query.jpa.impl.JPAQuery;
 public class VoteGroupService extends Service<VoteGroup> {
 	private QVoteGroup voteGroupTable = QVoteGroup.voteGroup;
 
-	public static final String VOTEGROUP_IMAGES_DIRECTORY_REL_PATH = "/resources/votegroup_images/";
-
 	public VoteGroupService() {
 		this.type = VoteGroup.class;
 	}
@@ -54,7 +52,7 @@ public class VoteGroupService extends Service<VoteGroup> {
 		// Generate a random file name.
 		String fileName = UUID.randomUUID().toString();
 
-		FileUploadUtilities.uploadPartToPathAndCrop(part, VOTEGROUP_IMAGES_DIRECTORY_REL_PATH, fileName, 300);
+		FileUploadUtilities.uploadImageToPathAndCrop(part, fileName, 300);
 
 		deleteVoteGroupImage(voteGroup.getPictureFileName());
 
@@ -65,7 +63,7 @@ public class VoteGroupService extends Service<VoteGroup> {
 	}
 
 	public static void deleteVoteGroupImage(String fileName) {
-		FileUploadUtilities.deleteUploadedImage(VOTEGROUP_IMAGES_DIRECTORY_REL_PATH, fileName);
+		FileUploadUtilities.deleteUploadedImage(fileName);
 	}
 
 	public void deleteAll(int pollId) {

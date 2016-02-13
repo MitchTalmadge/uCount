@@ -64,7 +64,7 @@ public class ModifyVoteGroupController {
     }
 
     public void addNewContestant() {
-	Contestant contestant = new Contestant(voteGroup, "John Doe", "notFound.png");
+	Contestant contestant = new Contestant(voteGroup, "John Doe");
 	contestantService.insert(contestant);
 
 	voteGroup = voteGroupService.get(voteGroup.getId()); // Refresh
