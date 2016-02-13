@@ -13,7 +13,7 @@ public class LoadTestController {
 
 	@EJB
 	StudentIDAuthenticator studentIdAuthenticator;
-
+	
 	public void authenticate() {
 		try {
 			studentIdAuthenticator.authenticateIdUsingOverdrive((int) (8220000 + (Math.random() * 9999)));

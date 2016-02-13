@@ -6,8 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.ejb.Remote;
-import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -22,53 +21,45 @@ import org.apache.http.message.BasicNameValuePair;
 import com.AptiTekk.Poll.core.CredentialService;
 import com.AptiTekk.Poll.core.entityBeans.Credential;
 
-@Remote
-@Singleton
+@Stateless
 public class StudentIDAuthenticator {
 
 	@EJB
 	private CredentialService credentialService;
 
-	private static String JSDCookie;
+	private static final String JSDCookie = getOverdriveCookie();
 
 	/**
-	 * Gets a cookie from Overdrive if we do not have one already.
-	 * 
-	 * @param forceGrab
-	 *            Forcefully get a cookie from Overdrive, even if one already
-	 *            exists.
+	 * Gets a cookie from Overdrive.
 	 */
-	public void updateOverdriveCookie(boolean forceGrab) {
-		if (JSDCookie == null || forceGrab) {
-			PollLogger.logVerbose("Getting Cookie from Overdrive");
-			try {
-				String url = "https://jordanut.libraryreserve.com/10/45/en/SignIn.htm?url=Default.htm";
+	private static String getOverdriveCookie() {
+		PollLogger.logVerbose("Getting Cookie from Overdrive");
+		try {
+			String url = "https://jordanut.libraryreserve.com/10/45/en/SignIn.htm?url=Default.htm";
 
-				HttpClient httpClient = HttpClientBuilder.create().build();
-				HttpGet httpGet = new HttpGet(url);
+			HttpClient httpClient = HttpClientBuilder.create().build();
+			HttpGet httpGet = new HttpGet(url);
 
-				httpGet.setHeader("User-Agent",
-						"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.103 Safari/537.36");
+			httpGet.setHeader("User-Agent",
+					"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.103 Safari/537.36");
 
-				HttpResponse httpResponse = httpClient.execute(httpGet);
+			HttpResponse httpResponse = httpClient.execute(httpGet);
 
-				PollLogger.logVerbose("\nSending 'GET' request to URL : " + url);
-				PollLogger.logVerbose("Response Code : " + httpResponse.getStatusLine().getStatusCode());
-				PollLogger.logVerbose("Cookie: " + httpResponse.getFirstHeader("Set-Cookie").getValue());
+			PollLogger.logVerbose("\nSending 'GET' request to URL : " + url);
+			PollLogger.logVerbose("Response Code : " + httpResponse.getStatusLine().getStatusCode());
+			PollLogger.logVerbose("Cookie: " + httpResponse.getFirstHeader("Set-Cookie").getValue());
 
-				JSDCookie = httpResponse.getFirstHeader("Set-Cookie").getValue();
+			return httpResponse.getFirstHeader("Set-Cookie").getValue();
 
-			} catch (ClientProtocolException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		return "";
 	}
 
 	public Credential authenticateIdUsingOverdrive(int studentId) throws AuthenticationException {
-		updateOverdriveCookie(false); // Makes sure we have a cookie.
-
 		try { // VERY HACKY METHOD of authenticating student IDs ---
 				// Uses Jordan School District's Overdrive login.
 			Credential credential = credentialService.getByStudentNumber(studentId);
@@ -95,15 +86,6 @@ public class StudentIDAuthenticator {
 
 				HttpResponse httpResponse = httpClient.execute(httpPost);
 				String location = httpResponse.getFirstHeader("Location").getValue();
-
-				if (httpResponse.getFirstHeader("Set-Cookie") != null) // Our
-																		// cookie
-																		// is
-																		// expired,
-																		// get a
-																		// new
-																		// one.
-					updateOverdriveCookie(true);
 
 				if (location.contains("Error.htm")) {
 					PollLogger.logVerbose("ID Was Invalid!");

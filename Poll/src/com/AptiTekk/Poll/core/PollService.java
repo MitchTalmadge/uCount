@@ -1,25 +1,15 @@
 package com.AptiTekk.Poll.core;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
-import javax.ejb.Startup;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
 
 import com.AptiTekk.Poll.core.entityBeans.Contestant;
 import com.AptiTekk.Poll.core.entityBeans.Poll;
 import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
 import com.AptiTekk.Poll.core.utilities.PollLogger;
-import com.AptiTekk.Poll.web.controllers.VotingController;
 
-@Startup
 @Singleton
 public class PollService extends Service<Poll> {
 	private Poll enabledPoll;
@@ -30,7 +20,6 @@ public class PollService extends Service<Poll> {
 
 	@PostConstruct
 	public void init() {
-		PollLogger.logVerbose("Starting PollService");
 		List<Poll> polls = getAll();
 		for (Poll poll : polls) {
 			if (poll.isEnabled()) {

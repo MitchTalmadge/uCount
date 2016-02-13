@@ -1,7 +1,6 @@
 package com.AptiTekk.Poll.web.controllers;
 
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -43,7 +42,7 @@ public class VotingController {
 
 	@EJB
 	CredentialService credentialService;
-
+	
 	@EJB
 	StudentIDAuthenticator studentIdAuthenticator;
 
@@ -92,7 +91,6 @@ public class VotingController {
 	@PostConstruct
 	public void init() {
 		this.setCredential(null);
-		studentIdAuthenticator.updateOverdriveCookie(false);
 	}
 
 	public Poll getEnabledPoll() {

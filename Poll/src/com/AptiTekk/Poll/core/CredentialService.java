@@ -1,12 +1,12 @@
 package com.AptiTekk.Poll.core;
 
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 
 import com.AptiTekk.Poll.core.entityBeans.Credential;
 import com.AptiTekk.Poll.core.entityBeans.QCredential;
 import com.mysema.query.jpa.impl.JPAQuery;
 
-@Stateless
+@Singleton
 public class CredentialService extends Service<Credential> {
   QCredential credentialTable = QCredential.credential;
 

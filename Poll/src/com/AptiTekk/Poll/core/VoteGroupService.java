@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.ejb.Singleton;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.servlet.http.Part;
 
 import com.AptiTekk.Poll.core.entityBeans.Contestant;
