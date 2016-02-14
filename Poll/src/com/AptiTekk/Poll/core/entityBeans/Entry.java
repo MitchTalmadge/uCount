@@ -1,6 +1,5 @@
 package com.AptiTekk.Poll.core.entityBeans;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,9 +13,7 @@ public class Entry {
   @GeneratedValue
   private int id;
 
-  @ManyToOne(cascade = CascadeType.MERGE)
-  @JoinColumn(name = "credentialsId")
-  private Credential credential;
+  private int studentNumber;
 
   @ManyToOne
   @JoinColumn(name = "voteGroupId")
@@ -30,8 +27,8 @@ public class Entry {
 
   }
 
-  public Entry(Credential credential, VoteGroup voteGroup, Poll poll) {
-    setCredential(credential);
+  public Entry(int studentNumber, VoteGroup voteGroup, Poll poll) {
+    setStudentNumber(studentNumber);
     setVoteGroup(voteGroup);
     setPoll(poll);
   }
@@ -42,14 +39,6 @@ public class Entry {
 
   public void setId(int id) {
     this.id = id;
-  }
-
-  public Credential getCredential() {
-    return credential;
-  }
-
-  public void setCredential(Credential credential) {
-    this.credential = credential;
   }
 
   public VoteGroup getVoteGroup() {
@@ -67,5 +56,13 @@ public class Entry {
   public void setPoll(Poll poll) {
     this.poll = poll;
   }
+
+public int getStudentNumber() {
+	return studentNumber;
+}
+
+public void setStudentNumber(int studentNumber) {
+	this.studentNumber = studentNumber;
+}
 
 }

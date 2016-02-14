@@ -11,15 +11,16 @@ var setup = function(targetID) {
 			- margin.bottom, defaultBarWidth = 2000;
 
 	// Set up scales
-	var x = d3.scale.linear().domain([ 30, defaultBarWidth ])
-			.range([ 30, width ]);
+	var x = d3.scale.linear().domain([ 30, defaultBarWidth ]).range(
+			[ 30, width ]);
 	var y = d3.scale.ordinal().rangeRoundBands([ 0, height ], 0.1, 0);
 
 	// Create SVG element
 	d3.select(targetID).selectAll("svg").remove()
 	var svg = d3.select(targetID).append("svg").attr("height",
-			height + margin.top + margin.bottom).attr("style", "width:100%;").append("g").attr("transform",
-			"translate(" + margin.left + "," + margin.top + ")");
+			height + margin.top + margin.bottom).attr("style", "width:100%;")
+			.append("g").attr("transform",
+					"translate(" + margin.left + "," + margin.top + ")");
 
 	// Package and export settings
 	var settings = {
@@ -124,8 +125,9 @@ var redrawChart = function(targetID, newdata) {
 		return 200 + i * 30;
 	};
 
-	chartRow.transition().delay(delay).duration(900).attr("transform",
-			function(d) {
+	chartRow.transition().delay(delay).duration(firstLoad ? 0 : 900).attr(
+			"transform", function(d) {
+				firstLoad = false;
 				return "translate(0," + y(d.key) + ")";
 			});
 };
@@ -151,6 +153,10 @@ var formatData = function(data) {
 var redraw = function(settings) {
 	pullData(settings, redrawChart)
 }
+
+// Is this the first time we organize the chart? If true, skip delay.
+var firstLoad = true;
+
 // setup (includes first draw)
 var settings = setup('#chart');
 redraw(settings)

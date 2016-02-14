@@ -40,16 +40,13 @@ public class LoadTestController {
 	}
 
 	public void authenticate() {
-		Credential credential = null;
 		int studentId = (int) (8220000 + (Math.random() * 9999));
 		try {
-			credential = studentIdAuthenticator.authenticateIdUsingOverdrive(studentId);
+			studentIdAuthenticator.authenticateIdUsingOverdrive(studentId);
 		} catch (AuthenticationException e) {
-			credential = new Credential(studentId);
-			credentialService.insert(credential);
 		}
 
-		if (enabledPoll != null && credential != null) {
+		if (enabledPoll != null) {
 			int numVoteGroups = enabledPoll.getVoteGroups().size();
 			int indexSize = numVoteGroups - 1;
 			int voteGroupId = (int) Math.round((Math.random() * indexSize));
@@ -62,7 +59,7 @@ public class LoadTestController {
 			PollLogger.logVerbose("Voting for Vote Group " + voteGroupId);
 			VoteGroup voteGroup = enabledPoll.getVoteGroups().get(voteGroupId);
 
-			Entry entry = new Entry(credential, voteGroup, enabledPoll);
+			Entry entry = new Entry(studentId, voteGroup, enabledPoll);
 			entryService.insert(entry);
 		}
 	}

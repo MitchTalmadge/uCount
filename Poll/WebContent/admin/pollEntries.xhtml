@@ -12,8 +12,7 @@
 		<div class="section no-pad-top">
 			<div class="section #{style.colorPrimary}">
 
-				<h1 class="header center #{style.colorWhiteText}">Poll
-					Entries</h1>
+				<h1 class="header center #{style.colorWhiteText}">Poll Entries</h1>
 
 				<ui:fragment rendered="#{PollEntriesController.poll != null}">
 					<h5 class="header center #{style.colorWhiteText}">Viewing
@@ -21,8 +20,8 @@
 				</ui:fragment>
 
 				<ui:fragment rendered="#{PollEntriesController.poll == null}">
-					<h5 class="header center #{style.colorWhiteText}">No Poll
-						has been Selected!</h5>
+					<h5 class="header center #{style.colorWhiteText}">No Poll has
+						been Selected!</h5>
 				</ui:fragment>
 
 			</div>
@@ -51,7 +50,7 @@
 								<table class="striped responsive-table">
 									<thead>
 										<tr>
-											<th style="width: 150px">Student Number</th>
+											<th style="width: 150px">Student ID</th>
 											<th>Vote Group ID</th>
 										</tr>
 									</thead>
@@ -59,17 +58,15 @@
 										<ui:repeat value="#{PollEntriesController.poll.entries}"
 											var="entry">
 											<tr>
-												<td>#{entry.credential.studentNumber}</td>
+												<td>#{entry.studentNumber}</td>
 												<td>#{entry.voteGroup.id}</td>
-												<td style="width: 50px">
-													<h:form>
+												<td style="width: 50px"><h:form>
 														<h:commandLink class="#{style.colorDeleteText}"
 															action="#{PollEntriesController.deleteEntry(entry)}">
 															<i class="material-icons">delete</i>
 															<f:ajax render=":entries" />
 														</h:commandLink>
-													</h:form>
-												</td>
+													</h:form></td>
 											</tr>
 										</ui:repeat>
 									</tbody>

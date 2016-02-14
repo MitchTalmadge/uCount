@@ -39,8 +39,8 @@
 					<!-- This fragment is shown if the user is not banned. -->
 					<ui:fragment rendered="#{!VotingController.banned}">
 
-						<!-- Shown when the user is not authenticated (credential will be null). Asks the user to enter their Student ID -->
-						<ui:fragment rendered="#{VotingController.credential == null}">
+						<!-- Shown when the user is not authenticated (studentId will be -1). Asks the user to enter their Student ID -->
+						<ui:fragment rendered="#{VotingController.studentId == -1}">
 							<h5 class="header center">Please Enter Your Student ID</h5>
 							<div class="row center">
 								<h:form styleClass="col s12" id="voteForm"
@@ -72,7 +72,7 @@
 						</ui:fragment>
 
 						<!-- Shown when the user is authenticated. -->
-						<ui:fragment rendered="#{VotingController.credential != null}">
+						<ui:fragment rendered="#{VotingController.studentId > -1}">
 
 							<!-- Shown when the user has not already submitted an entry. Should allow them to vote. -->
 							<ui:fragment

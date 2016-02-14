@@ -58,10 +58,9 @@ public class VotingController {
 	}
 
 	/**
-	 * The student's credential. Null if the user has not yet validated their
-	 * student ID.
+	 * The student's ID. Will be -1 if no student ID is specified.
 	 */
-	private Credential credential;
+	private int studentId = -1;
 
 	/**
 	 * The input string when the student types in their ID.
@@ -95,7 +94,6 @@ public class VotingController {
 
 	@PostConstruct
 	public void init() {
-		this.setCredential(null);
 		this.enabledPoll = pollService.getEnabledPoll();
 	}
 
@@ -109,21 +107,23 @@ public class VotingController {
 
 	public void authenticate() {
 		PollLogger.logVerbose("Authenticating...");
-		this.setCredential(null);
+		setStudentId(-1);
 
 		if (studentIdInput != null && !studentIdInput.isEmpty()) {
 			try {
 				int studentId = Integer.parseInt(studentIdInput);
 
 				if (AUTH_METHOD.equals("JSD"))
-					setCredential(studentIdAuthenticator.authenticateIdUsingOverdrive(studentId));
+					studentIdAuthenticator.authenticateIdUsingOverdrive(studentId);
 				else if (AUTH_METHOD.equals("Basic"))
-					setCredential(studentIdAuthenticator.authenticateIdUsingBasicVerification(studentId));
+					studentIdAuthenticator.authenticateIdUsingBasicVerification(studentId);
 				else if (AUTH_METHOD.equals("Table"))
-					setCredential(studentIdAuthenticator.authenticateIdUsingCredentialsTable(studentId));
+					studentIdAuthenticator.authenticateIdUsingCredentialsTable(studentId);
 
 				BanHelper.clearFailedAttempts(BAN_NAME);
 				BanHelper.unBanUser(BAN_NAME);
+
+				setStudentId(studentId);
 			} catch (NumberFormatException e) {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Please only enter numbers."));
 			} catch (AuthenticationException e) {
@@ -142,18 +142,6 @@ public class VotingController {
 		}
 		studentIdInput = null; // Clear input
 
-	}
-
-	public Credential getCredential() {
-		return credential;
-	}
-
-	public void setCredential(Credential credential) {
-		this.credential = credential;
-		if (credential == null)
-			this.setStudentHasAlreadyVoted(false);
-		else
-			this.setStudentHasAlreadyVoted(entryService.hasStudentVoted(credential.getId(), enabledPoll.getId()));
 	}
 
 	public String getStudentIdInput() {
@@ -181,23 +169,8 @@ public class VotingController {
 		this.votingComplete = votingComplete;
 	}
 
-	public void dummyVote() {
-		PollLogger.logVerbose("Adding Dummy Vote");
-		if (credential != null && enabledPoll != null) {
-			List<VoteGroup> voteGroups = enabledPoll.getVoteGroups();
-			if (!voteGroups.isEmpty()) {
-				Entry entry = new Entry(getCredential(), voteGroups.get(0), enabledPoll);
-				entryService.insert(entry);
-				setVotingComplete(true);
-				PollLogger.logVerbose("Dummy Vote Added");
-			} else {
-				PollLogger.logError("Dummy Vote could not be added. VoteGroups was empty.");
-			}
-		}
-	}
-
 	public void recordVote(VoteGroup voteGroup) {
-		Entry entry = new Entry(getCredential(), voteGroup, enabledPoll);
+		Entry entry = new Entry(studentId, voteGroup, enabledPoll);
 		entryService.insert(entry);
 		setVotingComplete(true);
 	}
@@ -208,6 +181,18 @@ public class VotingController {
 
 	public void setBanned(boolean isBanned) {
 		this.isBanned = isBanned;
+	}
+
+	public int getStudentId() {
+		return studentId;
+	}
+
+	public void setStudentId(int studentId) {
+		this.studentId = studentId;
+
+		if (studentId > -1) {
+			this.setStudentHasAlreadyVoted(entryService.hasStudentVoted(studentId, enabledPoll.getId()));
+		}
 	}
 
 }
