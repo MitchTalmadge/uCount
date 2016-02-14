@@ -108,4 +108,8 @@
     	<validator-id>ImageFileValidator</validator-id>
     	<validator-class>com.AptiTekk.Poll.core.utilities.ImageFileValidator</validator-class>
     </validator>
+    <validator>
+    	<validator-id>CredentialsFileValidator</validator-id>
+    	<validator-class>com.AptiTekk.Poll.core.utilities.CredentialsFileValidator</validator-class>
+    </validator>
 </faces-config>

@@ -42,12 +42,9 @@ public abstract class Service<T> {
 	}
 
 	public void delete(int id) {
-		T old = entityManager.find(type, id);
-		if (old != null) {
-			PollLogger.logVerbose("Deleting " + old.getClass().getSimpleName() + " entity from database with ID: " + id);
-			entityManager.remove(merge(old));
-		} else
-			PollLogger.logError("Tried to delete entity from database with ID: " + id + ", but it was not found!");
+		T entity = entityManager.getReference(type, id);
+		if (entity != null)
+			entityManager.remove(entity);
 	}
 
 	public T merge(T entity) {
