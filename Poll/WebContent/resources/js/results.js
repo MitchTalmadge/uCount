@@ -125,7 +125,7 @@ var redrawChart = function(targetID, newdata) {
 		return 200 + i * 30;
 	};
 
-	chartRow.transition().delay(delay).duration(firstLoad ? 0 : 900).attr(
+	chartRow.transition().delay(delay).duration(firstLoad ? 500 : 900).attr(
 			"transform", function(d) {
 				firstLoad = false;
 				return "translate(0," + y(d.key) + ")";
