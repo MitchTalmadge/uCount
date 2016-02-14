@@ -14,6 +14,14 @@
 
 			<!-- First header section, displaying the current page. -->
 			<div class="section #{style.colorPrimary}">
+				<nav class="breadcrumbs #{style.colorPrimaryLight}">
+				<div class="nav-wrapper container #{style.colorPrimaryLight}">
+					<div class="col s12">
+						<h:link outcome="manage" value="Admin Panel" class="breadcrumb" />
+						<a href="#!" class="breadcrumb">Modify Vote Group</a>
+					</div>
+				</div>
+				</nav>
 				<h1 class="header center #{style.colorWhiteText}">Modify Vote
 					Group</h1>
 			</div>
@@ -240,13 +248,11 @@
 													<!-- Upload image button -->
 													<label
 														class="#{style.colorPrimaryText} file-field input-field"
-														style="display: inline-block; cursor: pointer;">
-														<h:inputFile
+														style="display: inline-block; cursor: pointer;"> <h:inputFile
 															value="#{ModifyVoteGroupController.pictureUpload}"
 															style="display:none;">
 															<f:validator validatorId="ImageFileValidator" />
-														</h:inputFile>
-														<i class="material-icons">perm_media</i>
+														</h:inputFile> <i class="material-icons">perm_media</i>
 													</label>
 
 												</ui:fragment>
