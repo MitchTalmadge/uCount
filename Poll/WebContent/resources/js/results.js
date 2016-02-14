@@ -17,9 +17,8 @@ var setup = function(targetID) {
 
 	// Create SVG element
 	d3.select(targetID).selectAll("svg").remove()
-	var svg = d3.select(targetID).append("svg").attr("width",
-			width + margin.left + margin.right).attr("height",
-			height + margin.top + margin.bottom).append("g").attr("transform",
+	var svg = d3.select(targetID).append("svg").attr("height",
+			height + margin.top + margin.bottom).attr("style", "width:100%;").append("g").attr("transform",
 			"translate(" + margin.left + "," + margin.top + ")");
 
 	// Package and export settings
@@ -132,7 +131,7 @@ var redrawChart = function(targetID, newdata) {
 };
 
 var pullData = function(settings, callback) {
-	d3.json("/Poll/ResultsProvider", function(err, data) {
+	d3.json("/Poll/admin/ResultsProvider", function(err, data) {
 		if (err)
 			return console.warn(err);
 
@@ -142,11 +141,11 @@ var pullData = function(settings, callback) {
 		callback(settings, newData);
 	})
 }
-// Sort data in descending order and take the top 10 values
+// Sort data in descending order and take the top 5 values
 var formatData = function(data) {
 	return data.sort(function(a, b) {
 		return b.value - a.value;
-	}).slice(0, 10);
+	}).slice(0, 5);
 }
 // I like to call it what it does
 var redraw = function(settings) {

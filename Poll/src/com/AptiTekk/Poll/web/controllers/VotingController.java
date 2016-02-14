@@ -42,7 +42,7 @@ public class VotingController {
 
 	@EJB
 	CredentialService credentialService;
-	
+
 	@EJB
 	StudentIDAuthenticator studentIdAuthenticator;
 
@@ -88,13 +88,19 @@ public class VotingController {
 	 */
 	private boolean isBanned = BanHelper.isUserBanned(BAN_NAME);
 
+	/**
+	 * The enabled poll, cached for the life of the view.
+	 */
+	private Poll enabledPoll;
+
 	@PostConstruct
 	public void init() {
 		this.setCredential(null);
+		this.enabledPoll = pollService.getEnabledPoll();
 	}
 
 	public Poll getEnabledPoll() {
-		return pollService.getEnabledPoll();
+		return enabledPoll;
 	}
 
 	public List<VoteGroup> getVoteGroups() {
@@ -147,8 +153,7 @@ public class VotingController {
 		if (credential == null)
 			this.setStudentHasAlreadyVoted(false);
 		else
-			this.setStudentHasAlreadyVoted(
-					entryService.hasStudentVoted(credential.getId(), pollService.getEnabledPoll().getId()));
+			this.setStudentHasAlreadyVoted(entryService.hasStudentVoted(credential.getId(), enabledPoll.getId()));
 	}
 
 	public String getStudentIdInput() {
@@ -178,12 +183,11 @@ public class VotingController {
 
 	public void dummyVote() {
 		PollLogger.logVerbose("Adding Dummy Vote");
-		if (credential != null && pollService.getEnabledPoll() != null) {
-			List<VoteGroup> voteGroups = pollService.getEnabledPoll().getVoteGroups();
+		if (credential != null && enabledPoll != null) {
+			List<VoteGroup> voteGroups = enabledPoll.getVoteGroups();
 			if (!voteGroups.isEmpty()) {
-				Entry entry = new Entry(getCredential(), voteGroups.get(0), pollService.getEnabledPoll());
+				Entry entry = new Entry(getCredential(), voteGroups.get(0), enabledPoll);
 				entryService.insert(entry);
-				pollService.getEnabledPoll().getEntries().add(entry);
 				setVotingComplete(true);
 				PollLogger.logVerbose("Dummy Vote Added");
 			} else {
@@ -193,9 +197,8 @@ public class VotingController {
 	}
 
 	public void recordVote(VoteGroup voteGroup) {
-		Entry entry = new Entry(getCredential(), voteGroup, pollService.getEnabledPoll());
+		Entry entry = new Entry(getCredential(), voteGroup, enabledPoll);
 		entryService.insert(entry);
-		pollService.getEnabledPoll().getEntries().add(entry);
 		setVotingComplete(true);
 	}
 

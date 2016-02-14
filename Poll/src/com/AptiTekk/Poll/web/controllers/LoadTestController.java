@@ -55,7 +55,6 @@ public class LoadTestController {
 
 			Entry entry = new Entry(credential, voteGroup, pollService.getEnabledPoll());
 			entryService.insert(entry);
-			pollService.getEnabledPoll().getEntries().add(entry);
 			voteGroup.getEntries().add(entry);
 		}
 	}

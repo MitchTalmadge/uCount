@@ -4,43 +4,36 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 
 import com.AptiTekk.Poll.core.entityBeans.Contestant;
-import com.AptiTekk.Poll.core.entityBeans.Entry;
 import com.AptiTekk.Poll.core.entityBeans.Poll;
+import com.AptiTekk.Poll.core.entityBeans.QPoll;
 import com.AptiTekk.Poll.core.entityBeans.VoteGroup;
 import com.AptiTekk.Poll.core.utilities.PollLogger;
+import com.mysema.query.jpa.impl.JPAQuery;
+import com.mysema.query.jpa.impl.JPAUpdateClause;
 
-@Singleton
+@Stateless
 public class PollService extends Service<Poll> {
-	private Poll enabledPoll;
+	QPoll pollTable = QPoll.poll;
 
 	public PollService() {
 		this.type = Poll.class;
 	}
 
-	@PostConstruct
-	public void init() {
-		List<Poll> polls = getAll();
-		for (Poll poll : polls) {
-			if (poll.isEnabled()) {
-				this.enabledPoll = poll;
-				break;
-			}
-		}
+	public Poll getEnabledPoll() {
+		return new JPAQuery(entityManager).from(pollTable).where(pollTable.enabled.isTrue()).singleResult(pollTable);
 	}
 
-	public Poll getEnabledPoll() {
-		return this.enabledPoll;
+	public void disableAllPolls() {
+		new JPAUpdateClause(entityManager, pollTable).set(pollTable.enabled, false).where(pollTable.enabled.isTrue())
+				.execute();
 	}
 
 	public void enablePoll(Poll poll) {
-		if (this.enabledPoll != null) {
-			enabledPoll.setEnabled(false);
-			merge(enabledPoll);
-		}
+		disableAllPolls();
+
 		if (poll != null) {
 			PollLogger.logVerbose("Setting Enabled Poll to " + poll.getName());
 			poll.setEnabled(true);
@@ -48,14 +41,6 @@ public class PollService extends Service<Poll> {
 		} else {
 			PollLogger.logVerbose("Clearing Enabled Poll.");
 		}
-		this.enabledPoll = poll;
-	}
-
-	public void refreshEnabledPoll() {
-		if (this.enabledPoll != null)
-			this.enabledPoll = get(enabledPoll.getId());
-		else
-			this.enabledPoll = null;
 	}
 
 	@Override
@@ -68,7 +53,7 @@ public class PollService extends Service<Poll> {
 				}
 			}
 		}
-
+		
 		super.delete(id);
 	}
 

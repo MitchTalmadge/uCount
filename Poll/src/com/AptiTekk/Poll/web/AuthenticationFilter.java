@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.AptiTekk.Poll.core.utilities.PollLogger;
+
 import io.undertow.server.session.Session;
 
 /**
@@ -50,12 +52,14 @@ public class AuthenticationFilter implements Filter {
 				return;
 			} else {
 				this.context.log("Unauthorized access request to " + uri);
+				PollLogger.logVerbose("Redirecting to: " + context.getContextPath() + "/login.xhtml");
 				currentRes.sendRedirect(context.getContextPath() + "/login.xhtml");
 			}
 		} else if (uri.contains("login.xhtml")) {
 			if (currentSession != null && currentSession.getAttribute("user") != null
 					&& currentSession.getAttribute("userRole").equals("admin")) {
 				this.context.log("User tried to access " + uri + " but was already logged in.");
+				PollLogger.logVerbose("Redirecting to: " + context.getContextPath() + "/admin/manage.xhtml");
 				currentRes.sendRedirect(context.getContextPath() + "/admin/manage.xhtml");
 				return;
 			} else {

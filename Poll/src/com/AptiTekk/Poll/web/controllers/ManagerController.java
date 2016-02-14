@@ -39,7 +39,12 @@ public class ManagerController {
 	 * The poll currently being looked at on the manage page.
 	 */
 	private Poll selectedPoll;
-
+	
+	/**
+	 * The enabled poll, cached for the life of the view.
+	 */
+	private Poll enabledPoll;
+	
 	/**
 	 * Whether or not we are currently editing the poll name.
 	 */
@@ -64,14 +69,16 @@ public class ManagerController {
 		if (!polls.isEmpty()) {
 			setSelectedPoll(polls.get(0));
 		}
+		enabledPoll = pollService.getEnabledPoll();
 	}
 
 	public Poll getEnabledPoll() {
-		return pollService.getEnabledPoll();
+		return enabledPoll;
 	}
 
 	public void setEnabledPoll(Poll poll) {
 		pollService.enablePoll(poll);
+		this.enabledPoll = pollService.getEnabledPoll();
 	}
 
 	public List<Poll> getPolls() {
@@ -107,7 +114,6 @@ public class ManagerController {
 	public void deleteSelectedPoll() {
 		if (selectedPoll != null) {
 			pollService.delete(selectedPoll.getId());
-			pollService.refreshEnabledPoll();
 			selectedPoll = null;
 			PollLogger.logVerbose("Deleted Selected Poll.");
 			init();
@@ -144,10 +150,6 @@ public class ManagerController {
 		setEditingName(false);
 		selectedPoll.setName(editablePollName);
 		pollService.merge(selectedPoll);
-		if (pollService.getEnabledPoll() != null) {
-			if (selectedPoll.getId() == pollService.getEnabledPoll().getId())
-				pollService.refreshEnabledPoll();
-		}
 	}
 
 	public String getEditablePollDescription() {
@@ -180,10 +182,6 @@ public class ManagerController {
 		setEditingDescription(false);
 		selectedPoll.setDescription(editablePollDescription);
 		pollService.merge(selectedPoll);
-		if (pollService.getEnabledPoll() != null) {
-			if (selectedPoll.getId() == pollService.getEnabledPoll().getId())
-				pollService.refreshEnabledPoll();
-		}
 	}
 
 	public void addNewVoteGroup() {
@@ -191,7 +189,6 @@ public class ManagerController {
 			VoteGroup voteGroup = new VoteGroup(selectedPoll, "New Votegroup");
 			voteGroupService.insert(voteGroup);
 			selectedPoll.getVoteGroups().add(voteGroup);
-			pollService.refreshEnabledPoll();
 		}
 	}
 
@@ -206,7 +203,6 @@ public class ManagerController {
 					break;
 				}
 			}
-			pollService.refreshEnabledPoll();
 		}
 	}
 
@@ -215,7 +211,6 @@ public class ManagerController {
 			PollLogger.logVerbose("Deleting All Vote Groups");
 			voteGroupService.deleteAll(selectedPoll.getId());
 			selectedPoll.getVoteGroups().clear();
-			pollService.refreshEnabledPoll();
 		}
 	}
 

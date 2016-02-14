@@ -2,6 +2,7 @@ package com.AptiTekk.Poll.core.utilities;
 
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Formatter;
+import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
@@ -10,14 +11,30 @@ import org.jboss.logmanager.Level;
 public class PollLogger {
 
 	private static final Logger LOGGER = Logger.getLogger("Poll");
-	private static final ConsoleHandler CONSOLE_HANDLER = new ConsoleHandler();
 
 	static {
+		ConsoleHandler consoleHandler = null;
+		
+		//Look for an existing ConsoleHandler so we don't add another.
+		for(Handler handler : LOGGER.getHandlers())
+		{
+			if(handler instanceof ConsoleHandler)
+				consoleHandler = (ConsoleHandler) handler;
+		}
+		
+		//No existing ConsoleHandler; add one.
+		if(consoleHandler == null)
+		{
+			consoleHandler = new ConsoleHandler();
+			LOGGER.addHandler(consoleHandler);
+		}
+		
+		//Set levels for logging.
 		LOGGER.setLevel(Level.ALL);
-		CONSOLE_HANDLER.setLevel(Level.DEBUG);
+		consoleHandler.setLevel(Level.DEBUG);
 
-		CONSOLE_HANDLER.setFormatter(new PollConsoleFormatter());
-		LOGGER.addHandler(CONSOLE_HANDLER);
+		//Set formatter.
+		consoleHandler.setFormatter(new PollConsoleFormatter());
 	}
 
 	/**

@@ -1,7 +1,5 @@
 package com.AptiTekk.Poll.web.controllers;
 
-import java.util.List;
-
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -17,53 +15,45 @@ import com.AptiTekk.Poll.core.entityBeans.Poll;
 @ViewScoped
 public class PollEntriesController {
 
-  @EJB
-  PollService pollService;
+	@EJB
+	PollService pollService;
 
-  @EJB
-  EntryService entryService;
+	@EJB
+	EntryService entryService;
 
-  private Poll poll;
+	private Poll poll;
 
-  @PostConstruct
-  public void init() {
-    String pollIdParam = FacesContext.getCurrentInstance().getExternalContext()
-        .getRequestParameterMap().get("pollId");
-    try {
-      int pollId = Integer.parseInt(pollIdParam);
-      setPoll(pollService.get(pollId));
-    } catch (NumberFormatException ignored) {
-    }
-  }
+	@PostConstruct
+	public void init() {
+		String pollIdParam = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
+				.get("pollId");
+		try {
+			int pollId = Integer.parseInt(pollIdParam);
+			setPoll(pollService.get(pollId));
+		} catch (NumberFormatException ignored) {
+		}
+	}
 
-  public Poll getPoll() {
-    return poll;
-  }
+	public Poll getPoll() {
+		return poll;
+	}
 
-  public void setPoll(Poll poll) {
-    this.poll = poll;
-  }
+	public void setPoll(Poll poll) {
+		this.poll = poll;
+	}
 
-  public void deleteEntry(Entry entry) {
-    if (entry != null) {
-      entryService.delete(entry.getId());
+	public void deleteEntry(Entry entry) {
+		if (entry != null) {
+			entryService.delete(entry.getId());
 
-      poll = pollService.get(poll.getId()); //Refresh poll
+			poll = pollService.get(poll.getId()); // Refresh poll
+		}
+	}
 
-      if (pollService.getEnabledPoll() != null)
-        if (pollService.getEnabledPoll().getId() == poll.getId())
-          pollService.refreshEnabledPoll();
-    }
-  }
+	public void deleteAllEntries() {
+		entryService.deleteAllEntries(poll.getId());
 
-  public void deleteAllEntries() {
-    entryService.deleteAllEntries(poll.getId());
-
-    poll = pollService.get(poll.getId());
-
-    if (pollService.getEnabledPoll() != null)
-      if (pollService.getEnabledPoll().getId() == poll.getId())
-        pollService.refreshEnabledPoll();
-  }
+		poll = pollService.get(poll.getId());
+	}
 
 }

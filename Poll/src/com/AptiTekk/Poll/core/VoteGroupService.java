@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.servlet.http.Part;
 
 import com.AptiTekk.Poll.core.entityBeans.Contestant;
@@ -16,7 +16,7 @@ import com.AptiTekk.Poll.core.utilities.PollLogger;
 import com.mysema.query.jpa.impl.JPADeleteClause;
 import com.mysema.query.jpa.impl.JPAQuery;
 
-@Singleton
+@Stateless
 public class VoteGroupService extends Service<VoteGroup> {
 	private QVoteGroup voteGroupTable = QVoteGroup.voteGroup;
 
