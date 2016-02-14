@@ -32,7 +32,8 @@
 					<div class="row">
 						<div class="col s12">
 							<h:form>
-								<h:commandLink value="Delete All Entries"
+								<h:commandLink
+									value="Delete All #{ PollEntriesController.poll.entries.size() } Entries"
 									styleClass="waves-effect waves-light btn #{style.colorDelete} right"
 									action="#{PollEntriesController.deleteAllEntries}">
 									<i class="material-icons right">delete</i>
