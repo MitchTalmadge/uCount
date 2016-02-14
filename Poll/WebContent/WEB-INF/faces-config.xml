@@ -45,6 +45,11 @@
     	<managed-bean-class>com.AptiTekk.Poll.web.controllers.LoadTestController</managed-bean-class>
     	<managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+    	<managed-bean-name>CredentialsController</managed-bean-name>
+    	<managed-bean-class>com.AptiTekk.Poll.web.controllers.CredentialsController</managed-bean-class>
+    	<managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
     <navigation-rule>
     	<from-view-id>*</from-view-id>
     	<navigation-case>
@@ -89,6 +94,14 @@
     	<navigation-case>
     		<from-outcome>liveResults</from-outcome>
     		<to-view-id>/admin/liveResults.xhtml</to-view-id>
+    	</navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+    	<display-name>*</display-name>
+    	<from-view-id>*</from-view-id>
+    	<navigation-case>
+    		<from-outcome>credentials</from-outcome>
+    		<to-view-id>/admin/credentials.xhtml</to-view-id>
     	</navigation-case>
     </navigation-rule>
     <validator>
