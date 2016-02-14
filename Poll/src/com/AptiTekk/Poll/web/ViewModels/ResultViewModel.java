@@ -39,14 +39,18 @@ public class ResultViewModel {
 
 	public static List<ResultViewModel> toViewModels(Map<VoteGroup, Integer> map) {
 		List<ResultViewModel> resultViewModels = new ArrayList<>();
-		for(Map.Entry<VoteGroup, Integer> entry : map.entrySet()) {
-			String key = entry.getKey().getName() + " - ";
-			for(int i =0; i< entry.getKey().getContestants().size(); i++) {
-				Contestant contestant = entry.getKey().getContestants().get(i);
-				key += contestant.getName() + ((i == entry.getKey().getContestants().size()-1) ? "" : ", ");
+		for (Map.Entry<VoteGroup, Integer> entry : map.entrySet()) {
+			StringBuilder stringBuilder = new StringBuilder(entry.getKey().getName());
+			if (entry.getKey().getContestants().size() > 0) {
+				stringBuilder.append(" - ");
+				for (int i = 0; i < entry.getKey().getContestants().size(); i++) {
+					Contestant contestant = entry.getKey().getContestants().get(i);
+					stringBuilder.append(contestant.getName())
+							.append(((i == entry.getKey().getContestants().size() - 1) ? "" : ", "));
+				}
 			}
-			
-			resultViewModels.add(new ResultViewModel(key, entry.getValue()));
+
+			resultViewModels.add(new ResultViewModel(stringBuilder.toString(), entry.getValue()));
 		}
 		return resultViewModels;
 	}

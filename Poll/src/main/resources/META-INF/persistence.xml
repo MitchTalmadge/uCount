@@ -2,11 +2,14 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence"
 	version="1.0">
 	<persistence-unit name="PollRepo" transaction-type="JTA">
-		<!-- <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider> -->
 		<jta-data-source>java:jboss/Resource/PollDS</jta-data-source>
+		<shared-cache-mode>DISABLE_SELECTIVE</shared-cache-mode>
 		<properties>
 			<property name="hibernate.hbm2ddl.auto" value="update" />
 			<property name="hibernate.enable_lazy_load_no_trans" value="true" />
+			<property name="hibernate.cache.use_second_level_cache"
+				value="true" />
+			<property name="hibernate.cache.use_query_cache" value="true" />
 		</properties>
 	</persistence-unit>
 </persistence>
