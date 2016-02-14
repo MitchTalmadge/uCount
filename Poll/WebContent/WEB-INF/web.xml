@@ -5,7 +5,7 @@
 	id="WebApp_ID" version="3.1">
 	<display-name>Poll</display-name>
 	<welcome-file-list>
-		<welcome-file>vote.xhtml</welcome-file>
+		<welcome-file>index.xhtml</welcome-file>
 	</welcome-file-list>
 	<context-param>
 		<description>State saving method: 'client' or 'server' (=default). See JSF Specification 2.5.2</description>
