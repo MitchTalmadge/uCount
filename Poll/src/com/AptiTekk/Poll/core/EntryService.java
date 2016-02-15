@@ -22,8 +22,12 @@ public class EntryService extends Service<Entry> {
 		return entry != null;
 	}
 
-	public void deleteAllEntries(int pollId) {
+	public void deleteAllPollEntries(int pollId) {
 		new JPADeleteClause(entityManager, entryTable).where(entryTable.poll.id.eq(pollId)).execute();
+	}
+	
+	public void deleteAllVoteGroupEntries(int voteGroupId) {
+		new JPADeleteClause(entityManager, entryTable).where(entryTable.voteGroup.id.eq(voteGroupId)).execute();
 	}
 
 }

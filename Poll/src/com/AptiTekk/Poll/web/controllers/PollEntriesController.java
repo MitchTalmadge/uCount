@@ -51,7 +51,7 @@ public class PollEntriesController {
 	}
 
 	public void deleteAllEntries() {
-		entryService.deleteAllEntries(poll.getId());
+		entryService.deleteAllPollEntries(poll.getId());
 
 		poll = pollService.get(poll.getId());
 	}

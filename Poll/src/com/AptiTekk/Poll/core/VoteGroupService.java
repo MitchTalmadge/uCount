@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.servlet.http.Part;
 
@@ -19,6 +20,12 @@ import com.mysema.query.jpa.impl.JPAQuery;
 @Stateless
 public class VoteGroupService extends Service<VoteGroup> {
 	private QVoteGroup voteGroupTable = QVoteGroup.voteGroup;
+
+	@EJB
+	ContestantService contestantService;
+
+	@EJB
+	EntryService entryService;
 
 	public VoteGroupService() {
 		this.type = VoteGroup.class;
@@ -65,6 +72,12 @@ public class VoteGroupService extends Service<VoteGroup> {
 	}
 
 	public void deleteAll(int pollId) {
+		List<VoteGroup> voteGroups = new JPAQuery(entityManager).from(voteGroupTable)
+				.where(voteGroupTable.poll.id.eq(pollId)).list(voteGroupTable);
+		for (VoteGroup voteGroup : voteGroups) {
+			contestantService.deleteAllContestants(voteGroup.getId());
+			entryService.deleteAllVoteGroupEntries(voteGroup.getId());
+		}
 		new JPADeleteClause(entityManager, voteGroupTable).where(voteGroupTable.poll.id.eq(pollId)).execute();
 	}
 

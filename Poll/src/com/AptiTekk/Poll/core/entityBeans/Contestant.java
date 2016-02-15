@@ -8,8 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.AptiTekk.Poll.core.Service;
-
 @Entity
 public class Contestant {
 
