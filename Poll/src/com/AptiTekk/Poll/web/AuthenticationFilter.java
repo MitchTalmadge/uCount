@@ -60,7 +60,7 @@ public class AuthenticationFilter implements Filter {
 					&& currentSession.getAttribute("userRole").equals("admin")) {
 				this.context.log("User tried to access " + uri + " but was already logged in.");
 				PollLogger.logVerbose("Redirecting to: " + context.getContextPath() + "/admin/manage.xhtml");
-				currentRes.sendRedirect(context.getContextPath() + "/admin/manage.xhtml");
+				currentRes.sendRedirect(context.getContextPath() + "/admin");
 				return;
 			} else {
 				chain.doFilter(request, response);

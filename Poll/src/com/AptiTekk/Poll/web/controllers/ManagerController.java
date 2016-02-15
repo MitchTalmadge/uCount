@@ -39,12 +39,12 @@ public class ManagerController {
 	 * The poll currently being looked at on the manage page.
 	 */
 	private Poll selectedPoll;
-	
+
 	/**
 	 * The enabled poll, cached for the life of the view.
 	 */
 	private Poll enabledPoll;
-	
+
 	/**
 	 * Whether or not we are currently editing the poll name.
 	 */
@@ -100,14 +100,15 @@ public class ManagerController {
 	}
 
 	public void addNewPoll() {
+		PollLogger.logVerbose("Adding new Poll...");
 		Poll poll = new Poll("New Poll", "This is a new poll. Edit its description here!", false);
+		PollLogger.logVerbose("Inserting Poll...");
 		pollService.insert(poll);
 		PollLogger.logVerbose("Added New Poll.");
-		if (polls.isEmpty()) // If the number of available polls right now is 0,
-								// call init so that a poll is selected.
-			init();
-		else // Otherwise, just refresh the polls list; don't leave the
-				// currently selected poll.
+		if (polls.isEmpty()) {
+			polls = pollService.getAll();
+			setSelectedPoll(polls.get(0));
+		} else
 			polls = pollService.getAll();
 	}
 

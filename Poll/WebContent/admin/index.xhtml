@@ -79,7 +79,7 @@
 									</ui:fragment>
 								</div>
 								<div class="col">
-									<h:link value="View #{ ManagerController.selectedPoll.entries.size() } Poll Entries"
+									<h:link value="View #{(empty ManagerController.selectedPoll.entries) ? '0' : ManagerController.selectedPoll.entries.size()} Poll Entries"
 										styleClass="waves-effect waves-light btn #{style.colorPrimary}"
 										outcome="pollEntries?pollId=#{ManagerController.selectedPoll.id}"
 										includeViewParams="true">
