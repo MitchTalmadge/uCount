@@ -28,6 +28,10 @@ nav ul li.nav-message-mobile:hover {
 	background-color: initial !important;	
 }
 
+nav.breadcrumbs {
+	margin-top: -15px;
+}
+
 .upload-button {
 	margin: 0 !important;
 }

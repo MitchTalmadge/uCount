@@ -54,11 +54,11 @@
     	<from-view-id>*</from-view-id>
     	<navigation-case>
     		<from-outcome>manage</from-outcome>
-    		<to-view-id>/admin/manage.xhtml</to-view-id>
+    		<to-view-id>/admin/index.xhtml</to-view-id>
     	</navigation-case>
     </navigation-rule>
     <navigation-rule>
-    	<from-view-id>/admin/manage.xhtml</from-view-id>
+    	<from-view-id>/admin/index.xhtml</from-view-id>
     	<navigation-case>
     		<from-outcome>modifyVoteGroup</from-outcome>
     		<to-view-id>/admin/modifyVoteGroup.xhtml</to-view-id>
@@ -77,7 +77,7 @@
     	<from-view-id>*</from-view-id>
     	<navigation-case>
     		<from-outcome>vote</from-outcome>
-    		<to-view-id>/vote.xhtml</to-view-id>
+    		<to-view-id>/index.xhtml</to-view-id>
     	</navigation-case>
     </navigation-rule>
     <navigation-rule>

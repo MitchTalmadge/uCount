@@ -12,6 +12,15 @@
 		<div class="section no-pad-top">
 			<div class="section #{style.colorPrimary}">
 
+				<nav class="breadcrumbs #{style.colorPrimaryLight}">
+				<div class="nav-wrapper container #{style.colorPrimaryLight}">
+					<div class="col s12">
+						<h:link outcome="manage" value="Admin Panel" class="breadcrumb" />
+						<a href="#!" class="breadcrumb">Poll Entries</a>
+					</div>
+				</div>
+				</nav>
+
 				<h1 class="header center #{style.colorWhiteText}">Poll Entries</h1>
 
 				<ui:fragment rendered="#{PollEntriesController.poll != null}">
@@ -32,7 +41,8 @@
 					<div class="row">
 						<div class="col s12">
 							<h:form>
-								<h:commandLink value="Delete All Entries"
+								<h:commandLink
+									value="Delete All #{ PollEntriesController.poll.entries.size() } Entries"
 									styleClass="waves-effect waves-light btn #{style.colorDelete} right"
 									action="#{PollEntriesController.deleteAllEntries}">
 									<i class="material-icons right">delete</i>
