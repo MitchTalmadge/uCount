@@ -1,5 +1,6 @@
 package com.AptiTekk.Poll.web.controllers;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -96,16 +97,17 @@ public class VotingController {
 	@PostConstruct
 	public void init() {
 		this.enabledPoll = pollService.getEnabledPoll();
+
+		if (enabledPoll != null) {
+			Collections.shuffle(enabledPoll.getVoteGroups()); // Randomize the
+																// order the
+																// vote groups
+																// are shown
+		}
 	}
 
 	public Poll getEnabledPoll() {
 		return enabledPoll;
-	}
-
-	public List<VoteGroup> getVoteGroups() {
-		List<VoteGroup> voteGroups = enabledPoll.getVoteGroups();
-		Collections.shuffle(voteGroups);
-		return voteGroups;
 	}
 
 	public void authenticate() {
@@ -173,6 +175,7 @@ public class VotingController {
 	}
 
 	public void recordVote(VoteGroup voteGroup) {
+		PollLogger.logVerbose("VoteGroup: " + voteGroup.getName());
 		if (entryService.hasStudentVoted(studentId, enabledPoll.getId()))
 			setStudentHasAlreadyVoted(true);
 		else {

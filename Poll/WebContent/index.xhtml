@@ -83,9 +83,9 @@
 								<!-- This fragment will contain the votegroups and allow the user to vote -->
 								<ui:fragment rendered="#{!VotingController.votingComplete}">
 
-									<h:form id="votingOptionsForm">
+									<h:form>
 										<!-- Iterate over the contestants of the voteGroup -->
-										<ui:repeat value="#{VotingController.voteGroups}"
+										<ui:repeat value="#{VotingController.enabledPoll.voteGroups}"
 											var="voteGroup">
 											<div class="card">
 												<div class="card-content">
