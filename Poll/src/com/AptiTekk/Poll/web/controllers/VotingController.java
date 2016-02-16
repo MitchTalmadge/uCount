@@ -1,5 +1,6 @@
 package com.AptiTekk.Poll.web.controllers;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -102,7 +103,9 @@ public class VotingController {
 	}
 
 	public List<VoteGroup> getVoteGroups() {
-		return voteGroupService.getVoteGroupsFromPoll(getEnabledPoll());
+		List<VoteGroup> voteGroups = enabledPoll.getVoteGroups();
+		Collections.shuffle(voteGroups);
+		return voteGroups;
 	}
 
 	public void authenticate() {

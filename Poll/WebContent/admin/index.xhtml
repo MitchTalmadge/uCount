@@ -220,6 +220,7 @@
 									<thead>
 										<tr>
 											<th style="width: 200px">Name</th>
+											<th style="width: 100px"># Votes</th>
 											<th>Contestants</th>
 										</tr>
 									</thead>
@@ -229,6 +230,7 @@
 											var="voteGroup">
 											<tr>
 												<td>#{voteGroup.name}</td>
+												<td>#{voteGroup.entries.size()}</td>
 												<td><ui:repeat value="#{voteGroup.contestants}"
 														var="contestant" varStatus="status">
 													#{contestant.name}#{status.last ? '' : ','}
