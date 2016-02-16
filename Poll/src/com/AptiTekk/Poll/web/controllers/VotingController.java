@@ -170,9 +170,13 @@ public class VotingController {
 	}
 
 	public void recordVote(VoteGroup voteGroup) {
-		Entry entry = new Entry(studentId, voteGroup, enabledPoll);
-		entryService.insert(entry);
-		setVotingComplete(true);
+		if (entryService.hasStudentVoted(studentId, enabledPoll.getId()))
+			setStudentHasAlreadyVoted(true);
+		else {
+			Entry entry = new Entry(studentId, voteGroup, enabledPoll);
+			entryService.insert(entry);
+			setVotingComplete(true);
+		}
 	}
 
 	public boolean getBanned() {
