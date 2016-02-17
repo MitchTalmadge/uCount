@@ -175,7 +175,6 @@ public class VotingController {
 	}
 
 	public void recordVote(VoteGroup voteGroup) {
-		PollLogger.logVerbose("VoteGroup: " + voteGroup.getName());
 		if (entryService.hasStudentVoted(studentId, enabledPoll.getId()))
 			setStudentHasAlreadyVoted(true);
 		else {

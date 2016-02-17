@@ -1,68 +1,84 @@
 package com.AptiTekk.Poll.core.entityBeans;
 
+import java.util.Calendar;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class Entry {
 
-  @Id
-  @GeneratedValue
-  private int id;
+	@Id
+	@GeneratedValue
+	private int id;
 
-  private int studentNumber;
+	private int studentNumber;
 
-  @ManyToOne
-  @JoinColumn(name = "voteGroupId")
-  private VoteGroup voteGroup;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Calendar submitDate;
 
-  @ManyToOne
-  @JoinColumn(name = "pollId")
-  private Poll poll;
+	@ManyToOne
+	@JoinColumn(name = "voteGroupId")
+	private VoteGroup voteGroup;
 
-  public Entry() {
+	@ManyToOne
+	@JoinColumn(name = "pollId")
+	private Poll poll;
 
-  }
+	public Entry() {
 
-  public Entry(int studentNumber, VoteGroup voteGroup, Poll poll) {
-    setStudentNumber(studentNumber);
-    setVoteGroup(voteGroup);
-    setPoll(poll);
-  }
+	}
 
-  public int getId() {
-    return id;
-  }
+	public Entry(int studentNumber, VoteGroup voteGroup, Poll poll) {
+		setStudentNumber(studentNumber);
+		setVoteGroup(voteGroup);
+		setPoll(poll);
+		setSubmitDate(Calendar.getInstance());
+	}
 
-  public void setId(int id) {
-    this.id = id;
-  }
+	public int getId() {
+		return id;
+	}
 
-  public VoteGroup getVoteGroup() {
-    return voteGroup;
-  }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-  public void setVoteGroup(VoteGroup voteGroup) {
-    this.voteGroup = voteGroup;
-  }
+	public VoteGroup getVoteGroup() {
+		return voteGroup;
+	}
 
-  public Poll getPoll() {
-    return poll;
-  }
+	public void setVoteGroup(VoteGroup voteGroup) {
+		this.voteGroup = voteGroup;
+	}
 
-  public void setPoll(Poll poll) {
-    this.poll = poll;
-  }
+	public Poll getPoll() {
+		return poll;
+	}
 
-public int getStudentNumber() {
-	return studentNumber;
-}
+	public void setPoll(Poll poll) {
+		this.poll = poll;
+	}
 
-public void setStudentNumber(int studentNumber) {
-	this.studentNumber = studentNumber;
-}
+	public int getStudentNumber() {
+		return studentNumber;
+	}
+
+	public void setStudentNumber(int studentNumber) {
+		this.studentNumber = studentNumber;
+	}
+
+	public Calendar getSubmitDate() {
+		return submitDate;
+	}
+
+	public void setSubmitDate(Calendar submitDate) {
+		this.submitDate = submitDate;
+	}
 
 }
