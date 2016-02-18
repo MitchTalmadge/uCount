@@ -11,7 +11,7 @@
 		<div class="section no-pad-top">
 
 			<!-- Shown when a poll is enabled; displays poll name and description -->
-			<ui:fragment rendered="#{VotingController.enabledPoll != null}">
+			<ui:fragment rendered="#{(VotingController.enabledPoll != null and settings.private_voting == false) or (VotingController.enabledPoll != null and settings.private_voting == true and LoginController.user != null)}">
 				<div class="section #{style.colorPrimary}">
 					<div class="container">
 						<h1 class="header center #{style.colorWhiteText}">#{VotingController.enabledPoll.name}</h1>
@@ -21,7 +21,7 @@
 			</ui:fragment>
 
 			<!-- Shown when no polls are enabled; asks the user to come back later. -->
-			<ui:fragment rendered="#{VotingController.enabledPoll == null}">
+			<ui:fragment rendered="#{VotingController.enabledPoll == null or (settings.private_voting == true and LoginController.user == null)}">
 				<div class="section #{style.colorPrimary}">
 					<h1 class="header center #{style.colorWhiteText}">No polls
 						are available.</h1>
@@ -34,7 +34,7 @@
 
 				<!-- This group is only shown when a poll is enabled. -->
 				<h:panelGroup id="mainContent"
-					rendered="#{VotingController.enabledPoll != null}">
+					rendered="#{(VotingController.enabledPoll != null and settings.private_voting == false) or (VotingController.enabledPoll != null and settings.private_voting == true and LoginController.user != null)}">
 
 					<!-- This fragment is shown if the user is not banned. -->
 					<ui:fragment rendered="#{!VotingController.banned}">
@@ -69,8 +69,8 @@
 									</div>
 									<div class="row center">
 										<div class="col s12 m4 push-m4">
-											Any information entered or seen here can and will be destroyed as prescribed in our
-											<h:link outcome="ppolicy" value="Privacy Policy" />
+											All information entered into this poll is encrypted and cannot be tied back to any particular student. All data will be destroyed after voting closes.
+											See our <h:link outcome="ppolicy" value="Privacy Policy" /> for more info.
 										</div>
 									</div>
 								</h:form>
