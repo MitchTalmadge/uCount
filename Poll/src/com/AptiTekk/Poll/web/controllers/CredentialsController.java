@@ -26,90 +26,134 @@ import com.AptiTekk.Poll.core.utilities.PollLogger;
 @ViewScoped
 public class CredentialsController {
 
-	@EJB
-	CredentialService credentialService;
+  @EJB
+  CredentialService credentialService;
 
-	private Part importedCredentials;
+  private Part importedCredentials;
 
-	private List<Credential> credentials;
+  private List<Credential> credentials;
 
-	@PostConstruct
-	public void init() {
-		credentials = credentialService.getAll();
-	}
+  private int credentialIdCurrentlyEditing = -1;
 
-	public void addCredential() {
-		Credential credential = new Credential();
-		credentialService.insert(credential);
-		credentials.add(credential);
-	}
+  private int editableStudentId = -1;
 
-	public void importCredentials() {
-		PollLogger.logVerbose("Importing Credentials File...");
-		if (importedCredentials != null) {
-			try {
-				InputStream inputStream = importedCredentials.getInputStream();
-				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+  @PostConstruct
+  public void init() {
+    credentials = credentialService.getAll();
+  }
 
-				String line = null;
-				while ((line = bufferedReader.readLine()) != null) {
-					if (line.equals("studentId"))
-						continue;
-					else {
-						try {
-							int studentNumber = Integer.parseInt(line);
-							Credential credential = new Credential(studentNumber);
-							credentialService.insert(credential);
-						} catch (NumberFormatException e) {
-							PollLogger.logVerbose("Couldn't read Student ID (Line = " + line + "). Skipping...");
-						}
-					}
-				}
+  public void addCredential() {
+    Credential credential = new Credential();
+    credentialService.insert(credential);
+    credentials.add(credential);
+  }
 
-				bufferedReader.close();
-				inputStream.close();
+  public void importCredentials() {
+    PollLogger.logVerbose("Importing Credentials File...");
+    if (importedCredentials != null) {
+      try {
+        InputStream inputStream = importedCredentials.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-				//Refresh page
-				FacesContext context = FacesContext.getCurrentInstance();
-				String viewId = context.getViewRoot().getViewId();
-				ViewHandler handler = context.getApplication().getViewHandler();
-				UIViewRoot root = handler.createView(context, viewId);
-				root.setViewId(viewId);
-				context.setViewRoot(root);
+        String line = null;
+        while ((line = bufferedReader.readLine()) != null) {
+          if (line.equals("studentId"))
+            continue;
+          else {
+            try {
+              int studentNumber = Integer.parseInt(line);
+              Credential credential = new Credential(studentNumber);
+              credentialService.insert(credential);
+            } catch (NumberFormatException e) {
+              PollLogger.logVerbose("Couldn't read Student ID (Line = " + line + "). Skipping...");
+            }
+          }
+        }
 
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+        bufferedReader.close();
+        inputStream.close();
 
-	public void deleteCredential(Credential credential) {
-		if (credential != null) {
-			credentialService.delete(credential.getId());
-			Iterator<Credential> iterator = credentials.iterator();
-			while (iterator.hasNext()) {
-				Credential c = iterator.next();
-				if (c.getId() == credential.getId())
-					iterator.remove();
-			}
-		}
-	}
+        // Refresh page
+        FacesContext context = FacesContext.getCurrentInstance();
+        String viewId = context.getViewRoot().getViewId();
+        ViewHandler handler = context.getApplication().getViewHandler();
+        UIViewRoot root = handler.createView(context, viewId);
+        root.setViewId(viewId);
+        context.setViewRoot(root);
 
-	public void deleteAllCredentials() {
-		credentialService.deleteAllCredentials();
-		credentials.clear();
-	}
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+  }
 
-	public List<Credential> getCredentials() {
-		return credentials;
-	}
+  public void beginEditingCredential(Credential credential) {
+    this.setCredentialIdCurrentlyEditing(credential.getId());
+    this.setEditableStudentId(credential.getStudentId());
+  }
+  
+  public void finishEditingCredential()
+  {
+    if(this.getEditableStudentId() != -1)
+    {
+      for(Credential credential : credentials)
+      {
+        if(credential.getId() == getCredentialIdCurrentlyEditing())
+        {
+          credential.setId(getEditableStudentId());
+          credentialService.merge(credential);
+          break;
+        }
+      }
+      
+      setCredentialIdCurrentlyEditing(-1);
+    }
+  }
 
-	public Part getImportedCredentials() {
-		return importedCredentials;
-	}
+  public void deleteCredential(Credential credential) {
+    if (credential != null) {
+      credentialService.delete(credential.getId());
+      Iterator<Credential> iterator = credentials.iterator();
+      while (iterator.hasNext()) {
+        Credential c = iterator.next();
+        if (c.getId() == credential.getId())
+          iterator.remove();
+      }
+      setCredentialIdCurrentlyEditing(-1);
+    }
+  }
 
-	public void setImportedCredentials(Part importedCredentials) {
-		this.importedCredentials = importedCredentials;
-	}
+  public void deleteAllCredentials() {
+    credentialService.deleteAllCredentials();
+    credentials.clear();
+  }
+
+  public List<Credential> getCredentials() {
+    return credentials;
+  }
+
+  public Part getImportedCredentials() {
+    return importedCredentials;
+  }
+
+  public void setImportedCredentials(Part importedCredentials) {
+    this.importedCredentials = importedCredentials;
+  }
+
+  public int getCredentialIdCurrentlyEditing() {
+    return credentialIdCurrentlyEditing;
+  }
+
+  public void setCredentialIdCurrentlyEditing(int credentialIdCurrentlyEditing) {
+    this.credentialIdCurrentlyEditing = credentialIdCurrentlyEditing;
+  }
+
+  public int getEditableStudentId() {
+    return editableStudentId;
+  }
+
+  public void setEditableStudentId(int editableStudentId) {
+    this.editableStudentId = editableStudentId;
+  }
 
 }
