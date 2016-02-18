@@ -1,5 +1,6 @@
 package com.AptiTekk.Poll.core.entityBeans;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import javax.persistence.Entity;
@@ -10,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.AptiTekk.Poll.core.utilities.Sha256Helper;
+
 @Entity
 public class Entry {
 
@@ -17,7 +20,7 @@ public class Entry {
 	@GeneratedValue
 	private int id;
 
-	private int studentNumber;
+	private byte[] hashedStudentId;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar submitDate;
@@ -34,8 +37,8 @@ public class Entry {
 
 	}
 
-	public Entry(int studentNumber, VoteGroup voteGroup, Poll poll) {
-		setStudentNumber(studentNumber);
+	public Entry(int studentId, VoteGroup voteGroup, Poll poll) {
+		setHashedStudentId(Sha256Helper.rawToSha(studentId + ""));
 		setVoteGroup(voteGroup);
 		setPoll(poll);
 		setSubmitDate(Calendar.getInstance());
@@ -65,20 +68,25 @@ public class Entry {
 		this.poll = poll;
 	}
 
-	public int getStudentNumber() {
-		return studentNumber;
-	}
-
-	public void setStudentNumber(int studentNumber) {
-		this.studentNumber = studentNumber;
-	}
-
 	public Calendar getSubmitDate() {
 		return submitDate;
 	}
 
+	public String getFriendlySubmitDate() {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		return simpleDateFormat.format(getSubmitDate().getTime());
+	}
+
 	public void setSubmitDate(Calendar submitDate) {
 		this.submitDate = submitDate;
+	}
+
+	public byte[] getHashedStudentId() {
+		return hashedStudentId;
+	}
+
+	public void setHashedStudentId(byte[] hashedStudentId) {
+		this.hashedStudentId = hashedStudentId;
 	}
 
 }

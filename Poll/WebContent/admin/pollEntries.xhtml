@@ -60,16 +60,16 @@
 								<table class="striped responsive-table">
 									<thead>
 										<tr>
-											<th style="width: 150px">Student ID</th>
-											<th>Vote Group ID</th>
+											<th style="width:200px">Submit Time</th>
+											<th>Vote Group Name</th>
 										</tr>
 									</thead>
 									<tbody>
 										<ui:repeat value="#{PollEntriesController.poll.entries}"
 											var="entry">
 											<tr>
-												<td>#{entry.studentNumber}</td>
-												<td>#{entry.voteGroup.id}</td>
+												<td>#{entry.getFriendlySubmitDate()}</td>
+												<td>#{entry.voteGroup.name}</td>
 												<td style="width: 50px"><h:form>
 														<h:commandLink class="#{style.colorDeleteText}"
 															action="#{PollEntriesController.deleteEntry(entry)}">
