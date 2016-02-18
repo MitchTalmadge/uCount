@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 
 import com.AptiTekk.Poll.core.entityBeans.Property;
 import com.AptiTekk.Poll.core.entityBeans.QProperty;
+import com.mysema.query.jpa.impl.JPAQuery;
 
 @Stateless
 public class PropertyService extends Service<Property> {
@@ -15,34 +16,35 @@ public class PropertyService extends Service<Property> {
     this.type = Property.class;
   }
 
-  public String getString(String key) {
-    List<Property> properties = getAll();
-    for (Property property : properties) {
-      if (property.getKey().equals(key)) {
-        return property.getValue();
-      }
+  public Property findPropertyIfExists(String key) {
+    try {
+      return new JPAQuery(entityManager).from(propertiesTable).where(propertiesTable.key.eq(key))
+          .singleResult(propertiesTable);
+    } catch (Exception e) {
+      return null;
     }
+  }
+
+  public String getString(String key) {
+    Property property = findPropertyIfExists(key);
+    if (property != null)
+      return property.getValue();
     return null;
   }
-  
+
   public int getInt(String key) {
-    List<Property> properties = getAll();
-    for (Property property : properties) {
-      if (property.getKey().equals(key)) {
-        return Integer.parseInt(property.getValue());
-      }
-    }
+    Property property = findPropertyIfExists(key);
+    if (property != null)
+      return Integer.parseInt(property.getValue());
     return -1;
   }
-  
+
   public void set(String key, String value) {
-    List<Property> properties = getAll();
-    for (Property property : properties) {
-      if (property.getKey().equals(key)) {
-        property.setValue(value);
-        merge(property);
-        return;
-      }
+    Property property = findPropertyIfExists(key);
+    if (property != null) {
+      property.setValue(value);
+      merge(property);
+      return;
     }
     Property newProperty = new Property(key, value);
     insert(newProperty);
