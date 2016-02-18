@@ -13,45 +13,45 @@ import com.AptiTekk.Poll.core.utilities.PollLogger;
 @Remote
 public abstract class Service<T> {
 
-    @PersistenceContext(unitName = "PollRepo")
-    protected EntityManager entityManager;
+	@PersistenceContext(unitName = "PollRepo")
+	protected EntityManager entityManager;
 
-    protected Class<T> type;
+	protected Class<T> type;
 
-    public Service() {
+	public Service() {
 
-    }
-
-    public void insert(T o) {
-	this.entityManager.persist(o);
-    }
-
-    public T get(int id) {
-	return this.entityManager.find(this.type, id);
-    }
-
-    public List<T> getAll() {
-	Query query = entityManager.createQuery("SELECT e FROM "
-		+ ((type.getAnnotation(Table.class) != null) ? type.getAnnotation(Table.class).name() : type.getName())
-		+ " e");
-	return (List<T>) query.getResultList();
-    }
-
-    public void update(T newData, int id) {
-	T old = entityManager.find(type, id);
-	if (old != null) {
-	    old = newData;
 	}
-    }
 
-    public void delete(int id) {
-	T entity = entityManager.getReference(type, id);
-	if (entity != null)
-	    entityManager.remove(entity);
-    }
+	public void insert(T o) {
+		this.entityManager.persist(o);
+	}
 
-    public T merge(T entity) {
-	return entityManager.merge(entity);
-    }
+	public T get(int id) {
+		return this.entityManager.find(this.type, id);
+	}
+
+	public List<T> getAll() {
+		Query query = entityManager.createQuery("SELECT e FROM "
+				+ ((type.getAnnotation(Table.class) != null) ? type.getAnnotation(Table.class).name() : type.getName())
+				+ " e");
+		return (List<T>) query.getResultList();
+	}
+
+	public void update(T newData, int id) {
+		T old = entityManager.find(type, id);
+		if (old != null) {
+			old = newData;
+		}
+	}
+
+	public void delete(int id) {
+		T entity = entityManager.getReference(type, id);
+		if (entity != null)
+			entityManager.remove(entity);
+	}
+
+	public T merge(T entity) {
+		return entityManager.merge(entity);
+	}
 
 }
