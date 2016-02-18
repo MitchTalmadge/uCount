@@ -58,6 +58,13 @@
     	</navigation-case>
     </navigation-rule>
     <navigation-rule>
+    	<from-view-id>*</from-view-id>
+    	<navigation-case>
+    		<from-outcome>ppolicy</from-outcome>
+    		<to-view-id>/privacyPolicy.xhtml</to-view-id>
+    	</navigation-case>
+    </navigation-rule>
+    <navigation-rule>
     	<from-view-id>/admin/index.xhtml</from-view-id>
     	<navigation-case>
     		<from-outcome>modifyVoteGroup</from-outcome>
