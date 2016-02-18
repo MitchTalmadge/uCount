@@ -2,39 +2,54 @@ package com.AptiTekk.Poll.core.entityBeans;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "Properties")
 public class Property {
 
-	@Column(unique = true, nullable = false)
-	private
-	String key;
-	
-	private String value;
-	
-	public Property() {
-		
-	}
-	
-	public Property(String key, String value) {
-		this.setKey(key);
-		this.setValue(value);
-	}
+  @Id
+  @GeneratedValue
+  private int id;
 
-	public String getKey() {
-		return key;
-	}
+  @Column(unique = true, nullable = false)
+  private String name;
 
-	public void setKey(String key) {
-		this.key = key;
-	}
+  private String value;
 
-	public String getValue() {
-		return value;
-	}
+  public Property() {
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+  }
+
+  public Property(String key, String value) {
+    this.setName(name);
+    this.setValue(value);
+  }
+  
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getValue() {
+    return value;
+  }
+
+  public void setValue(String value) {
+    this.value = value;
+  }
 
 }

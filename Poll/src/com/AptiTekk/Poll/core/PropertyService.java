@@ -1,7 +1,5 @@
 package com.AptiTekk.Poll.core;
 
-import java.util.List;
-
 import javax.ejb.Stateless;
 
 import com.AptiTekk.Poll.core.entityBeans.Property;
@@ -16,9 +14,9 @@ public class PropertyService extends Service<Property> {
     this.type = Property.class;
   }
 
-  public Property findPropertyIfExists(String key) {
+  public Property findPropertyIfExists(String name) {
     try {
-      return new JPAQuery(entityManager).from(propertiesTable).where(propertiesTable.key.eq(key))
+      return new JPAQuery(entityManager).from(propertiesTable).where(propertiesTable.name.eq(name))
           .singleResult(propertiesTable);
     } catch (Exception e) {
       return null;
