@@ -15,9 +15,9 @@ public class CredentialService extends Service<Credential> {
 		this.type = Credential.class;
 	}
 
-	public Credential getByStudentNumber(int studentNumber) {
+	public Credential getByStudentId(int studentId) {
 		Credential credential = new JPAQuery(entityManager).from(credentialTable)
-				.where(credentialTable.studentNumber.eq(studentNumber)).singleResult(credentialTable);
+				.where(credentialTable.studentId.eq(studentId)).singleResult(credentialTable);
 		return credential;
 	}
 

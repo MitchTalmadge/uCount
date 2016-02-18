@@ -11,14 +11,14 @@ public class Credential {
 	@GeneratedValue
 	private int id;
 
-	private int studentNumber;
+	private int studentId;
 
 	public Credential() {
 
 	}
 
-	public Credential(int studentNumber) {
-		setStudentNumber(studentNumber);
+	public Credential(int studentId) {
+		setStudentId(studentId);
 	}
 
 	public int getId() {
@@ -29,12 +29,12 @@ public class Credential {
 		this.id = id;
 	}
 
-	public int getStudentNumber() {
-		return studentNumber;
+	public int getStudentId() {
+		return studentId;
 	}
 
-	public void setStudentNumber(int studentNumber) {
-		this.studentNumber = studentNumber;
+	public void setStudentId(int studentId) {
+		this.studentId = studentId;
 	}
 
 }

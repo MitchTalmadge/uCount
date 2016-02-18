@@ -19,10 +19,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.AptiTekk.Poll.core.CredentialService;
-import com.AptiTekk.Poll.core.EntryService;
-import com.AptiTekk.Poll.core.PollService;
 import com.AptiTekk.Poll.core.entityBeans.Credential;
-import com.AptiTekk.Poll.core.entityBeans.Poll;
 
 @Stateless
 public class StudentIDAuthenticator {
@@ -103,7 +100,7 @@ public class StudentIDAuthenticator {
 	public Credential authenticateIdUsingCredentialsTable(int studentId) throws AuthenticationException {
 		PollLogger.logVerbose("Authenticating StudentID with Credentials table.");
 
-		Credential credential = credentialService.getByStudentNumber(studentId);
+		Credential credential = credentialService.getByStudentId(studentId);
 		if (credential == null) {
 			throw new AuthenticationException("The Student ID you entered is invalid. Please try again.");
 		} else {
@@ -112,7 +109,7 @@ public class StudentIDAuthenticator {
 		}
 	}
 
-	public Credential authenticateIdUsingBasicVerification(int studentId) throws AuthenticationException {
+	public void authenticateIdUsingBasicVerification(int studentId) throws AuthenticationException {
 		PollLogger.logVerbose("Authenticating StudentID with basic methods.");
 
 		if (studentId > 9999999 || studentId < 8000000) {
@@ -120,16 +117,6 @@ public class StudentIDAuthenticator {
 			throw new AuthenticationException("The Student ID you entered is invalid. Please try again.");
 		} else {
 			PollLogger.logVerbose("ID Was Valid!");
-
-			Credential credential = credentialService.getByStudentNumber(studentId);
-			if (credential == null) {
-				PollLogger.logVerbose("Creating new Credential.");
-				credential = new Credential(studentId);
-				credentialService.insert(credential);
-			} else {
-				PollLogger.logVerbose("Found existing Credential.");
-			}
-			return credential;
 		}
 	}
 

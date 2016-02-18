@@ -53,7 +53,7 @@ public class CredentialsController {
 
 				String line = null;
 				while ((line = bufferedReader.readLine()) != null) {
-					if (line.equals("studentNumber"))
+					if (line.equals("studentId"))
 						continue;
 					else {
 						try {
