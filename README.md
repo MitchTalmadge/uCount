@@ -1,2 +1,1 @@
-# Sweethearts-Poll-Java-EE
-
+# uCount Poll System
