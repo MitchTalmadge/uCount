@@ -6,7 +6,7 @@ import javax.faces.context.FacesContext;
 
 public class PropertiesHelper {
 
-	private final static String APPLICATION_PROPERTIES_FILE = "com.AptiTekk.application";
+	private final static String APPLICATION_PROPERTIES_FILE = "org.BinghamTSA.application";
 
 	public static String getApplicationProperty(String key) {
 		ResourceBundle resourceBundle = ResourceBundle.getBundle(APPLICATION_PROPERTIES_FILE);
