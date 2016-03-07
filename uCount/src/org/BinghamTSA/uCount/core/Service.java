@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Remote
 public abstract class Service<T> {
 
-	@PersistenceContext(unitName = "PollRepo")
+	@PersistenceContext(unitName = "uCountRepo")
 	protected EntityManager entityManager;
 
 	protected Class<T> type;

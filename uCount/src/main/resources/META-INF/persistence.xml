@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="http://java.sun.com/xml/ns/persistence"
 	version="1.0">
-	<persistence-unit name="PollRepo" transaction-type="JTA">
-		<jta-data-source>java:jboss/Resource/PollDS</jta-data-source>
+	<persistence-unit name="uCountRepo" transaction-type="JTA">
+		<jta-data-source>java:jboss/Resource/uCountDS</jta-data-source>
 		<shared-cache-mode>DISABLE_SELECTIVE</shared-cache-mode>
 		<properties>
 			<property name="hibernate.hbm2ddl.auto" value="update" />

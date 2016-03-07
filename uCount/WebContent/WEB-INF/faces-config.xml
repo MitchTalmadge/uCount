@@ -7,11 +7,11 @@
     
     <application>
 		<resource-bundle>
-			<base-name>com.AptiTekk.application</base-name>
+			<base-name>org.BinghamTSA.application</base-name>
 			<var>settings</var>
 		</resource-bundle>
 		<resource-bundle>
-			<base-name>com.AptiTekk.style</base-name>
+			<base-name>org.BinghamTSA.style</base-name>
 			<var>style</var>
 		</resource-bundle>
 	</application>
