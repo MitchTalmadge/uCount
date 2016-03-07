@@ -71,16 +71,17 @@
 </h:head>
 
 <h:body>
-	<ui:debug hotkey="x"
-		rendered="#{initParam['javax.faces.FACELETS_DEVELOPMENT']}" />
+	<h:header>
+		<ui:include src="/WEB-INF/templates/header.xhtml" />
+	</h:header>
 
-	<header> <ui:include src="/WEB-INF/templates/header.xhtml" />
-	</header>
+	<h:main>
+		<ui:insert name="content" />
+	</h:main>
 
-	<main> <ui:insert name="content" /> </main>
-
-	<footer class="page-footer #{style.colorComplementary}"> <ui:include
-		src="/WEB-INF/templates/footer.xhtml" /> </footer>
+	<h:footer class="page-footer #{style.colorComplementary}">
+		<ui:include src="/WEB-INF/templates/footer.xhtml" />
+	</h:footer>
 
 	<!--  Scripts-->
 	<h:outputScript library="primefaces" name="jquery/jquery.js" />
