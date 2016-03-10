@@ -71,17 +71,17 @@
 </h:head>
 
 <h:body>
-	<h:header>
+	<header>
 		<ui:include src="/WEB-INF/templates/header.xhtml" />
-	</h:header>
+	</header>
 
-	<h:main>
+	<main>
 		<ui:insert name="content" />
-	</h:main>
+	</main>
 
-	<h:footer class="page-footer #{style.colorComplementary}">
+	<footer class="page-footer #{style.colorComplementary}">
 		<ui:include src="/WEB-INF/templates/footer.xhtml" />
-	</h:footer>
+	</footer>
 
 	<!--  Scripts-->
 	<h:outputScript library="primefaces" name="jquery/jquery.js" />
