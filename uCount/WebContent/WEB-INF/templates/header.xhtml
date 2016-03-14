@@ -7,8 +7,10 @@
 <ui:composition>
 	<nav class="#{style.colorPrimaryDark}" role="navigation">
 		<div class="nav-wrapper container">
-			<h:link id="logo-container" styleClass="brand-logo hide-on-med-and-down" outcome="vote"
-				value="#{settings.header_title}" />
+			<h:link id="logo-container"
+				styleClass="brand-logo hide-on-med-and-down" outcome="vote">
+				<h:graphicImage value="/resources/images/Logo-White.svg" style="height:45px; margin-top:10px;"/>
+			</h:link>
 			<a href="#" data-activates="nav-mobile" class="button-collapse"><i
 				class="material-icons">menu</i></a>
 
@@ -17,8 +19,7 @@
 
 				<!-- Shown when an admin is logged in -->
 				<ui:fragment rendered="#{LoginController.user != null}">
-					<li class="nav-message">Hello,
-						#{LoginController.user.name}!</li>
+					<li class="nav-message">Hello, #{LoginController.user.name}!</li>
 					<li><h:link outcome="manage" value="Admin Panel" /></li>
 					<li><h:link outcome="liveResults" value="Live Results" /></li>
 					<li><h:link outcome="credentials" value="Credentials" /></li>
