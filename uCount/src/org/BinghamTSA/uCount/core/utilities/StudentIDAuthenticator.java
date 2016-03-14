@@ -23,109 +23,109 @@ import org.apache.http.message.BasicNameValuePair;
 @Stateless
 public class StudentIDAuthenticator {
 
-	@EJB
-	private CredentialService credentialService;
+  @EJB
+  private CredentialService credentialService;
 
-	private static final String JSDCookie = getOverdriveCookie();
+  private static final String JSDCookie = getOverdriveCookie();
 
-	/**
-	 * Gets a cookie from Overdrive.
-	 */
-	private static String getOverdriveCookie() {
-		PollLogger.logVerbose("Getting Cookie from Overdrive");
-		try {
-			String url = "https://jordanut.libraryreserve.com/10/45/en/SignIn.htm?url=Default.htm";
+  /**
+   * Gets a cookie from Overdrive.
+   */
+  private static String getOverdriveCookie() {
+    PollLogger.logVerbose("Getting Cookie from Overdrive");
+    try {
+      String url = "https://jordanut.libraryreserve.com/10/45/en/SignIn.htm?url=Default.htm";
 
-			HttpClient httpClient = HttpClientBuilder.create().build();
-			HttpGet httpGet = new HttpGet(url);
+      HttpClient httpClient = HttpClientBuilder.create().build();
+      HttpGet httpGet = new HttpGet(url);
 
-			httpGet.setHeader("User-Agent",
-					"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.103 Safari/537.36");
+      httpGet.setHeader("User-Agent",
+          "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.103 Safari/537.36");
 
-			HttpResponse httpResponse = httpClient.execute(httpGet);
+      HttpResponse httpResponse = httpClient.execute(httpGet);
 
-			PollLogger.logVerbose("\nSending 'GET' request to URL : " + url);
-			PollLogger.logVerbose("Response Code : " + httpResponse.getStatusLine().getStatusCode());
-			PollLogger.logVerbose("Cookie: " + httpResponse.getFirstHeader("Set-Cookie").getValue());
+      PollLogger.logVerbose("\nSending 'GET' request to URL : " + url);
+      PollLogger.logVerbose("Response Code : " + httpResponse.getStatusLine().getStatusCode());
+      PollLogger.logVerbose("Cookie: " + httpResponse.getFirstHeader("Set-Cookie").getValue());
 
-			return httpResponse.getFirstHeader("Set-Cookie").getValue();
+      return httpResponse.getFirstHeader("Set-Cookie").getValue();
 
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return "";
-	}
+    } catch (ClientProtocolException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return "";
+  }
 
-	public void authenticateIdUsingOverdrive(int studentId) throws AuthenticationException {
-		try { // VERY HACKY METHOD of authenticating student IDs ---
-				// Uses Jordan School District's Overdrive login.
-			PollLogger.logVerbose("Authenticating StudentID " + studentId + " with Overdrive");
+  public void authenticateIdUsingOverdrive(int studentId) throws AuthenticationException {
+    try {
+      PollLogger.logVerbose("Authenticating StudentID " + studentId + " with Overdrive");
 
-			String url = "https://jordanut.libraryreserve.com/10/45/en/BANGAuthenticate.dll";
+      String url = "https://jordanut.libraryreserve.com/10/45/en/BANGAuthenticate.dll";
 
-			HttpClient httpClient = HttpClientBuilder.create().build();
-			HttpPost httpPost = new HttpPost(url);
+      HttpClient httpClient = HttpClientBuilder.create().build();
+      HttpPost httpPost = new HttpPost(url);
 
-			httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
-			httpPost.setHeader("User-Agent",
-					"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.103 Safari/537.36");
-			httpPost.setHeader("Cookie", JSDCookie);
+      httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
+      httpPost.setHeader("User-Agent",
+          "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.103 Safari/537.36");
+      httpPost.setHeader("Cookie", JSDCookie);
 
-			List<NameValuePair> urlParameters = new ArrayList<>();
-			urlParameters.add(new BasicNameValuePair("URL", "Default.htm"));
-			urlParameters.add(new BasicNameValuePair("LibraryCardILS", "jordan"));
-			urlParameters.add(new BasicNameValuePair("lcn", studentId + ""));
+      List<NameValuePair> urlParameters = new ArrayList<>();
+      urlParameters.add(new BasicNameValuePair("URL", "Default.htm"));
+      urlParameters.add(new BasicNameValuePair("LibraryCardILS", "jordan"));
+      urlParameters.add(new BasicNameValuePair("lcn", studentId + ""));
 
-			httpPost.setEntity(new UrlEncodedFormEntity(urlParameters));
+      httpPost.setEntity(new UrlEncodedFormEntity(urlParameters));
 
-			HttpResponse httpResponse = httpClient.execute(httpPost);
-			String location = httpResponse.getFirstHeader("Location").getValue();
+      HttpResponse httpResponse = httpClient.execute(httpPost);
+      String location = httpResponse.getFirstHeader("Location").getValue();
 
-			if (location.contains("Error.htm")) {
-				PollLogger.logVerbose("ID Was Invalid!");
-				throw new AuthenticationException("The entered Student ID is invalid.");
-			}
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+      if (location.contains("Error.htm")) {
+        PollLogger.logVerbose("ID Was Invalid!");
+        throw new AuthenticationException("The entered Student ID is invalid.");
+      }
+    } catch (UnsupportedEncodingException e) {
+      e.printStackTrace();
+    } catch (ClientProtocolException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
-	public Credential authenticateIdUsingCredentialsTable(int studentId) throws AuthenticationException {
-		PollLogger.logVerbose("Authenticating StudentID with Credentials table.");
+  public Credential authenticateIdUsingCredentialsTable(int studentId)
+      throws AuthenticationException {
+    PollLogger.logVerbose("Authenticating StudentID with Credentials table.");
 
-		Credential credential = credentialService.getByStudentId(studentId);
-		if (credential == null) {
-			throw new AuthenticationException("The Student ID you entered is invalid. Please try again.");
-		} else {
-			PollLogger.logVerbose("Found existing Credential.");
-			return credential;
-		}
-	}
+    Credential credential = credentialService.getByStudentId(studentId);
+    if (credential == null) {
+      throw new AuthenticationException("The Student ID you entered is invalid. Please try again.");
+    } else {
+      PollLogger.logVerbose("Found existing Credential.");
+      return credential;
+    }
+  }
 
-	public void authenticateIdUsingBasicVerification(int studentId) throws AuthenticationException {
-		PollLogger.logVerbose("Authenticating StudentID with basic methods.");
+  public void authenticateIdUsingBasicVerification(int studentId) throws AuthenticationException {
+    PollLogger.logVerbose("Authenticating StudentID with basic methods.");
 
-		if (studentId > 9999999 || studentId < 8000000) {
-			PollLogger.logVerbose("Invalid Format!");
-			throw new AuthenticationException("The Student ID you entered is invalid. Please try again.");
-		} else {
-			PollLogger.logVerbose("ID Was Valid!");
-		}
-	}
+    if (studentId > 9999999 || studentId < 8000000) {
+      PollLogger.logVerbose("Invalid Format!");
+      throw new AuthenticationException("The Student ID you entered is invalid. Please try again.");
+    } else {
+      PollLogger.logVerbose("ID Was Valid!");
+    }
+  }
 
-	@SuppressWarnings("serial")
-	public class AuthenticationException extends Exception {
+  @SuppressWarnings("serial")
+  public class AuthenticationException extends Exception {
 
-		public AuthenticationException(String message) {
-			super(message);
-		}
+    public AuthenticationException(String message) {
+      super(message);
+    }
 
-	}
+  }
 
 }
