@@ -133,7 +133,7 @@ var redrawChart = function(targetID, newdata) {
 };
 
 var pullData = function(settings, callback) {
-	d3.json("/Poll/admin/ResultsProvider", function(err, data) {
+	d3.json("/uCount/admin/ResultsProvider", function(err, data) {
 		if (err)
 			return console.warn(err);
 
