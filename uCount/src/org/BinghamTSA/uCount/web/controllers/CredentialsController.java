@@ -64,8 +64,8 @@ public class CredentialsController {
             continue;
           else {
             try {
-              int studentNumber = Integer.parseInt(line);
-              Credential credential = new Credential(studentNumber);
+              int studentId = Integer.parseInt(line);
+              Credential credential = new Credential(studentId);
               credentialService.insert(credential);
             } catch (NumberFormatException e) {
               PollLogger.logVerbose("Couldn't read Student ID (Line = " + line + "). Skipping...");

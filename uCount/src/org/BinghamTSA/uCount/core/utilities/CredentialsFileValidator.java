@@ -49,7 +49,7 @@ public class CredentialsFileValidator implements Validator {
 
         String line = bufferedReader.readLine();
         if (line != null)
-          if (line.equals("studentNumber"))
+          if (line.equals("studentId"))
             valid = true;
 
         bufferedReader.close();
