@@ -93,7 +93,7 @@ public class LoginController {
 			FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 			username = null;
 		}
-		return "index";
+		return "vote";
 	}
 
 	public String getSubmitUsername() {

@@ -1,5 +1,7 @@
 //updatingBarChart.js
 
+var baseURI = $("base").attr("href");
+
 var setup = function(targetID) {
 	// Set size of svg element and chart
 	var margin = {
@@ -133,7 +135,7 @@ var redrawChart = function(targetID, newdata) {
 };
 
 var pullData = function(settings, callback) {
-	d3.json("/uCount/admin/ResultsProvider", function(err, data) {
+	d3.json(baseURI+"admin/ResultsProvider", function(err, data) {
 		if (err)
 			return console.warn(err);
 
