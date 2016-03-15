@@ -11,97 +11,102 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * A database Entity bean that stores data about a Poll
+ */
 @Entity
-@Table(name="Poll")
+@Table(name = "Poll")
 public class Poll {
 
-	@Id
-	@GeneratedValue
-	private int id;
+  @Id
+  @GeneratedValue
+  private int id;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "poll", cascade = CascadeType.REMOVE, orphanRemoval = true)
-	private List<VoteGroup> voteGroups;
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "poll", cascade = CascadeType.REMOVE,
+      orphanRemoval = true)
+  private List<VoteGroup> voteGroups;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "poll", cascade = CascadeType.REMOVE, orphanRemoval = true)
-	private List<Entry> entries;
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "poll", cascade = CascadeType.REMOVE,
+      orphanRemoval = true)
+  private List<Entry> entries;
 
-	@Column(length = 128)
-	private String name;
+  @Column(length = 128)
+  private String name;
 
-	@Column(length = 512)
-	private String description;
+  @Column(length = 512)
+  private String description;
 
-	private Boolean enabled;
+  private Boolean enabled;
 
-	public Poll() {
+  public Poll() {
 
-	}
+  }
 
-	public Poll(String name, String description) {
-		this(name, description, false);
-	}
+  public Poll(String name, String description) {
+    this(name, description, false);
+  }
 
-	public Poll(String name, String description, boolean enabled) {
-		setName(name);
-		setDescription(description);
-		setEnabled(enabled);
-	}
+  public Poll(String name, String description, boolean enabled) {
+    setName(name);
+    setDescription(description);
+    setEnabled(enabled);
+  }
 
-	public int getId() {
-		return id;
-	}
+  public int getId() {
+    return id;
+  }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+  public void setId(int id) {
+    this.id = id;
+  }
 
-	public List<VoteGroup> getVoteGroups() {
-		return voteGroups;
-	}
+  public List<VoteGroup> getVoteGroups() {
+    return voteGroups;
+  }
 
-	public void setVoteGroups(List<VoteGroup> voteGroups) {
-		this.voteGroups = voteGroups;
-	}
+  public void setVoteGroups(List<VoteGroup> voteGroups) {
+    this.voteGroups = voteGroups;
+  }
 
-	public List<Entry> getEntries() {
-		return entries;
-	}
+  public List<Entry> getEntries() {
+    return entries;
+  }
 
-	public void setEntries(List<Entry> entries) {
-		this.entries = entries;
-	}
+  public void setEntries(List<Entry> entries) {
+    this.entries = entries;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public String getDescription() {
-		return description;
-	}
+  public String getDescription() {
+    return description;
+  }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-	public Boolean isEnabled() {
-		return enabled;
-	}
+  public Boolean isEnabled() {
+    return enabled;
+  }
 
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}
+  public void setEnabled(Boolean enabled) {
+    this.enabled = enabled;
+  }
 
-	@Override
-	public boolean equals(Object other) {
-		return (other != null && other instanceof Poll && ((Poll) other).getId() == id);
-	}
+  @Override
+  public boolean equals(Object other) {
+    return (other != null && other instanceof Poll && ((Poll) other).getId() == id);
+  }
 
-	@Override
-	public int hashCode() {
-		return getClass().hashCode() + super.hashCode() + id;
-	}
+  @Override
+  public int hashCode() {
+    return getClass().hashCode() + super.hashCode() + id;
+  }
 }

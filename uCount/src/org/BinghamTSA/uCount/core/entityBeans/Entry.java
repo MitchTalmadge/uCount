@@ -14,81 +14,93 @@ import javax.persistence.TemporalType;
 
 import org.BinghamTSA.uCount.core.utilities.Sha256Helper;
 
+/**
+ * A database Entity bean that stores data about an Entry
+ */
 @Entity
-@Table(name="Entry")
+@Table(name = "Entry")
 public class Entry {
 
-	@Id
-	@GeneratedValue
-	private int id;
+  @Id
+  @GeneratedValue
+  private int id;
 
-	private byte[] hashedStudentId;
+  private byte[] hashedStudentId;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Calendar submitDate;
+  @Temporal(TemporalType.TIMESTAMP)
+  private Calendar submitDate;
 
-	@ManyToOne
-	@JoinColumn(name = "voteGroupId")
-	private VoteGroup voteGroup;
+  @ManyToOne
+  @JoinColumn(name = "voteGroupId")
+  private VoteGroup voteGroup;
 
-	@ManyToOne
-	@JoinColumn(name = "pollId")
-	private Poll poll;
+  @ManyToOne
+  @JoinColumn(name = "pollId")
+  private Poll poll;
 
-	public Entry() {
+  public Entry() {
 
-	}
+  }
 
-	public Entry(int studentId, VoteGroup voteGroup, Poll poll) {
-		setHashedStudentId(Sha256Helper.rawToSha(studentId + ""));
-		setVoteGroup(voteGroup);
-		setPoll(poll);
-		setSubmitDate(Calendar.getInstance());
-	}
+  public Entry(int studentId, VoteGroup voteGroup, Poll poll) {
+    setHashedStudentId(Sha256Helper.rawToSha(studentId + ""));
+    setVoteGroup(voteGroup);
+    setPoll(poll);
+    setSubmitDate(Calendar.getInstance());
+  }
 
-	public int getId() {
-		return id;
-	}
+  public int getId() {
+    return id;
+  }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+  public void setId(int id) {
+    this.id = id;
+  }
 
-	public VoteGroup getVoteGroup() {
-		return voteGroup;
-	}
+  public VoteGroup getVoteGroup() {
+    return voteGroup;
+  }
 
-	public void setVoteGroup(VoteGroup voteGroup) {
-		this.voteGroup = voteGroup;
-	}
+  public void setVoteGroup(VoteGroup voteGroup) {
+    this.voteGroup = voteGroup;
+  }
 
-	public Poll getPoll() {
-		return poll;
-	}
+  public Poll getPoll() {
+    return poll;
+  }
 
-	public void setPoll(Poll poll) {
-		this.poll = poll;
-	}
+  public void setPoll(Poll poll) {
+    this.poll = poll;
+  }
 
-	public Calendar getSubmitDate() {
-		return submitDate;
-	}
+  public Calendar getSubmitDate() {
+    return submitDate;
+  }
 
-	public String getFriendlySubmitDate() {
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-		return simpleDateFormat.format(getSubmitDate().getTime());
-	}
+  public String getFriendlySubmitDate() {
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+    return simpleDateFormat.format(getSubmitDate().getTime());
+  }
 
-	public void setSubmitDate(Calendar submitDate) {
-		this.submitDate = submitDate;
-	}
+  public void setSubmitDate(Calendar submitDate) {
+    this.submitDate = submitDate;
+  }
 
-	public byte[] getHashedStudentId() {
-		return hashedStudentId;
-	}
+  public byte[] getHashedStudentId() {
+    return hashedStudentId;
+  }
 
-	public void setHashedStudentId(byte[] hashedStudentId) {
-		this.hashedStudentId = hashedStudentId;
-	}
+  public void setHashedStudentId(byte[] hashedStudentId) {
+    this.hashedStudentId = hashedStudentId;
+  }
+  
+  @Override
+  public boolean equals(Object other) {
+    return (other != null && other instanceof Entry && ((Entry) other).getId() == id);
+  }
 
+  @Override
+  public int hashCode() {
+    return getClass().hashCode() + super.hashCode() + id;
+  }
 }
