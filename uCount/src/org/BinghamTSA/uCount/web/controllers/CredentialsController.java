@@ -13,15 +13,17 @@ import javax.faces.application.ViewHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIViewRoot;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
 import org.BinghamTSA.uCount.core.CredentialService;
 import org.BinghamTSA.uCount.core.entityBeans.Credential;
 import org.BinghamTSA.uCount.core.utilities.PollLogger;
 
+/**
+ * The CredentialsController is the backing bean for the credentials page. It manages everything
+ * from uploading credentials to editing and deleting them.
+ */
 @ManagedBean
 @ViewScoped
 public class CredentialsController {
@@ -94,21 +96,17 @@ public class CredentialsController {
     this.setCredentialIdCurrentlyEditing(credential.getId());
     this.setEditableStudentId(credential.getStudentId());
   }
-  
-  public void finishEditingCredential()
-  {
-    if(this.getEditableStudentId() != -1)
-    {
-      for(Credential credential : credentials)
-      {
-        if(credential.getId() == getCredentialIdCurrentlyEditing())
-        {
+
+  public void finishEditingCredential() {
+    if (this.getEditableStudentId() != -1) {
+      for (Credential credential : credentials) {
+        if (credential.getId() == getCredentialIdCurrentlyEditing()) {
           credential.setId(getEditableStudentId());
           credentialService.merge(credential);
           break;
         }
       }
-      
+
       setCredentialIdCurrentlyEditing(-1);
     }
   }

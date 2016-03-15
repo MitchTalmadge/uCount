@@ -27,6 +27,10 @@ import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 import org.primefaces.model.chart.PieChartModel;
 
+/**
+ * The FinalResultsController is not yet used. It will be the backing bean for the final results
+ * page, including statistical information about the poll and its winners.
+ */
 @ManagedBean
 @ViewScoped
 public class FinalResultsController {
@@ -57,7 +61,7 @@ public class FinalResultsController {
       Map<VoteGroup, Integer> results = pollService.getResults(poll.getId());
       totalVotes = StatisticsHelper.sumValues(results);
       setGroups(results.size());
-      
+
       setRankingMap(StatisticsHelper.sortByDescendingValue(pollService.getResults(poll.getId())));
 
       createHorizontalBarModel();
@@ -77,6 +81,7 @@ public class FinalResultsController {
 
   /**
    * Gets the top three VoteGroups for the current Poll.
+   * 
    * @return A List with the top three VoteGroups in order of descending rank.
    */
   public List<VoteGroup> getTopThree() {
@@ -157,18 +162,20 @@ public class FinalResultsController {
    */
   private void createFreqModel() {
     votingFrequencyModel = new LineChartModel();
-    
+
     LineChartSeries ballotsTaken = new LineChartSeries();
     ballotsTaken.setLabel("Ballots Taken");
     ballotsTaken.setFill(false);
 
     int votes = 0;
-    for(Entry entry : poll.getEntries()) {
+    for (Entry entry : poll.getEntries()) {
       votes++;
       ballotsTaken.set(StatisticsHelper.dateFormat.format(entry.getSubmitDate().getTime()), votes);
-      //System.out.println("Setting point at " + StatisticsHelper.dateFormat.format(entry.getSubmitDate().getTime()) + " with votes: " + votes);
+      // System.out.println("Setting point at " +
+      // StatisticsHelper.dateFormat.format(entry.getSubmitDate().getTime()) + " with votes: " +
+      // votes);
     }
-    
+
     votingFrequencyModel.addSeries(ballotsTaken);
     votingFrequencyModel.setAnimate(true);
     votingFrequencyModel.setZoom(true);
@@ -178,13 +185,13 @@ public class FinalResultsController {
     axis.setTickAngle(-50);
     axis.setMax(StatisticsHelper.dateFormat.format(new Date()));
     axis.setTickFormat("%b %#d - %H:%#M:%S");
-    
+
     votingFrequencyModel.getAxes().put(AxisType.X, axis);
-    
+
     Axis yAxis = votingFrequencyModel.getAxis(AxisType.Y);
     yAxis.setLabel("Ballots Taken");
     yAxis.setMin(0);
-    yAxis.setMax(votes+10);
+    yAxis.setMax(votes + 10);
 
   }
 

@@ -20,12 +20,21 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 
+/**
+ * This class contains methods for each type of student ID authentication.
+ */
 @Stateless
 public class StudentIDAuthenticator {
 
   @EJB
   private CredentialService credentialService;
 
+  /**
+   * This cookie is retrieved at the start of the program and is kept in memory until it is needed
+   * during authentication.
+   * 
+   * The cookie is required by Overdrive. An error is returned if it is not supplied.
+   */
   private static final String JSDCookie = getOverdriveCookie();
 
   /**
@@ -58,6 +67,14 @@ public class StudentIDAuthenticator {
     return "";
   }
 
+  /**
+   * Authenticates the given student ID using Overdrive. If no exception is thrown, the ID is
+   * considered valid.
+   * 
+   * @param studentId The student ID to authenticate.
+   * @throws AuthenticationException If the student ID is invalid or there was another issue
+   *         authenticating, this will return a reason.
+   */
   public void authenticateIdUsingOverdrive(int studentId) throws AuthenticationException {
     try {
       PollLogger.logVerbose("Authenticating StudentID " + studentId + " with Overdrive");
@@ -95,6 +112,15 @@ public class StudentIDAuthenticator {
     }
   }
 
+  /**
+   * Authenticates the given student ID using the Credentials Table. If no exception is thrown, the
+   * ID is considered valid.
+   * 
+   * @param studentId The student ID to authenticate.
+   * @return The valid Credential, if one exists.
+   * @throws AuthenticationException If the student ID is invalid or there was another issue
+   *         authenticating, this will return a reason.
+   */
   public Credential authenticateIdUsingCredentialsTable(int studentId)
       throws AuthenticationException {
     PollLogger.logVerbose("Authenticating StudentID with Credentials table.");
@@ -108,6 +134,15 @@ public class StudentIDAuthenticator {
     }
   }
 
+  /**
+   * Authenticates the given student ID using the basic methods. In essence, if the ID is between
+   * 8000000 and 9999999, it is considered valid. If no exception is thrown, the ID is considered
+   * valid.
+   * 
+   * @param studentId The student ID to authenticate.
+   * @throws AuthenticationException If the student ID is invalid or there was another issue
+   *         authenticating, this will return a reason.
+   */
   public void authenticateIdUsingBasicVerification(int studentId) throws AuthenticationException {
     PollLogger.logVerbose("Authenticating StudentID with basic methods.");
 

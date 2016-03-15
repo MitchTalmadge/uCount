@@ -17,8 +17,8 @@ import org.BinghamTSA.uCount.core.utilities.StudentIDAuthenticator;
 import org.BinghamTSA.uCount.core.utilities.StudentIDAuthenticator.AuthenticationException;
 
 /**
- * The purpose of this class is to provide a way to simulate user entry, and is used when performing
- * load tests from loadimpact.com
+ * The LoadTestController is the backing bean for the load test page. Its purpose is to provide a
+ * way to simulate user entry, and is used when performing load tests from loadimpact.com
  */
 @ManagedBean
 @ViewScoped

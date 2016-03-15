@@ -14,6 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.BinghamTSA.uCount.core.utilities.FileUploadUtilities;
 
+/**
+ * The ImageServlet serves images from the data directory when a user accesses the /images/
+ * directory. If an image is not found, a default image is returned.
+ */
 @WebServlet("/images/*")
 public class ImageServlet extends HttpServlet {
 

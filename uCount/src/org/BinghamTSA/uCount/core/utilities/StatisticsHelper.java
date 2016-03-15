@@ -9,10 +9,20 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This convenience class is to help in generating and analyzing statistics about the Polls. It is a
+ * work in progress, as statistics are not yet fully implemented into uCount.
+ */
 public class StatisticsHelper {
-  
+
   public static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
+  /**
+   * Sorts the given Map by descending order.
+   * 
+   * @param map The Map to sort.
+   * @return A sorted Map, in descending order.
+   */
   public static <K, V extends Comparable<? super V>> Map<K, V> sortByDescendingValue(
       Map<K, V> map) {
     List<Map.Entry<K, V>> list = new LinkedList<>(map.entrySet());
@@ -29,7 +39,13 @@ public class StatisticsHelper {
     }
     return result;
   }
-  
+
+  /**
+   * Creates a sum of all values in the given Map.
+   * 
+   * @param map The Map to sum.
+   * @return The sum of the values in the Map.
+   */
   public static <K> int sumValues(Map<K, Integer> map) {
     int total = 0;
     for (Map.Entry<K, Integer> entry : map.entrySet()) {
