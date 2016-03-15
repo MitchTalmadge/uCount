@@ -30,6 +30,9 @@ public class ResultsProvider extends HttpServlet {
 		super();
 	}
 
+	/**
+	 * Gathers the results of the poll and writes it to the response stream
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		List<ResultViewModel> results = null;

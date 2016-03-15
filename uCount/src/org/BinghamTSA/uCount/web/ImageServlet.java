@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.BinghamTSA.uCount.core.utilities.FileUploadUtilities;
-import org.BinghamTSA.uCount.core.utilities.PropertiesHelper;
 
 @WebServlet("/images/*")
 public class ImageServlet extends HttpServlet {
@@ -34,6 +33,10 @@ public class ImageServlet extends HttpServlet {
     }
   }
 
+  /**
+   * Finds the number sent at the end of the url and returns the picture associated with it through
+   * the response
+   */
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     String filename = request.getPathInfo().substring(1);
