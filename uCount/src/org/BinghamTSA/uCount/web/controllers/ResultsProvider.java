@@ -17,41 +17,42 @@ import org.BinghamTSA.uCount.web.ViewModels.ResultViewModel;
 import com.google.gson.Gson;
 
 /**
- * Servlet implementation class ResultsProvider
+ * The ResultsProvider is a Servlet that is only accessible as an administrator, and provides the
+ * results for the enabled Poll. It is used in the JavaScript of the live results page.
  */
 @WebServlet("/admin/ResultsProvider")
 public class ResultsProvider extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@EJB
-	PollService pollService;
+  @EJB
+  PollService pollService;
 
-	public ResultsProvider() {
-		super();
-	}
+  public ResultsProvider() {
+    super();
+  }
 
-	/**
-	 * Gathers the results of the poll and writes it to the response stream
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		List<ResultViewModel> results = null;
-		
-		Poll enabledPoll = pollService.getEnabledPoll();
-		
-		if (enabledPoll != null)
-			results = ResultViewModel.toViewModels(pollService.getResults(enabledPoll.getId()));
+  /**
+   * Gathers the results of the enabled Poll and writes it to the response stream
+   */
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    List<ResultViewModel> results = null;
 
-		String json = new Gson().toJson(results != null ? results : "");
+    Poll enabledPoll = pollService.getEnabledPoll();
 
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write(json);
-	}
+    if (enabledPoll != null)
+      results = ResultViewModel.toViewModels(pollService.getResults(enabledPoll.getId()));
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
-	}
+    String json = new Gson().toJson(results != null ? results : "");
+
+    response.setContentType("application/json");
+    response.setCharacterEncoding("UTF-8");
+    response.getWriter().write(json);
+  }
+
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    doGet(request, response);
+  }
 
 }

@@ -16,6 +16,11 @@ import org.BinghamTSA.uCount.core.entityBeans.Contestant;
 import org.BinghamTSA.uCount.core.entityBeans.VoteGroup;
 import org.BinghamTSA.uCount.core.utilities.PollLogger;
 
+/**
+ * The ModifyVoteGroupController is the backing bean for the VoteGroup modification page. It handles
+ * adding and removing contestants, changing contestant names and images, and changing the VoteGroup
+ * name and image.
+ */
 @ManagedBean
 @ViewScoped
 public class ModifyVoteGroupController {

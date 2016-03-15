@@ -11,49 +11,53 @@ import org.BinghamTSA.uCount.core.PollService;
 import org.BinghamTSA.uCount.core.entityBeans.Entry;
 import org.BinghamTSA.uCount.core.entityBeans.Poll;
 
+/**
+ * The PollEntriesController is the backing bean for the Poll entries page. It handles listing and
+ * deleting poll entries.
+ */
 @ManagedBean
 @ViewScoped
 public class PollEntriesController {
 
-	@EJB
-	PollService pollService;
+  @EJB
+  PollService pollService;
 
-	@EJB
-	EntryService entryService;
+  @EJB
+  EntryService entryService;
 
-	private Poll poll;
+  private Poll poll;
 
-	@PostConstruct
-	public void init() {
-		String pollIdParam = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
-				.get("pollId");
-		try {
-			int pollId = Integer.parseInt(pollIdParam);
-			setPoll(pollService.get(pollId));
-		} catch (NumberFormatException ignored) {
-		}
-	}
+  @PostConstruct
+  public void init() {
+    String pollIdParam = FacesContext.getCurrentInstance().getExternalContext()
+        .getRequestParameterMap().get("pollId");
+    try {
+      int pollId = Integer.parseInt(pollIdParam);
+      setPoll(pollService.get(pollId));
+    } catch (NumberFormatException ignored) {
+    }
+  }
 
-	public Poll getPoll() {
-		return poll;
-	}
+  public Poll getPoll() {
+    return poll;
+  }
 
-	public void setPoll(Poll poll) {
-		this.poll = poll;
-	}
+  public void setPoll(Poll poll) {
+    this.poll = poll;
+  }
 
-	public void deleteEntry(Entry entry) {
-		if (entry != null) {
-			entryService.delete(entry.getId());
+  public void deleteEntry(Entry entry) {
+    if (entry != null) {
+      entryService.delete(entry.getId());
 
-			poll = pollService.get(poll.getId()); // Refresh poll
-		}
-	}
+      poll = pollService.get(poll.getId()); // Refresh poll
+    }
+  }
 
-	public void deleteAllEntries() {
-		entryService.deleteAllPollEntries(poll.getId());
+  public void deleteAllEntries() {
+    entryService.deleteAllPollEntries(poll.getId());
 
-		poll = pollService.get(poll.getId());
-	}
+    poll = pollService.get(poll.getId());
+  }
 
 }
