@@ -48,6 +48,9 @@ public class CredentialsController {
     credentials.add(credential);
   }
 
+  /**
+   * Imports a CSV file with a list of credentials.
+   */
   public void importCredentials() {
     PollLogger.logVerbose("Importing Credentials File...");
     if (importedCredentials != null) {

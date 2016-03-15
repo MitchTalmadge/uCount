@@ -75,6 +75,10 @@ public class FinalResultsController {
     this.poll = poll;
   }
 
+  /**
+   * Gets the top three VoteGroups for the current Poll.
+   * @return A List with the top three VoteGroups in order of descending rank.
+   */
   public List<VoteGroup> getTopThree() {
     final Set<Map.Entry<VoteGroup, Integer>> mapValues = getRankingMap().entrySet();
     final int maplength = mapValues.size();
@@ -97,6 +101,9 @@ public class FinalResultsController {
     return votesChartModel;
   }
 
+  /**
+   * Creates a horizontal bar chart.
+   */
   private void createHorizontalBarModel() {
     votesChartModel = new HorizontalBarChartModel();
 
@@ -128,6 +135,9 @@ public class FinalResultsController {
     return votingProportionModel;
   }
 
+  /**
+   * Creates a pie chart.
+   */
   private void createPieChart() {
     votingProportionModel = new PieChartModel();
 
@@ -142,6 +152,9 @@ public class FinalResultsController {
     votingProportionModel.setDiameter(150);
   }
 
+  /**
+   * Creates a frequency model.
+   */
   private void createFreqModel() {
     votingFrequencyModel = new LineChartModel();
     

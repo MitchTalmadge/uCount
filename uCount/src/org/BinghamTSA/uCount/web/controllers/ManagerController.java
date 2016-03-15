@@ -89,6 +89,10 @@ public class ManagerController {
 		return selectedPoll;
 	}
 
+	/**
+	 * Sets the currently selected Poll to the given Poll.
+	 * @param selectedPoll The Poll to set as selected.
+	 */
 	public void setSelectedPoll(Poll selectedPoll) {
 		PollLogger.logVerbose("Setting Selected Poll to " + selectedPoll.getName());
 		this.selectedPoll = selectedPoll;
@@ -99,6 +103,9 @@ public class ManagerController {
 		this.editingDescription = false;
 	}
 
+	/**
+	 * Creates a brand new Poll with default values.
+	 */
 	public void addNewPoll() {
 		PollLogger.logVerbose("Adding new Poll...");
 		Poll poll = new Poll("New Poll", "This is a new poll. Edit its description here!", false);
@@ -112,6 +119,9 @@ public class ManagerController {
 			polls = pollService.getAll();
 	}
 
+	/**
+	 * Deletes the currently selected Poll.
+	 */
 	public void deleteSelectedPoll() {
 		if (selectedPoll != null) {
 			pollService.delete(selectedPoll.getId());

@@ -29,6 +29,9 @@ public class LoginController {
 	private String username;
 	private String password;
 
+	/**
+	 * Whether or not the user is currently banned (for attempting to login too many times)
+	 */
 	private boolean isBanned = BanHelper.isUserBanned(BAN_NAME);
 
 	public Principal getUser() {
@@ -37,6 +40,10 @@ public class LoginController {
 		return request.getUserPrincipal();
 	}
 
+	/**
+	 * Attempts to log the user in with the credentials they have input.
+	 * @return The outcome page.
+	 */
 	public String login() {
 		FacesContext context = FacesContext.getCurrentInstance();
 		PollLogger.logVerbose("Logging In");

@@ -9,9 +9,6 @@ import org.BinghamTSA.uCount.core.entityBeans.VoteGroup;
 
 /**
  * Object representation of the data sent to the Live Results JavaScript file.
- * 
- * @author kevint
- *
  */
 public class ResultViewModel {
 
@@ -25,7 +22,6 @@ public class ResultViewModel {
   private int value;
 
   public ResultViewModel() {
-    // TODO Auto-generated constructor stub
   }
 
   public ResultViewModel(String key, int value) {
