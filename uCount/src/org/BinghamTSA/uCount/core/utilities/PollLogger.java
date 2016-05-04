@@ -3,10 +3,9 @@ package org.BinghamTSA.uCount.core.utilities;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
-
-import org.jboss.logmanager.Level;
 
 /**
  * Used to log messages to the console and log files on different levels; info, verbose, and error.
@@ -32,7 +31,7 @@ public class PollLogger {
 
     // Set levels for logging.
     LOGGER.setLevel(Level.ALL);
-    consoleHandler.setLevel(Level.DEBUG); // Set to DEBUG to see Verbose messages.
+    consoleHandler.setLevel(Level.FINE); // Set to FINE to see Verbose messages.
 
     // Set formatter.
     consoleHandler.setFormatter(new PollConsoleFormatter());
@@ -62,7 +61,7 @@ public class PollLogger {
    * @param message The verbose message.
    */
   public static void logVerbose(String message) {
-    LOGGER.log(Level.DEBUG, message);
+    LOGGER.log(Level.FINE, message);
   }
 
   private static class PollConsoleFormatter extends Formatter {
