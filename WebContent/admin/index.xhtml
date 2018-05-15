@@ -1,0 +1,266 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<div class="section no-pad-top">
+
+			<!-- Header section, displaying the current page and the poll selection label -->
+			<div class="section #{style.colorPrimary}">
+				<h1 class="header center #{style.colorWhiteText}">Poll
+					Management</h1>
+			</div>
+
+			<!-- Selected Poll Nav Bar -->
+			<h:panelGroup id="navBar">
+				<nav class="#{style.colorPrimaryLight}">
+				<div class="nav-wrapper">
+					<div class="container">
+						<h:form>
+
+							<ul id="nav-mobile" class="left hide-on-med-and-down">
+								<ui:repeat value="#{ManagerController.polls}" var="poll">
+									<li
+										class="#{poll.id == ManagerController.selectedPoll.id ? 'active' : ''}">
+										<h:commandLink value="#{poll.name}"
+											action="#{ManagerController.setSelectedPoll(poll)}">
+											<ui:fragment
+												rendered="#{ManagerController.enabledPoll != null and poll.id == ManagerController.enabledPoll.id}">
+												<i class='material-icons right'>play_arrow</i>
+											</ui:fragment>
+											<f:ajax render=":pollContent :navBar" />
+										</h:commandLink>
+									</li>
+
+								</ui:repeat>
+								<li><h:commandLink
+										action="#{ManagerController.addNewPoll()}">
+										<i class="material-icons">add</i>
+										<f:ajax render=":pollContent :navBar" />
+									</h:commandLink></li>
+							</ul>
+
+						</h:form>
+					</div>
+				</div>
+				</nav>
+			</h:panelGroup>
+
+			<br />
+
+			<div class="container">
+				<h:panelGroup id="pollContent">
+					<ui:fragment rendered="#{ManagerController.selectedPoll != null}">
+						<div class="row">
+							<h:form>
+								<div class="col">
+									<ui:fragment
+										rendered="#{ManagerController.enabledPoll == null or ManagerController.selectedPoll.id != ManagerController.enabledPoll.id}">
+										<h:commandLink value="Enable Poll"
+											styleClass="waves-effect waves-light btn #{style.colorPrimary}"
+											action="#{ManagerController.setEnabledPoll(ManagerController.selectedPoll)}">
+											<i class="material-icons right">play_arrow</i>
+											<f:ajax render=":pollContent :navBar" />
+										</h:commandLink>
+									</ui:fragment>
+									<ui:fragment
+										rendered="#{ManagerController.enabledPoll != null and ManagerController.selectedPoll.id == ManagerController.enabledPoll.id}">
+										<h:commandLink value="Disable Poll"
+											styleClass="waves-effect waves-light btn #{style.colorPrimary}"
+											action="#{ManagerController.setEnabledPoll(null)}">
+											<i class="material-icons right">stop</i>
+											<f:ajax render=":pollContent :navBar" />
+										</h:commandLink>
+									</ui:fragment>
+								</div>
+								<div class="col">
+									<h:link
+										value="View #{(empty ManagerController.selectedPoll.entries) ? '0' : ManagerController.selectedPoll.entries.size()} Poll Entries"
+										styleClass="waves-effect waves-light btn #{style.colorPrimary}"
+										outcome="pollEntries?pollId=#{ManagerController.selectedPoll.id}"
+										includeViewParams="true">
+										<i class="material-icons right">send</i>
+									</h:link>
+								</div>
+								<div class="col right">
+									<h:commandLink value="Delete Poll"
+										styleClass="waves-effect waves-light btn #{style.colorDelete} right"
+										action="#{ManagerController.deleteSelectedPoll()}">
+										<i class="material-icons right">delete</i>
+										<f:ajax render=":pollContent :navBar" />
+									</h:commandLink>
+								</div>
+							</h:form>
+						</div>
+
+						<div class="row">
+							<div class="col s6">
+								<div class="card">
+									<h:form id="nameForm">
+										<div class="card-content">
+											<span class="card-title">Poll Name:</span>
+
+											<ui:fragment rendered="#{!ManagerController.editingName}">
+												<br />
+												<h:outputText value="#{ManagerController.editablePollName}" />
+											</ui:fragment>
+											<ui:fragment rendered="#{ManagerController.editingName}">
+												<div class="input-field">
+													<h:inputText id="nameTextField"
+														value="#{ManagerController.editablePollName}" />
+												</div>
+											</ui:fragment>
+										</div>
+										<div class="card-action">
+											<ui:fragment rendered="#{!ManagerController.editingName}">
+												<h:commandLink class="#{style.colorPrimaryText}">
+													<i class="material-icons">mode_edit</i>
+													<f:ajax render=":nameForm"
+														listener="#{ManagerController.onEditNameButtonFired}" />
+												</h:commandLink>
+											</ui:fragment>
+											<ui:fragment rendered="#{ManagerController.editingName}">
+												<h:commandLink class="#{style.colorPrimaryText}">
+													<i class="material-icons">done</i>
+													<f:ajax execute="nameTextField" render=":nameForm :navBar"
+														listener="#{ManagerController.onEditNameDoneButtonFired}" />
+												</h:commandLink>
+											</ui:fragment>
+											<h:message for="nameForm" style="color: red" />
+										</div>
+									</h:form>
+								</div>
+							</div>
+							<div class="col s6">
+								<div class="card">
+									<h:form id="descriptionForm">
+										<div class="card-content">
+											<span class="card-title">Poll Description:</span>
+
+											<ui:fragment
+												rendered="#{!ManagerController.editingDescription}">
+												<br />
+												<h:outputText
+													value="#{ManagerController.editablePollDescription}" />
+											</ui:fragment>
+											<ui:fragment
+												rendered="#{ManagerController.editingDescription}">
+												<div class="input-field">
+													<h:inputTextarea id="descriptionTextarea"
+														styleClass="materialize-textarea"
+														style="padding-top: 0; margin-bottom: 0;"
+														value="#{ManagerController.editablePollDescription}" />
+												</div>
+											</ui:fragment>
+										</div>
+										<div class="card-action">
+											<ui:fragment
+												rendered="#{!ManagerController.editingDescription}">
+												<h:commandLink class="#{style.colorPrimaryText}">
+													<i class="material-icons">mode_edit</i>
+													<f:ajax render=":descriptionForm"
+														listener="#{ManagerController.onEditDescriptionButtonFired}" />
+												</h:commandLink>
+											</ui:fragment>
+											<ui:fragment
+												rendered="#{ManagerController.editingDescription}">
+												<h:commandLink class="#{style.colorPrimaryText}">
+													<i class="material-icons">done</i>
+													<f:ajax execute="descriptionTextarea"
+														render=":descriptionForm"
+														listener="#{ManagerController.onEditDescriptionDoneButtonFired}" />
+												</h:commandLink>
+											</ui:fragment>
+											<h:message for="descriptionForm" style="color: red" />
+										</div>
+									</h:form>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col">
+								<span style="font-size: 24px; font-weight: 300">Vote
+									Groups: </span>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col">
+								<h:form>
+									<h:commandLink action="#{ManagerController.addNewVoteGroup()}"
+										styleClass="waves-effect waves-light btn #{style.colorPrimary}">
+										Add New Vote Group
+										<i class="material-icons right">add</i>
+										<f:ajax render=":pollContent" />
+									</h:commandLink>
+								</h:form>
+							</div>
+							<div class="col right">
+								<h:form>
+									<h:commandLink
+										action="#{ManagerController.deleteAllVoteGroups()}"
+										styleClass="waves-effect waves-light btn #{style.colorDelete}">
+										Delete All Vote Groups
+										<i class="material-icons right">delete</i>
+										<f:ajax render=":pollContent" />
+									</h:commandLink>
+								</h:form>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col s12">
+
+								<table class="striped responsive-table">
+									<thead>
+										<tr>
+											<th style="width: 200px">Name</th>
+											<th style="width: 100px"># Votes</th>
+											<th>Contestants</th>
+										</tr>
+									</thead>
+									<tbody>
+										<ui:repeat
+											value="#{ManagerController.selectedPoll.voteGroups}"
+											var="voteGroup">
+											<tr>
+												<td>#{voteGroup.name}</td>
+												<td>#{voteGroup.entries.size()}</td>
+												<td><ui:repeat value="#{voteGroup.contestants}"
+														var="contestant" varStatus="status">
+													#{contestant.name}#{status.last ? '' : ','}
+												</ui:repeat></td>
+												<td style="width: 50px"><h:form>
+														<h:link
+															outcome="modifyVoteGroup?voteGroupId=#{voteGroup.id}"
+															includeViewParams="true"
+															class="#{style.colorPrimaryText}">
+															<i class="material-icons">mode_edit</i>
+														</h:link>
+													</h:form></td>
+												<td style="width: 50px"><h:form>
+														<h:commandLink class="#{style.colorDeleteText}"
+															action="#{ManagerController.deleteVoteGroup(voteGroup)}">
+															<i class="material-icons">delete</i>
+															<f:ajax render=":pollContent" />
+														</h:commandLink>
+													</h:form></td>
+											</tr>
+										</ui:repeat>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</ui:fragment>
+				</h:panelGroup>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>
